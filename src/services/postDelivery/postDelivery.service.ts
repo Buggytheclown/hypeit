@@ -11,6 +11,6 @@ export class PostDeliveryService {
 
   async saveBestOfTheWeeks() {
     const habrData = await this.habrPostGrabberService.getBestOfTheWeek();
-    await this.postModel.savePosts(habrData).catch(console.error);
+    return await this.postModel.savePosts(habrData).catch(console.error);
   }
 }

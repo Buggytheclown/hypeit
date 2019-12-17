@@ -37,4 +37,8 @@ export class DBConnection {
       });
     });
   }
+
+  destroy() {
+    this.connection.destroy();
+  }
 }
