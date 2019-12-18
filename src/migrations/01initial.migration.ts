@@ -1,8 +1,3 @@
-// `ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
-// ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
-// SELECT plugin FROM mysql.user WHERE User = 'root';
-// `;
-
 export function migration(connection, fn) {
   connection.query(
     `CREATE TABLE IF NOT EXISTS resources(
@@ -19,6 +14,7 @@ CREATE TABLE IF NOT EXISTS posts(
   time DATETIME,
   rawTime TEXT,
   link TEXT,
+  image_link TEXT,
   rating INT,
   resources_id INT,
   CONSTRAINT
@@ -38,6 +34,7 @@ CREATE TABLE IF NOT EXISTS posts_tags(
   posts_id INT,
   tags_id INT,
   PRIMARY KEY (posts_tags_id),
+  UNIQUE KEY (posts_id, tags_id),
   CONSTRAINT
   FOREIGN KEY (posts_id)
     REFERENCES posts(posts_id)

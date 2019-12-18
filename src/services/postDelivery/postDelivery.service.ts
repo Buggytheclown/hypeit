@@ -9,8 +9,19 @@ export class PostDeliveryService {
     private readonly postModel: PostModel,
   ) {}
 
-  async saveBestOfTheWeeks() {
+  async saveBestOfTheWeek() {
     const habrData = await this.habrPostGrabberService.getBestOfTheWeek();
-    return await this.postModel.savePosts(habrData).catch(console.error);
+    return await this.postModel.savePosts(habrData).catch(e => {
+      console.error(e);
+      throw e;
+    });
+  }
+
+  async saveBestOfTheMonth() {
+    const habrData = await this.habrPostGrabberService.getBestOfTheMonth();
+    return await this.postModel.savePosts(habrData).catch(e => {
+      console.error(e);
+      throw e;
+    });
   }
 }

@@ -1,4 +1,4 @@
-export const habrMock = `<!DOCTYPE html>
+export const habrData1 = `<!DOCTYPE html>
 <html lang="en" class="no-js">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -49,340 +49,6 @@ export const habrMock = `<!DOCTYPE html>
 
 
   <link title="Top of the week / Development" type="application/rss+xml" rel="alternate" href="https://habr.com/en/rss/flows/develop/top/weekly/?fl=en"/>
-
-<script>/* Font Face Observer v2.0.13 - © Bram Stein. License: BSD-3-Clause */(function(){'use strict';var f,g=[];function l(a){g.push(a);1==g.length&&f()}function m(){for(;g.length;)g[0](),g.shift()}f=function(){setTimeout(m)};function n(a){this.a=p;this.b=void 0;this.f=[];var b=this;try{a(function(a){q(b,a)},function(a){r(b,a)})}catch(c){r(b,c)}}var p=2;function t(a){return new n(function(b,c){c(a)})}function u(a){return new n(function(b){b(a)})}function q(a,b){if(a.a==p){if(b==a)throw new TypeError;var c=!1;try{var d=b&&b.then;if(null!=b&&"object"==typeof b&&"function"==typeof d){d.call(b,function(b){c||q(a,b);c=!0},function(b){c||r(a,b);c=!0});return}}catch(e){c||r(a,e);return}a.a=0;a.b=b;v(a)}}
-function r(a,b){if(a.a==p){if(b==a)throw new TypeError;a.a=1;a.b=b;v(a)}}function v(a){l(function(){if(a.a!=p)for(;a.f.length;){var b=a.f.shift(),c=b[0],d=b[1],e=b[2],b=b[3];try{0==a.a?"function"==typeof c?e(c.call(void 0,a.b)):e(a.b):1==a.a&&("function"==typeof d?e(d.call(void 0,a.b)):b(a.b))}catch(h){b(h)}}})}n.prototype.g=function(a){return this.c(void 0,a)};n.prototype.c=function(a,b){var c=this;return new n(function(d,e){c.f.push([a,b,d,e]);v(c)})};
-function w(a){return new n(function(b,c){function d(c){return function(d){h[c]=d;e+=1;e==a.length&&b(h)}}var e=0,h=[];0==a.length&&b(h);for(var k=0;k<a.length;k+=1)u(a[k]).c(d(k),c)})}function x(a){return new n(function(b,c){for(var d=0;d<a.length;d+=1)u(a[d]).c(b,c)})};window.Promise||(window.Promise=n,window.Promise.resolve=u,window.Promise.reject=t,window.Promise.race=x,window.Promise.all=w,window.Promise.prototype.then=n.prototype.c,window.Promise.prototype["catch"]=n.prototype.g);}());
-
-(function(){function l(a,b){document.addEventListener?a.addEventListener("scroll",b,!1):a.attachEvent("scroll",b)}function m(a){document.body?a():document.addEventListener?document.addEventListener("DOMContentLoaded",function c(){document.removeEventListener("DOMContentLoaded",c);a()}):document.attachEvent("onreadystatechange",function k(){if("interactive"==document.readyState||"complete"==document.readyState)document.detachEvent("onreadystatechange",k),a()})};function r(a){this.a=document.createElement("div");this.a.setAttribute("aria-hidden","true");this.a.appendChild(document.createTextNode(a));this.b=document.createElement("span");this.c=document.createElement("span");this.h=document.createElement("span");this.f=document.createElement("span");this.g=-1;this.b.style.cssText="max-width:none;display:inline-block;position:absolute;height:100%;width:100%;overflow:scroll;font-size:16px;";this.c.style.cssText="max-width:none;display:inline-block;position:absolute;height:100%;width:100%;overflow:scroll;font-size:16px;";
-this.f.style.cssText="max-width:none;display:inline-block;position:absolute;height:100%;width:100%;overflow:scroll;font-size:16px;";this.h.style.cssText="display:inline-block;width:200%;height:200%;font-size:16px;max-width:none;";this.b.appendChild(this.h);this.c.appendChild(this.f);this.a.appendChild(this.b);this.a.appendChild(this.c)}
-function t(a,b){a.a.style.cssText="max-width:none;min-width:20px;min-height:20px;display:inline-block;overflow:hidden;position:absolute;width:auto;margin:0;padding:0;top:-999px;white-space:nowrap;font-synthesis:none;font:"+b+";"}function y(a){var b=a.a.offsetWidth,c=b+100;a.f.style.width=c+"px";a.c.scrollLeft=c;a.b.scrollLeft=a.b.scrollWidth+100;return a.g!==b?(a.g=b,!0):!1}function z(a,b){function c(){var a=k;y(a)&&a.a.parentNode&&b(a.g)}var k=a;l(a.b,c);l(a.c,c);y(a)};function A(a,b){var c=b||{};this.family=a;this.style=c.style||"normal";this.weight=c.weight||"normal";this.stretch=c.stretch||"normal"}var B=null,C=null,E=null,F=null;function G(){if(null===C)if(J()&&/Apple/.test(window.navigator.vendor)){var a=/AppleWebKit\/([0-9]+)(?:\.([0-9]+))(?:\.([0-9]+))/.exec(window.navigator.userAgent);C=!!a&&603>parseInt(a[1],10)}else C=!1;return C}function J(){null===F&&(F=!!document.fonts);return F}
-function K(){if(null===E){var a=document.createElement("div");try{a.style.font="condensed 100px sans-serif"}catch(b){}E=""!==a.style.font}return E}function L(a,b){return[a.style,a.weight,K()?a.stretch:"","100px",b].join(" ")}
-A.prototype.load=function(a,b){var c=this,k=a||"BESbswy",q=0,D=b||3E3,H=(new Date).getTime();return new Promise(function(a,b){if(J()&&!G()){var M=new Promise(function(a,b){function e(){(new Date).getTime()-H>=D?b():document.fonts.load(L(c,'"'+c.family+'"'),k).then(function(c){1<=c.length?a():setTimeout(e,25)},function(){b()})}e()}),N=new Promise(function(a,c){q=setTimeout(c,D)});Promise.race([N,M]).then(function(){clearTimeout(q);a(c)},function(){b(c)})}else m(function(){function u(){var b;if(b=-1!=
-f&&-1!=g||-1!=f&&-1!=h||-1!=g&&-1!=h)(b=f!=g&&f!=h&&g!=h)||(null===B&&(b=/AppleWebKit\/([0-9]+)(?:\.([0-9]+))/.exec(window.navigator.userAgent),B=!!b&&(536>parseInt(b[1],10)||536===parseInt(b[1],10)&&11>=parseInt(b[2],10))),b=B&&(f==v&&g==v&&h==v||f==w&&g==w&&h==w||f==x&&g==x&&h==x)),b=!b;b&&(d.parentNode&&d.parentNode.removeChild(d),clearTimeout(q),a(c))}function I(){if((new Date).getTime()-H>=D)d.parentNode&&d.parentNode.removeChild(d),b(c);else{var a=document.hidden;if(!0===a||void 0===a)f=e.a.offsetWidth,
-g=n.a.offsetWidth,h=p.a.offsetWidth,u();q=setTimeout(I,50)}}var e=new r(k),n=new r(k),p=new r(k),f=-1,g=-1,h=-1,v=-1,w=-1,x=-1,d=document.createElement("div");d.dir="ltr";t(e,L(c,"sans-serif"));t(n,L(c,"serif"));t(p,L(c,"monospace"));d.appendChild(e.a);d.appendChild(n.a);d.appendChild(p.a);document.body.appendChild(d);v=e.a.offsetWidth;w=n.a.offsetWidth;x=p.a.offsetWidth;I();z(e,function(a){f=a;u()});t(e,L(c,'"'+c.family+'",sans-serif'));z(n,function(a){g=a;u()});t(n,L(c,'"'+c.family+'",serif'));
-z(p,function(a){h=a;u()});t(p,L(c,'"'+c.family+'",monospace'))})})};"object"===typeof module?module.exports=A:(window.FontFaceObserver=A,window.FontFaceObserver.prototype.load=A.prototype.load);}());
-
-(function( w ){
-if( w.document.documentElement.className.indexOf( "fonts-loaded" ) > -1 ){ return; }
-
-var html = document.documentElement;
-var FS500 = new w.FontFaceObserver("Fira Sans", { weight: 500 });
-
-FS500.load().then(function() {
-html.classList.add('fonts-loaded');
-sessionStorage.fontsLoaded = true;
-console.log('FS500-loaded');
-}).catch(function () {
-sessionStorage.fontsLoaded = false;
-console.log('FS500-unloaded');
-});
-
-if (sessionStorage.fontsLoaded) {
-html.classList.add('fonts-loaded');
-}
-}(this));
-</script>
-<script src="https://dr.habracdn.net/habrcom/javascripts/1575300555/libs/jquery-1.8.3.min.js"></script>
-  <script async src="https://cdn.onthe.io/io.js/Tn4LrERWU1qX"></script>
-  <script>
-    window._io_config = window._io_config || {};
-    window._io_config["0.2.0"] = window._io_config["0.2.0"] || [];
-    window._io_config["0.2.0"].push({
-    "page_url": "https:\/\/habr.com\/en\/flows\/develop\/top\/",
-    "page_url_canonical": "https:\/\/habr.com\/en\/flows\/develop\/top\/",
-    "page_title": "Top of the week \/ Development \/ Habr",
-    "page_type": "default",
-    "page_language": "en"
-});
-  </script>
-
-<script>
-  window.create_callback_for_blocked = function(key) {
-    return function() {
-      googletag.cmd.push(function () {
-        googletag.display(key);
-      });
-    }
-  }
-
-  window.habr_blockers_checker = new function() {
-    var result;
-    var callbacksQueue = [];
-    var calledOnce = false;
-
-    function fireCallbacks() {
-      callbacksQueue.forEach(function(callback) {
-        callback(result);
-      });
-      callbacksQueue = [];
-    }
-
-    this.detect = function(imgUrl, callback) {
-      var checksRemain = 2;
-      var detected = false;
-      var error1 = false;
-      var error2 = false;
-
-      if (typeof callback !== 'function') {
-        return;
-      };
-
-      callbacksQueue.push(callback);
-
-      if (typeof result !== 'undefined') {
-        fireCallbacks();
-      };
-
-      if (calledOnce) {
-        return;
-      }
-      calledOnce = true;
-
-      imgUrl += '?ch=*&rn=*';
-
-      function beforeCheck(timeout) {
-        if (checksRemain === 0 || timeout > 1E3) {
-          result = checksRemain === 0 && detected;
-          fireCallbacks();
-        } else {
-          setTimeout(function() {
-            beforeCheck(timeout * 2)
-          }, timeout * 2);
-        }
-      }
-
-      function checkImages() {
-        if (--checksRemain) {
-          return;
-        };
-        detected = !error1 && error2;
-      }
-
-      var random = Math.random() * 11;
-
-      var img1 = new Image;
-      img1.onload = checkImages;
-      img1.onerror = function() {
-        error1 = true;
-        checkImages()
-      };
-      img1.src = imgUrl.replace(/\*/, 1).replace(/\*/, random);
-
-      var img2 = new Image;
-      img2.onload = checkImages;
-      img2.onerror = function() {
-        error2 = true;
-        checkImages()
-      };
-      img2.src = imgUrl.replace(/\*/, 2).replace(/\*/, random);
-
-      beforeCheck(250, callback)
-    };
-
-    this.detectWrapper = function(callback) {
-      return this.detect('/images/px.gif', callback);
-    };
-  };
-
-  window.display_dfp_slot = function(key) {
-    if (window.habr_blockers_checker) {
-      window.habr_blockers_checker.detectWrapper(window.create_callback_for_blocked(key));
-    } else {
-      window.create_callback_for_blocked(key)();
-    }
-  };
-</script>
-
-
-<script src="https://dr.habracdn.net/habrcom/javascripts/1575300555/libs/raven.min.js"></script>
-<script>Raven.config('https://830576edd4b7478086093f693a5a0df5@s.tmtm.ru/37').install()</script>
-
-<script src="https://dr.habracdn.net/habrcom/javascripts/1575300555/_parts/advertise.js"></script>
-<script src="https://dr.habracdn.net/habrcom/javascripts/1575300555/_parts/adriver.js"></script>
-<script src="https://www.googletagservices.com/tag/js/gpt.js" async></script>
-<script src="https://static.criteo.net/js/ld/publishertag.js" async></script>
-
-<script>
-  var googletag = googletag || {};
-  googletag.cmd = googletag.cmd || [];
-</script>
-
-<script>
-  // TODO: move this code to module
-  //       move dot in chains to start of line and use one indent level:
-  //                  start()
-  //                    .chainEnd()
-  function display_yandex_rtb(yandexId, divId) {
-    $('#' + divId).show();
-    (function(w, d, n, s, t) {
-      w[n] = w[n] || [];
-      w[n].push(function() {
-        Ya.Context.AdvManager.render({
-          blockId: yandexId,
-          renderTo: divId,
-          async: true
-        });
-      });
-      t = d.getElementsByTagName('script')[0];
-      s = d.createElement('script');
-      s.type = 'text/javascript';
-      s.src = '//an.yandex.ru/system/context.js';
-      s.async = true;
-      t.parentNode.insertBefore(s, t);
-    })(this, this.document, 'yandexContextAsyncCallbacks');
-  }
-
-  function listen_googletag_and_render_yandex(yandexId, targetDivId) {
-    if (!window.googletag || !window.googletag.cmd) {
-      return;
-    }
-    window.googletag.cmd.push(function() {
-      if (!window.googletag.pubads) {
-        return;
-      }
-
-      window.googletag.pubads()
-        .addEventListener('slotRenderEnded', function(event) {
-          var divId = event.slot.getSlotElementId();
-          if (divId === targetDivId && event.isEmpty) {
-            window.display_yandex_rtb(yandexId, divId);
-          }
-        });
-    });
-  }
-
-  function getRoxotItem(storageKey, config) {
-    if (config) {
-      var { randomVal, returnCode } = config;
-    } else {
-      var randomVal = 100,
-          returnCode = '101';
-    }
-    try {
-      var groupId = localStorage.getItem(storageKey);
-      if (groupId === null) {
-        groupId = 1 + Math.floor(Math.random() * randomVal);
-        localStorage.setItem(storageKey, groupId);
-      }
-      return '' + groupId;
-    }
-    catch (e) {
-      return returnCode;
-    }
-  }
-
-  function getRoxotEvent() {
-    return '' + (1 + Math.floor(Math.random() * 100));
-  }
-
-  function leftpad(str, len, ch) {
-    str = String(str);
-
-    var i = -1;
-
-    if (!ch && ch !== 0) {
-      ch = ' ';
-    };
-
-    len = len - str.length;
-
-    while (++i < len) {
-      str = ch + str;
-    }
-
-    return str;
-  }
-
-  var WEEK_DAYS = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
-
-  function initializeDFP(usesABP) {
-    var currentDate = new Date();
-    var hours = currentDate.getHours();
-    var hoursStr = leftpad(hours, 2, '0');
-    var weekDayCode = WEEK_DAYS[currentDate.getDay()];
-    googletag.cmd.push(function() {
-      if (usesABP) {
-  googletag.defineSlot('/235032688/HH/HH01_ATF_Poster', [[1, 1], [300, 500], [300, 250], [300, 300], [300, 400], [300, 200], [300, 100], [240, 400]], 'div-gpt-hh-atf').addService(googletag.pubads());
-  window.listen_googletag_and_render_yandex('R-A-149298-31', 'div-gpt-hh-atf');
-} else {
-  googletag.defineSlot('/235032688/HH/HH01_ATF_Poster', [[1, 1], [300, 500], [300, 600], [300, 250], [300, 300], [300, 400], [300, 200], [300, 150], [300, 100], [240, 400]], 'div-gpt-hh-atf').addService(googletag.pubads());
-  window.listen_googletag_and_render_yandex('R-A-149298-35', 'div-gpt-hh-atf');
-}
-
-      googletag.pubads().enableSingleRequest();
-      if (!usesABP) {
-        googletag.pubads().disableInitialLoad(); //We will wait for the Criteo Bidder Call before calling the adserver
-      }
-      googletag.pubads().collapseEmptyDivs();
-      googletag.pubads().
-      setTargeting('roxot-group-id', getRoxotItem('roxot-gid', { randomVal: 10000, returnCode: '10001'})).
-      setTargeting('roxot-sector-id', getRoxotItem('roxot-sid')).
-      setTargeting('roxot-deep', getRoxotItem('roxot-deep')).
-      setTargeting('roxot-event-group-id', getRoxotEvent()).
-      setTargeting('roxot-event', getRoxotEvent()).
-      setTargeting('roxot-event-deep', getRoxotEvent()).
-      setTargeting('roxot-minutes', (new Date).getUTCMinutes().toString()).
-      setTargeting('roxot-hours', (new Date).getUTCHours().toString()).
-      setTargeting('roxot-day', (new Date).getUTCDay().toString()).
-      setTargeting('chr', hoursStr).
-      setTargeting('cwd', weekDayCode).
-      setTargeting('aa', (usesABP) ? 'yes' : 'no').
-      setTargeting('path', window.location.pathname + window.location.search).
-      setTargeting('feedtype', ["top_weekly","posts"]).
-      setTargeting('cat', ["f_develop"]).
-      setTargeting('dev', [0]).
-      setTargeting('user', ["guest","registered"]).
-      setTargeting('pagetype', ["feed"]);
-      googletag.enableServices();
-
-      if (!usesABP) {
-        window.Criteo = window.Criteo || {};
-        window.Criteo.events = window.Criteo.events || [];
-        var launchAdServer = function () {
-          googletag.cmd.push(function () {
-            Criteo.SetDFPKeyValueTargeting(); //This will append Criteo keywords to the adserver call
-            googletag.pubads().refresh(); //This will trigger the adserver call
-          });
-        };
-        Criteo.events.push(function () {
-          var adUnits = {
-            'placements': [
-              {'slotid': 'div-gpt-hh-inpage-wide', 'zoneid': 1173491}, // TMTM - RU - CDB - SA - Habr - 780x180
-              {'slotid': 'div-gpt-hh-atf', 'zoneid': 1173489}, // TMTM - RU - CDB - SA - Habr - 300x600
-            ]
-          };
-          // Define the price band range
-          Criteo.SetLineItemRanges('0..599:1;600..1398:2;1400..3000:5');
-          // Call Criteo and execute the callback function for a given timeout
-          Criteo.RequestBids(adUnits, launchAdServer, 750);
-        });
-      }
-    });
-  }
-  if (window.habr_blockers_checker) {
-    window.habr_blockers_checker.detectWrapper(initializeDFP);
-  } else {
-    initializeDFP(false);
-  }
-</script>
-
-<script type="text/javascript">
-  $(document).ready(function () {
-    if (!$.cookie('split201901')) {
-      $.cookie(
-        'split201901',
-        'A',
-        {
-          expires: 3 * 7,
-          domain: 'habr.com',
-          path: '/',
-          secure: true
-        }
-      );
-    }
-  });
-</script>
 
 
   </head>
@@ -585,7 +251,7 @@ html.classList.add('fonts-loaded');
       <span class="user-info__nickname user-info__nickname_small">ekaterinanikiforova</span>
     </a>
 
-    <span class="post__time">November 28, 2019 at 10:17 AM</span>
+    <span class="post__time">yesterday at 10:17 AM</span>
 
 
   </header>
@@ -751,10 +417,24 @@ The Ark Compiler was first announced by Huawei at the launch of the new smartpho
 
               </li>
 
+<li class="content-list__item content-list__item_post shortcuts_item">
+                                <!-- /235032688/HH/HH02_inpage_wide -->
+                                <div class="dfp-slot">
+                                    <div class="dfp-slot__banner dfp-slot__banner_wide" id='div-gpt-hh-inpage-wide'>
+                                        <script>
+                                          window.display_dfp_slot('div-gpt-hh-inpage-wide');
+                                        </script>
+                                    </div>
+                                    <div class="dfp-slot__placeholder">
+                                        <span class="dfp-slot__placeholder-text">AdBlock has stolen the banner, but&nbsp;banners are not&nbsp;teeth &mdash; they will be back<br/><br/> <a
+                                                href="https://u.tmtm.ru/tmtalkadblock" class="btn btn_large btn_blue"
+                                                style="display:inline-flex!important;" target="_blank">More</a></span>
+                                    </div>
+                                    <a href="https://tmtm.ru/services/advertising/" target="_blank"
+                                       class="dfp-slot__label">Ads</a>
 
-
-
-
+                                </div>
+                            </li>
 
 
               <li class="content-list__item content-list__item_post shortcuts_item" id="post_478400">

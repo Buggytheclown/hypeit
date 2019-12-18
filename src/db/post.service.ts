@@ -14,6 +14,8 @@ const dbPostsSchema = yup.array(
     time: yup.string(),
     rawTime: yup.string(),
     link: yup.string(),
+    imageLink: yup.string(),
+    externalID: yup.string(),
     rating: yup.number(),
     resources_id: yup.number(),
     tags: yup.array(yup.string()),
@@ -39,18 +41,16 @@ async function insertPosts({
 
   const values = posts
     .map(
-      ({ title, time, rawTime, link, rating, externalID }) =>
+      ({ title, time, rawTime, link, rating, externalID, imageLink }) =>
         `('${jsStringEscape(
           title,
-        )}', '${time}', '${rawTime}', '${link}', ${rating}, ${resourcesId}, ${externalID})`,
+        )}', '${time}', '${rawTime}', '${link}', ${rating}, ${resourcesId}, ${externalID}, '${imageLink}')`,
     )
     .join(',');
 
-  // TODO: insert or update
-  // TODO: add update time
   const insertPostsQuery = `
-      INSERT INTO posts(title, time, rawTime, link, rating, resources_id, external_posts_id)
-      VALUES ${values};
+      INSERT INTO posts(title, time, rawTime, link, rating, resources_id, external_posts_id, image_link)
+      VALUES ${values} ON DUPLICATE KEY UPDATE rating = rating;
     `;
   return dBConnection.query(insertPostsQuery);
 }
@@ -64,7 +64,7 @@ async function insertTags({
 }) {
   const insertTagsQuery = `
       INSERT IGNORE INTO tags(name)
-      VALUES ${extractedTags.map(el => `('${el}')`).join(',')};
+      VALUES ${extractedTags.map(el => `('${jsStringEscape(el)}')`).join(',')};
     `;
 
   return dBConnection.query(insertTagsQuery);
@@ -199,7 +199,7 @@ export class PostModel {
 
   async getPosts(): Promise<yup.InferType<typeof dbPostsSchema>> {
     const query = `
-      SELECT title, time, rawTime, link, rating, resources_id, JSON_ARRAYAGG(name) as tags FROM posts
+      SELECT title, time, rawTime, link, rating, resources_id, image_link as imageLink, external_posts_id as externalID, JSON_ARRAYAGG(name) as tags FROM posts
                 JOIN posts_tags on posts.posts_id = posts_tags.posts_id
                 JOIN tags on posts_tags.tags_id = tags.tags_id
       GROUP BY posts.posts_id

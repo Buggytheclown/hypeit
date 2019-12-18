@@ -1,24 +1,33 @@
 import { Injectable } from '@nestjs/common';
-// import fetch from 'node-fetch';
-import { habrMock } from './habrData1.mock';
+import fetch from 'node-fetch';
+import { habrData1 } from './habrData1.mock';
 import { HabrParserService } from './habrParser.service';
 import {
   PostData,
   PostResources,
 } from '../../services/postDelivery/post.interfaces';
+import * as _ from 'lodash';
+import { HabrHttpService } from './habrHttp.service';
+
+function proceedPosts(rawPosts: Promise<string[]>, habrParserService: HabrParserService) {
+  return rawPosts
+    .then(pages => pages.map(habrParserService.parse))
+    .then(_.flatten)
+    .then(posts => ({ posts, resource: PostResources.HABR }));
+}
 
 @Injectable()
 export class HabrPostGrabberService {
-  constructor(private readonly habrParserService: HabrParserService) {}
+  constructor(
+    private readonly habrParserService: HabrParserService,
+    private readonly habrHttpService: HabrHttpService,
+  ) {}
 
   getBestOfTheWeek(): Promise<{ posts: PostData[]; resource: PostResources }> {
-    // return fetch('https://habr.com/en/flows/develop/top/')
-    // https://habr.com/en/flows/develop/top/page2/
-    // https://habr.com/en/flows/develop/top/monthly/page2/
-    //   .then(res => res.text())
+    return proceedPosts(this.habrHttpService.getBestOfTheWeek(10), this.habrParserService);
+  }
 
-    return Promise.resolve(habrMock)
-      .then(this.habrParserService.parse)
-      .then(posts => ({ posts, resource: PostResources.HABR }));
+  getBestOfTheMonth(): Promise<{ posts: PostData[]; resource: PostResources }> {
+    return proceedPosts(this.habrHttpService.getBestOfTheMonth(20), this.habrParserService);
   }
 }
