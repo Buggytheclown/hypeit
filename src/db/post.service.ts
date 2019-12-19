@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DBConnection } from './dBConnection.service';
-import * as jsStringEscape from 'js-string-escape';
 import {
   PostData,
   PostResources,
 } from '../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
 import * as yup from 'yup';
+import { esc } from './helpers';
 
 const dbPostsSchema = yup.array(
   yup.object({
@@ -32,7 +32,7 @@ async function insertPosts({
   dBConnection: DBConnection;
 }) {
   const resourcesId = await dBConnection
-    .query(`SELECT resources_id FROM resources WHERE name = '${resource}'`)
+    .query(`SELECT resources_id FROM resources WHERE name = ${esc(resource)}`)
     .then(({ results: [firstResult] }) => (firstResult || {}).resources_id);
 
   if (!resourcesId) {
@@ -42,9 +42,9 @@ async function insertPosts({
   const values = posts
     .map(
       ({ title, time, rawTime, link, rating, externalID, imageLink }) =>
-        `('${jsStringEscape(
+        `(${esc(
           title,
-        )}', '${time}', '${rawTime}', '${link}', ${rating}, ${resourcesId}, ${externalID}, '${imageLink}')`,
+        )}, ${esc(time)}, ${esc(rawTime)}, ${esc(link)}, ${rating}, ${resourcesId}, ${esc(externalID)}, ${esc(imageLink)})`,
     )
     .join(',');
 
@@ -64,7 +64,7 @@ async function insertTags({
 }) {
   const insertTagsQuery = `
       INSERT IGNORE INTO tags(name)
-      VALUES ${extractedTags.map(el => `('${jsStringEscape(el)}')`).join(',')};
+      VALUES ${extractedTags.map(el => `(${esc(el)})`).join(',')};
     `;
 
   return dBConnection.query(insertTagsQuery);
@@ -87,7 +87,7 @@ function findInsertedPosts({
   const query = `
     SELECT posts_id, external_posts_id FROM posts
     WHERE external_posts_id IN (${posts
-      .map(({ externalID }) => externalID)
+      .map(({ externalID }) => esc(externalID))
       .join(',')})`;
 
   return dBConnection.query(query).then(({ results }) => results);
@@ -109,7 +109,7 @@ function findInsertedTags({
 > {
   const query = `
     SELECT tags_id, name FROM tags
-    WHERE name IN (${extractedTags.map(el => `'${el}'`).join(',')})
+    WHERE name IN (${extractedTags.map(el => `${esc(el)}`).join(',')})
   `;
 
   return dBConnection.query(query).then(({ results }) => results);

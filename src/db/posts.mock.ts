@@ -1,15 +1,14 @@
 export const postsMock = [
   {
-    title:
-      'PVS-Studio Static Analyzer as a Tool for Protection against Zero-Day Vulnerabilities',
+    title: `title escape me's!%-<>.,\\`,
     time: `2019-12-02 07:17:00`,
-    tags: [`PVS-Studio corporate blog`, 'Information Security'],
+    tags: [`tag escape me's!%-<>.,\\`, 'Information Security'],
     imageLink:
-      'https://habrastorage.org/webt/wn/yg/mo/wnygmobm1xqfcuxn4cmsqzay8lg.png',
-    link: 'https://habr.com/en/company/pvs-studio/blog/477838/',
+      'imageLink escape me\'s!%-<>.,\\',
+    link: 'link escape me\'s!%-<>.,\\',
     rating: 27,
-    rawTime: 'yesterday at 10:17 AM',
-    externalID: '477838',
+    rawTime: 'rawTime escape me\'s!%-<>.,\\',
+    externalID: 'externalID escape me\'s!%-<>.,\\',
   },
   {
     title: 'Checking the Ark Compiler Recently Made Open-Source by Huawei',
