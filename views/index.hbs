@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>App</title>
+</head>
+<body>
+
+    <div>
+        <a href="?bestof=1">DAY</a>
+        <a href="?bestof=7">WEEK</a>
+        <a href="?bestof=30">MONTH</a>
+    </div>
+
+    <div>
+        {{#each posts}}
+            <div>
+                <h3>
+                    <span>{{rating}}</span> <a href={{link}} target="_blank">{{title}}</a>
+                </h3>
+                <p>{{ time }}</p>
+            </div>
+        {{/each}}
+    </div>
+
+    <div>
+        <a href="{{extendQuery page='1'}}">1</a>
+        <a href="{{extendQuery page='2'}}">2</a>
+        <a href="{{extendQuery page='3'}}">3</a>
+        <a href="{{extendQuery page='4'}}">4</a>
+        <a href="{{extendQuery page='5'}}">5</a>
+    </div>
+
+</body>
+</html>

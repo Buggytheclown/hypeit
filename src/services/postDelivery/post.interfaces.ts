@@ -12,7 +12,7 @@ export const postDataSchema = yup.object({
   rating: yup.number(),
   tags: yup.array(yup.string()),
   externalID: yup.string(),
-  imageLink: yup.string(),
+  imageLink: yup.string().nullable(),
 });
 
 export const postDataArraySchema = yup.array(postDataSchema);

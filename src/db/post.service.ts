@@ -14,7 +14,7 @@ const dbPostsSchema = yup.array(
     time: yup.string(),
     rawTime: yup.string(),
     link: yup.string(),
-    imageLink: yup.string(),
+    imageLink: yup.string().nullable(),
     externalID: yup.string(),
     rating: yup.number(),
     resources_id: yup.number(),
@@ -42,9 +42,9 @@ async function insertPosts({
   const values = posts
     .map(
       ({ title, time, rawTime, link, rating, externalID, imageLink }) =>
-        `(${esc(
-          title,
-        )}, ${esc(time)}, ${esc(rawTime)}, ${esc(link)}, ${rating}, ${resourcesId}, ${esc(externalID)}, ${esc(imageLink)})`,
+        `(${esc(title)}, ${esc(time)}, ${esc(rawTime)}, ${esc(
+          link,
+        )}, ${rating}, ${resourcesId}, ${esc(externalID)}, ${esc(imageLink)})`,
     )
     .join(',');
 
@@ -197,12 +197,28 @@ export class PostModel {
     });
   }
 
-  async getPosts(): Promise<yup.InferType<typeof dbPostsSchema>> {
+  async getPosts(
+    {
+      limit,
+      lastXDays,
+      offset,
+    }: { limit: number; lastXDays?: number; offset: number } = {
+      limit: 100,
+      offset: 0,
+    },
+  ): Promise<yup.InferType<typeof dbPostsSchema>> {
     const query = `
       SELECT title, time, rawTime, link, rating, resources_id, image_link as imageLink, external_posts_id as externalID, JSON_ARRAYAGG(name) as tags FROM posts
                 JOIN posts_tags on posts.posts_id = posts_tags.posts_id
                 JOIN tags on posts_tags.tags_id = tags.tags_id
+      ${
+        lastXDays
+          ? `WHERE time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE()`
+          : ''
+      }
       GROUP BY posts.posts_id
+      ORDER BY rating DESC
+      LIMIT ${offset}, ${limit}
 `;
     return this.dBConnection
       .query(query)

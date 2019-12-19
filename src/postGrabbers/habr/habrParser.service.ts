@@ -65,7 +65,7 @@ function parsePosts($, ind, el): PostData {
     );
   }
 
-  const imageLink = $el.find('.post__body img').attr('src');
+  const imageLink = $el.find('.post__body img').attr('src') || null;
 
   return {
     title,
