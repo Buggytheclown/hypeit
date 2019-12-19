@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import fetch from 'node-fetch';
-import { habrData1 } from './habrData1.mock';
 import { HabrParserService } from './habrParser.service';
 import {
   PostData,

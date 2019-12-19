@@ -5,9 +5,6 @@ import { HabrGrabberModule } from './habrGrabber.module';
 import { HabrHttpService } from './habrHttp.service';
 import { HabrPostGrabberService } from './habrPostGrabber.service';
 
-// import * as fs from 'fs';
-// const habrData2 = fs.readFileSync('src/postGrabbers/habr/habrData2.mock.html', 'utf8');
-
 const habrHttpServiceMock = {
   getBestOfTheWeek() {
     return Promise.resolve([habrData1]);
@@ -25,7 +22,9 @@ describe('habrPostGrabber', () => {
       .useValue(habrHttpServiceMock)
       .compile();
 
-    habrPostGrabberService = app.get<HabrPostGrabberService>(HabrPostGrabberService);
+    habrPostGrabberService = app.get<HabrPostGrabberService>(
+      HabrPostGrabberService,
+    );
   });
 
   it('WHEN mock loaded THEN should validate it right', async () => {
