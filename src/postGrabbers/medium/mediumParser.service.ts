@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PostData } from '../../services/postDelivery/post.interfaces';
+import {
+  MediumPostData,
+  mediumPostDataArraySchema,
+} from '../../services/postDelivery/post.interfaces';
 import * as yup from 'yup';
 import * as moment from 'moment';
 
@@ -26,8 +29,6 @@ const PostPreviewSchema = yup.object({
   firstPublishedAt: yup.number().notRequired(),
 });
 
-type PostPreview = yup.InferType<typeof PostPreviewSchema>;
-
 const MediumRawDataSchema = yup.object({
   data: yup.object({
     topic: yup.object({
@@ -44,7 +45,7 @@ const MediumRawDataSchema = yup.object({
   }),
 });
 
-type MediumRawData = yup.InferType<typeof MediumRawDataSchema>;
+type MediumRawData = Required<yup.InferType<typeof MediumRawDataSchema>>;
 
 function formatDataTime(dateTime?: number): string {
   const format = 'YYYY-MM-DD HH:mm:ss';
@@ -60,7 +61,7 @@ function formatDataTime(dateTime?: number): string {
 
 @Injectable()
 export class MediumParserService {
-  parse(mediumRawData: MediumRawData): PostData[] {
+  parse(mediumRawData: MediumRawData): MediumPostData[] {
     PostPreviewSchema.validateSync(mediumRawData, { strict: true });
 
     const topic = mediumRawData.data.topic;
@@ -71,19 +72,21 @@ export class MediumParserService {
       ...topic.popularPosts.postPreviews,
     ].map(({ post }) => post);
 
-    return posts.map(post => {
+    const parsedPosts = posts.map(post => {
       const rawTime = post.firstPublishedAt || post.updatedAt;
       return {
         title: post.title,
         time: formatDataTime(rawTime),
         rawTime: rawTime ? String(rawTime) : null,
         link: post.mediumUrl,
-        rating: post.clapCount,
+        clapCount: post.clapCount,
         voterCount: post.voterCount,
         tags: post.tags.map(({ displayTitle }) => displayTitle),
         externalID: post.id,
         imageLink: `https://miro.medium.com/max/334/${post.previewImage.id}`,
       };
     });
+
+    return mediumPostDataArraySchema.validateSync(parsedPosts);
   }
 }

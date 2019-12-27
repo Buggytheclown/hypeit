@@ -1,5 +1,6 @@
 import * as mysql from 'mysql';
-import { migration } from './01initial.migration';
+import { migration as migration1 } from './01initial.migration';
+import { migration as migration2 } from './02.migration';
 import { ConfigServiceProvider } from '../services/config/config.module';
 
 function promisefy(fn) {
@@ -71,7 +72,10 @@ Promise.resolve()
     return logOperation('clearBD', execMigration(clearBD));
   })
   .then(() => {
-    return logOperation('initial migration', execMigration(migration));
+    return logOperation('initial migration', execMigration(migration1));
+  })
+  .then(() => {
+    return logOperation('migration02', execMigration(migration2));
   })
   .catch(console.error)
   .finally(() => {

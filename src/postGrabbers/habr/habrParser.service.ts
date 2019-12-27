@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as cheerio from 'cheerio';
 import * as moment from 'moment';
 import {
+  HabrPostData, habrPostDataArraySchema,
   PostData,
   postDataArraySchema,
 } from '../../services/postDelivery/post.interfaces';
@@ -35,7 +36,7 @@ function rawTimeToDateTime(
   return parsedTime.utcOffset(0).format('YYYY-MM-DD HH:mm:ss');
 }
 
-function parsePosts($, ind, el): PostData {
+function parsePosts($, ind, el): HabrPostData {
   const $el = $(el);
   const title = $el.find('.post__title a').text();
 
@@ -51,19 +52,9 @@ function parsePosts($, ind, el): PostData {
 
   const externalID = $el.find('footer .bookmark-btn').data('id');
 
-  if (!externalID) {
-    throw new TypeError(
-      `Cant parse externalID for post ind:${ind}, title: ${title}`,
-    );
-  }
+  const totalVotes = +$el.find('.post-stats__result-counter').text();
 
-  const rating = +$el.find('.post-stats__result-counter').text();
-
-  if (!Number.isInteger(rating)) {
-    throw new TypeError(
-      `Cant parse rating for post ind:${ind}, title: ${title}`,
-    );
-  }
+  const totalViews = +$el.find('.post-stats__views-count').text();
 
   const imageLink = $el.find('.post__body img').attr('src') || null;
 
@@ -72,7 +63,8 @@ function parsePosts($, ind, el): PostData {
     time,
     tags,
     link,
-    rating,
+    totalVotes,
+    totalViews,
     rawTime,
     externalID: externalID.toString(),
     imageLink,
@@ -81,7 +73,7 @@ function parsePosts($, ind, el): PostData {
 
 @Injectable()
 export class HabrParserService {
-  parse(data: string): PostData[] {
+  parse(data: string): HabrPostData[] {
     const $ = cheerio.load(data);
     const posts = $('.posts_list .content-list__item_post');
 
@@ -102,6 +94,6 @@ export class HabrParserService {
         }
       });
 
-    return postDataArraySchema.validateSync(parsedPosts.toArray());
+    return habrPostDataArraySchema.validateSync(parsedPosts.toArray(), { strict: true });
   }
 }

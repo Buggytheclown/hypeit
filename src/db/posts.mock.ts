@@ -3,12 +3,13 @@ export const postsMock = [
     title: `title escape me's!%-<>.,\\`,
     time: `2019-12-02 07:17:00`,
     tags: [`tag escape me's!%-<>.,\\`, 'Information Security'],
-    imageLink:
-      'imageLink escape me\'s!%-<>.,\\',
-    link: 'link escape me\'s!%-<>.,\\',
+    imageLink: "imageLink escape me's!%-<>.,\\",
+    link: "link escape me's!%-<>.,\\",
+    totalViews: 190,
+    totalVotes: 27,
     rating: 27,
-    rawTime: 'rawTime escape me\'s!%-<>.,\\',
-    externalID: 'externalID escape me\'s!%-<>.,\\',
+    rawTime: "rawTime escape me's!%-<>.,\\",
+    externalID: "externalID escape me's!%-<>.,\\",
   },
   {
     title: 'Checking the Ark Compiler Recently Made Open-Source by Huawei',
@@ -17,6 +18,8 @@ export const postsMock = [
     imageLink:
       'https://habrastorage.org/getpro/habr/post_images/e03/5c8/f22/e035c8f22108a3bbe00865f9307244fe.png',
     link: 'https://habr.com/en/company/pvs-studio/blog/478282/',
+    totalViews: 329,
+    totalVotes: 24,
     rating: 24,
     rawTime: 'December 2, 2019 at 09:39 AM',
     externalID: '478282',
@@ -34,6 +37,8 @@ export const postsMock = [
     imageLink:
       'https://habrastorage.org/webt/tw/r9/w5/twr9w5yd649q0nvqdja9fxnftbw.jpeg',
     link: 'https://habr.com/en/company/mailru/blog/478400/',
+    totalVotes: 5,
+    totalViews: 383,
     rating: 5,
     rawTime: 'December 2, 2019 at 07:31 PM',
     externalID: '478400',
@@ -50,6 +55,8 @@ export const postsMock = [
     imageLink:
       'https://habrastorage.org/getpro/habr/post_images/8fd/846/426/8fd8464262f2a92659d4f2acb085a840.gif',
     link: 'https://habr.com/en/company/microsoft/blog/478166/',
+    totalViews: 218,
+    totalVotes: 2,
     rating: 2,
     rawTime: 'today at 10:00 AM',
     externalID: '478166',
@@ -67,6 +74,8 @@ export const postsMock = [
     imageLink:
       'https://habrastorage.org/webt/jo/zt/kk/joztkkbm3d1zf17-0q7n10xjrzk.jpeg',
     link: 'https://habr.com/en/company/microsoft/blog/477104/',
+    totalViews: 441,
+    totalVotes: 2,
     rating: 2,
     rawTime: 'November 29, 2019 at 10:00 AM',
     externalID: '477104',
@@ -85,6 +94,8 @@ export const postsMock = [
     imageLink:
       'https://habrastorage.org/webt/zo/-h/xu/zo-hxunxkji95ubq9vioprymxqm.png',
     link: 'https://habr.com/en/company/flashphoner/blog/478310/',
+    totalVotes: 1,
+    totalViews: 158,
     rating: 1,
     rawTime: 'December 2, 2019 at 12:19 PM',
     externalID: '478310',

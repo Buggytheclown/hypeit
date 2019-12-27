@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { DBConnection } from './dBConnection.service';
 import {
+  HabrPostRatingInfo,
+  MediumPostRatingInfo,
   PostData,
   PostResources,
 } from '../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
 import * as yup from 'yup';
 import { esc } from './helpers';
+import { PostResourcesData } from '../services/postDelivery/postResourses.interfaces';
 
 const dbPostsSchema = yup.array(
   yup.object({
@@ -22,12 +25,16 @@ const dbPostsSchema = yup.array(
   }),
 );
 
+type PostWithRating = PostResourcesData['posts'] extends Array<infer Post>
+  ? Post & { rating: number }
+  : never;
+
 async function insertPosts({
   posts,
   resource,
   dBConnection,
 }: {
-  posts: PostData[];
+  posts: PostWithRating[];
   resource: PostResources;
   dBConnection: DBConnection;
 }) {
@@ -41,17 +48,37 @@ async function insertPosts({
 
   const values = posts
     .map(
-      ({ title, time, rawTime, link, rating, externalID, imageLink }) =>
-        `(${esc(title)}, ${esc(time)}, ${esc(rawTime)}, ${esc(
-          link,
-        )}, ${rating}, ${resourcesId}, ${esc(externalID)}, ${esc(imageLink)})`,
+      ({
+        title,
+        time,
+        rawTime,
+        link,
+        rating,
+        externalID,
+        imageLink,
+        totalViews,
+        totalVotes,
+      }) =>
+        `(${[
+          esc(title),
+          esc(time),
+          esc(rawTime),
+          esc(link),
+          rating,
+          resourcesId,
+          esc(externalID),
+          esc(imageLink),
+          totalViews,
+          totalVotes,
+        ].join(',')})`,
     )
     .join(',');
 
   const insertPostsQuery = `
-      INSERT INTO posts(title, time, rawTime, link, rating, resources_id, external_posts_id, image_link)
-      VALUES ${values} ON DUPLICATE KEY UPDATE rating = rating;
+      INSERT INTO posts(title, time, rawTime, link, rating, resources_id, external_posts_id, image_link, total_views, total_votes)
+      VALUES ${values} ON DUPLICATE KEY UPDATE rating = rating, total_views = total_views, total_votes = total_votes;
     `;
+
   return dBConnection.query(insertPostsQuery);
 }
 
@@ -149,19 +176,25 @@ function createPostsTagsRelations({
   return dBConnection.query(query);
 }
 
+const calculators = {
+  [PostResources.HABR]: ({ totalVotes, totalViews }: HabrPostRatingInfo) =>
+    totalVotes,
+  [PostResources.MEDIUM]: ({ clapCount, voterCount }: MediumPostRatingInfo) =>
+    clapCount / (voterCount * 5),
+};
+
+function withPostRating({ posts, resource }) {
+  const calculator = calculators[resource];
+  return posts.map(post => ({ ...post, rating: calculator(post) }));
+}
+
 @Injectable()
 export class PostModel {
   constructor(private readonly dBConnection: DBConnection) {}
 
-  async savePosts({
-    posts,
-    resource,
-  }: {
-    posts: PostData[];
-    resource: PostResources;
-  }) {
+  async savePosts({ posts, resource }: PostResourcesData) {
     await insertPosts({
-      posts,
+      posts: withPostRating({ posts, resource }),
       resource,
       dBConnection: this.dBConnection,
     });
@@ -206,7 +239,7 @@ export class PostModel {
       limit: 100,
       offset: 0,
     },
-  ): Promise<yup.InferType<typeof dbPostsSchema>> {
+  ): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
     const query = `
       SELECT title, time, rawTime, link, rating, resources_id, image_link as imageLink, external_posts_id as externalID, JSON_ARRAYAGG(name) as tags FROM posts
                 JOIN posts_tags on posts.posts_id = posts_tags.posts_id

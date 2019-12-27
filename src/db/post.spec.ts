@@ -3,6 +3,7 @@ import { DbModule } from './db.module';
 import { PostModel } from './post.service';
 import { postsMock } from './posts.mock';
 import { PostResources } from '../services/postDelivery/post.interfaces';
+import * as _ from 'lodash';
 
 function withSortedTags(posts) {
   return posts.map(post => ({ ...post, tags: post.tags.slice().sort() }));
@@ -26,7 +27,12 @@ describe('post model test', () => {
     });
     const posts = await postModel.getPosts();
     expect(withSortedTags(posts)).toEqual(
-      withSortedTags(postsMock.map(post => ({ ...post, resources_id: 1 }))),
+      withSortedTags(
+        postsMock.map(post => ({
+          ..._.omit(post, ['totalVotes', 'totalViews']),
+          resources_id: 1,
+        })),
+      ),
     );
 
     done();
