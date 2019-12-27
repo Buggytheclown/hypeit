@@ -20,7 +20,7 @@ describe('post model test', () => {
     postModel = app.get<PostModel>(PostModel);
   });
 
-  it('postDelivery', async done => {
+  it('postDelivery should isert and update posts', async done => {
     await postModel.savePosts({
       posts: postsMock,
       resource: PostResources.HABR,
@@ -30,6 +30,24 @@ describe('post model test', () => {
       withSortedTags(
         postsMock.map(post => ({
           ..._.omit(post, ['totalVotes', 'totalViews']),
+          resources_id: 1,
+        })),
+      ),
+    );
+
+    await postModel.savePosts({
+      posts: postsMock.map(post => ({
+        ...post,
+        totalVotes: post.totalVotes + 1,
+      })),
+      resource: PostResources.HABR,
+    });
+    const postsUpdated = await postModel.getPosts();
+    expect(withSortedTags(postsUpdated)).toEqual(
+      withSortedTags(
+        postsMock.map(post => ({
+          ..._.omit(post, ['totalVotes', 'totalViews']),
+          rating: post.rating + 1,
           resources_id: 1,
         })),
       ),

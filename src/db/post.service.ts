@@ -76,7 +76,7 @@ async function insertPosts({
 
   const insertPostsQuery = `
       INSERT INTO posts(title, time, rawTime, link, rating, resources_id, external_posts_id, image_link, total_views, total_votes)
-      VALUES ${values} ON DUPLICATE KEY UPDATE rating = rating, total_views = total_views, total_votes = total_votes;
+      VALUES ${values} ON DUPLICATE KEY UPDATE rating = VALUES(rating), total_views = VALUES(total_views), total_votes = VALUES(total_votes);
     `;
 
   return dBConnection.query(insertPostsQuery);

@@ -11,8 +11,8 @@ export const habrMockParsed = [
     imageLink:
       'https://habrastorage.org/webt/wn/yg/mo/wnygmobm1xqfcuxn4cmsqzay8lg.png',
     link: 'https://habr.com/en/company/pvs-studio/blog/477838/',
-    totalViews: 190,
-    totalVotes: 27,
+    totalViews: 19000,
+    totalVotes: 2700,
     rawTime: 'yesterday at 10:17 AM',
     externalID: '477838',
   },

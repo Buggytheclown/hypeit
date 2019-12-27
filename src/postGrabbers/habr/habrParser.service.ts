@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import * as cheerio from 'cheerio';
 import * as moment from 'moment';
 import {
-  HabrPostData, habrPostDataArraySchema,
-  PostData,
-  postDataArraySchema,
+  HabrPostData,
+  habrPostDataSchema,
 } from '../../services/postDelivery/post.interfaces';
 import { Moment } from 'moment';
 
@@ -36,6 +35,13 @@ function rawTimeToDateTime(
   return parsedTime.utcOffset(0).format('YYYY-MM-DD HH:mm:ss');
 }
 
+function parseNormalizedCount(data: string): number {
+  if (data.includes('k')) {
+    return +data.replace('k', '') * 1000;
+  }
+  return +data;
+}
+
 function parsePosts($, ind, el): HabrPostData {
   const $el = $(el);
   const title = $el.find('.post__title a').text();
@@ -52,9 +58,13 @@ function parsePosts($, ind, el): HabrPostData {
 
   const externalID = $el.find('footer .bookmark-btn').data('id');
 
-  const totalVotes = +$el.find('.post-stats__result-counter').text();
+  const totalVotes = parseNormalizedCount(
+    $el.find('.post-stats__result-counter').text(),
+  );
 
-  const totalViews = +$el.find('.post-stats__views-count').text();
+  const totalViews = parseNormalizedCount(
+    $el.find('.post-stats__views-count').text(),
+  );
 
   const imageLink = $el.find('.post__body img').attr('src') || null;
 
@@ -77,7 +87,7 @@ export class HabrParserService {
     const $ = cheerio.load(data);
     const posts = $('.posts_list .content-list__item_post');
 
-    const parsedPosts = posts
+    return posts
       .filter(
         (_, el) =>
           $(el).attr('id') &&
@@ -87,13 +97,14 @@ export class HabrParserService {
       )
       .map((ind, el) => {
         try {
-          return parsePosts($, ind, el);
+          return habrPostDataSchema.validateSync(parsePosts($, ind, el), {
+            strict: true,
+          });
         } catch (e) {
           console.log($.html(el));
           throw e;
         }
-      });
-
-    return habrPostDataArraySchema.validateSync(parsedPosts.toArray(), { strict: true });
+      })
+      .toArray();
   }
 }

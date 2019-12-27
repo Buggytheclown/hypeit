@@ -287,7 +287,7 @@ A Zero-day (0-day) vulnerability is a computer-software vulnerability introduced
           <span class="post-stats__result-icon">
             <svg class="icon-svg_votes" width="10" height="16"><use xlink:href="https://habr.com/images/1575300555/common-svg-sprite.svg#counter-rating" /></svg>
           </span>
-          <span class="post-stats__result-counter voting-wjt__counter_positive " title="Total rating 27: &uarr;27 and &darr;0">+27</span>
+          <span class="post-stats__result-counter voting-wjt__counter_positive " title="Total rating 27: &uarr;27 and &darr;0">+2.7k</span>
         </div>
       </li>
     <li class="post-stats__item post-stats__item_bookmark">
@@ -298,7 +298,7 @@ A Zero-day (0-day) vulnerability is a computer-software vulnerability introduced
 
     <li class="post-stats__item post-stats__item_views">
       <div class="post-stats__views" title="Views">
-        <svg class="icon-svg_views-count" width="21" height="12"><use xlink:href="https://habr.com/images/1575300555/common-svg-sprite.svg#eye" /></svg><span class="post-stats__views-count">190</span>
+        <svg class="icon-svg_views-count" width="21" height="12"><use xlink:href="https://habr.com/images/1575300555/common-svg-sprite.svg#eye" /></svg><span class="post-stats__views-count">19k</span>
       </div>
     </li>
 
