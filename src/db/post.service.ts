@@ -29,6 +29,45 @@ type PostWithRating = PostResourcesData['posts'] extends Array<infer Post>
   ? Post & { rating: number }
   : never;
 
+function getRatingInfo(
+  post,
+  resource,
+): {
+  totalViews: number | null;
+  totalVotes: number | null;
+  voterCount: number | null;
+  clapCount: number | null;
+} {
+  const nullRatingInfo = {
+    totalViews: null,
+    totalVotes: null,
+    voterCount: null,
+    clapCount: null,
+  };
+  if (resource === PostResources.HABR) {
+    return {
+      ...nullRatingInfo,
+      totalViews: post.totalViews,
+      totalVotes: post.totalVotes,
+    };
+  }
+
+  if (resource === PostResources.MEDIUM) {
+    return {
+      ...nullRatingInfo,
+      voterCount: post.voterCount,
+      clapCount: post.clapCount,
+    };
+  }
+}
+
+function toNullable<T>(value: T): T | 'NULL' {
+  if (value === null) {
+    return 'NULL';
+  }
+  return value;
+}
+
 async function insertPosts({
   posts,
   resource,
@@ -47,8 +86,8 @@ async function insertPosts({
   }
 
   const values = posts
-    .map(
-      ({
+    .map(post => {
+      const {
         title,
         time,
         rawTime,
@@ -56,29 +95,37 @@ async function insertPosts({
         rating,
         externalID,
         imageLink,
-        totalViews,
-        totalVotes,
-      }) =>
-        `(${[
-          esc(title),
-          esc(time),
-          esc(rawTime),
-          esc(link),
-          rating,
-          resourcesId,
-          esc(externalID),
-          esc(imageLink),
-          totalViews,
-          totalVotes,
-        ].join(',')})`,
-    )
+      } = post;
+
+      const { totalViews, totalVotes, voterCount, clapCount } = getRatingInfo(
+        post,
+        resource,
+      );
+
+      return `(${[
+        esc(title),
+        esc(time),
+        esc(rawTime),
+        esc(link),
+        rating,
+        resourcesId,
+        esc(externalID),
+        esc(imageLink),
+        toNullable(totalViews),
+        toNullable(totalVotes),
+        toNullable(clapCount),
+        toNullable(voterCount),
+      ].join(',')})`;
+    })
     .join(',');
 
   const insertPostsQuery = `
-      INSERT INTO posts(title, time, rawTime, link, rating, resources_id, external_posts_id, image_link, total_views, total_votes)
+      INSERT INTO posts(
+        title, time, rawTime, link,
+        rating, resources_id, external_posts_id, image_link,
+        total_views, total_votes, clap_count, voter_count)
       VALUES ${values} ON DUPLICATE KEY UPDATE rating = VALUES(rating), total_views = VALUES(total_views), total_votes = VALUES(total_votes);
     `;
-
   return dBConnection.query(insertPostsQuery);
 }
 
@@ -180,7 +227,7 @@ const calculators = {
   [PostResources.HABR]: ({ totalVotes, totalViews }: HabrPostRatingInfo) =>
     totalVotes,
   [PostResources.MEDIUM]: ({ clapCount, voterCount }: MediumPostRatingInfo) =>
-    clapCount / (voterCount * 5),
+    voterCount,
 };
 
 function withPostRating({ posts, resource }) {
@@ -246,7 +293,7 @@ export class PostModel {
                 JOIN tags on posts_tags.tags_id = tags.tags_id
       ${
         lastXDays
-          ? `WHERE time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE()`
+          ? `WHERE time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`
           : ''
       }
       GROUP BY posts.posts_id
@@ -259,5 +306,15 @@ export class PostModel {
         results.map(row => ({ ...row, tags: JSON.parse(row.tags) })),
       )
       .then(res => dbPostsSchema.validateSync(res));
+  }
+
+  async deleteAllPosts() {
+    const query = `
+    SET FOREIGN_KEY_CHECKS = 0;
+    TRUNCATE TABLE posts;
+    TRUNCATE TABLE tags;
+    TRUNCATE TABLE posts_tags;
+    SET FOREIGN_KEY_CHECKS = 1;`;
+    return this.dBConnection.query(query);
   }
 }

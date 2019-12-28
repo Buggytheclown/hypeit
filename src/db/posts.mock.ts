@@ -1,103 +1,78 @@
-export const postsMock = [
-  {
-    title: `title escape me's!%-<>.,\\`,
-    time: `2019-12-02 07:17:00`,
-    tags: [`tag escape me's!%-<>.,\\`, 'Information Security'],
-    imageLink: "imageLink escape me's!%-<>.,\\",
-    link: "link escape me's!%-<>.,\\",
-    totalViews: 190,
-    totalVotes: 27,
-    rating: 27,
-    rawTime: "rawTime escape me's!%-<>.,\\",
-    externalID: "externalID escape me's!%-<>.,\\",
-  },
-  {
-    title: 'Checking the Ark Compiler Recently Made Open-Source by Huawei',
-    time: '2019-12-02 06:39:00',
-    tags: ['PVS-Studio corporate blog', 'Open source', 'C++', 'Compilers', 'C'],
-    imageLink:
-      'https://habrastorage.org/getpro/habr/post_images/e03/5c8/f22/e035c8f22108a3bbe00865f9307244fe.png',
-    link: 'https://habr.com/en/company/pvs-studio/blog/478282/',
-    totalViews: 329,
-    totalVotes: 24,
-    rating: 24,
-    rawTime: 'December 2, 2019 at 09:39 AM',
-    externalID: '478282',
-  },
-  {
-    title: 'СodeSide. The new game for Russian AI Cup',
-    time: '2019-12-02 16:31:00',
-    tags: [
-      'Mail.ru Group corporate blog',
-      'Abnormal programming',
-      'Sport programming',
-      'Entertaining tasks',
-      'Artificial Intelligence',
-    ],
-    imageLink:
-      'https://habrastorage.org/webt/tw/r9/w5/twr9w5yd649q0nvqdja9fxnftbw.jpeg',
-    link: 'https://habr.com/en/company/mailru/blog/478400/',
-    totalVotes: 5,
-    totalViews: 383,
-    rating: 5,
-    rawTime: 'December 2, 2019 at 07:31 PM',
-    externalID: '478400',
-  },
-  {
-    title: 'Windows Terminal Preview v0.7 Release',
-    time: `2019-12-02 07:00:00`,
-    tags: [
-      'Microsoft corporate blog',
-      'System administration',
-      'GitHub',
-      'Development for Windows',
-    ],
-    imageLink:
-      'https://habrastorage.org/getpro/habr/post_images/8fd/846/426/8fd8464262f2a92659d4f2acb085a840.gif',
-    link: 'https://habr.com/en/company/microsoft/blog/478166/',
-    totalViews: 218,
-    totalVotes: 2,
-    rating: 2,
-    rawTime: 'today at 10:00 AM',
-    externalID: '478166',
-  },
-  {
-    title: 'AI-assisted IntelliSense for your team’s codebase',
-    time: '2019-11-29 07:00:00',
-    tags: [
-      'Microsoft corporate blog',
-      'Programming',
-      'Visual Studio',
-      'Machine learning',
-      'Artificial Intelligence',
-    ],
-    imageLink:
-      'https://habrastorage.org/webt/jo/zt/kk/joztkkbm3d1zf17-0q7n10xjrzk.jpeg',
-    link: 'https://habr.com/en/company/microsoft/blog/477104/',
-    totalViews: 441,
-    totalVotes: 2,
-    rating: 2,
-    rawTime: 'November 29, 2019 at 10:00 AM',
-    externalID: '477104',
-  },
-  {
-    title:
-      'Dynamic CDN for Low Latency WebRTC Streaming with Stream Access Control',
-    time: '2019-12-02 09:19:00',
-    tags: [
-      'Flashphoner corporate blog',
-      'Website development',
-      'Working with video',
-      'Programming',
-      'Video conferencing',
-    ],
-    imageLink:
-      'https://habrastorage.org/webt/zo/-h/xu/zo-hxunxkji95ubq9vioprymxqm.png',
-    link: 'https://habr.com/en/company/flashphoner/blog/478310/',
-    totalVotes: 1,
-    totalViews: 158,
-    rating: 1,
-    rawTime: 'December 2, 2019 at 12:19 PM',
-    externalID: '478310',
-  },
-];
+export const postsMocks = {
+  habr: [
+    {
+      title: `title escape me's!%-<>.,\\`,
+      time: `2019-12-02 07:17:00`,
+      tags: [`tag escape me's!%-<>.,\\`, 'Information Security'],
+      imageLink: "imageLink escape me's!%-<>.,\\",
+      link: "link escape me's!%-<>.,\\",
+      totalViews: 190,
+      totalVotes: 27,
+      rating: 27,
+      rawTime: "rawTime escape me's!%-<>.,\\",
+      externalID: "externalID escape me's!%-<>.,\\",
+    },
+    {
+      title: 'Checking the Ark Compiler Recently Made Open-Source by Huawei',
+      time: '2019-12-02 06:39:00',
+      tags: [
+        'PVS-Studio corporate blog',
+        'Open source',
+        'C++',
+        'Compilers',
+        'C',
+      ],
+      imageLink:
+        'https://habrastorage.org/getpro/habr/post_images/e03/5c8/f22/e035c8f22108a3bbe00865f9307244fe.png',
+      link: 'https://habr.com/en/company/pvs-studio/blog/478282/',
+      totalViews: 329,
+      totalVotes: 24,
+      rating: 24,
+      rawTime: 'December 2, 2019 at 09:39 AM',
+      externalID: '478282',
+    },
+  ],
+  medium: [
+    {
+      title: 'Complex logic at breakneck speed: Try Julia for data science',
+      time: '2019-12-18 21:18:14',
+      rawTime: '1576703894485',
+      link:
+        'https://towardsdatascience.com/complex-logic-at-breakneck-speed-try-julia-for-data-science-bcd4dfa23541',
+      clapCount: 150,
+      voterCount: 28,
+      rating: 28,
+      tags: [
+        'Data Science',
+        'Machine Learning',
+        'Technology',
+        'Programming',
+        'Python',
+      ],
+      externalID: 'bcd4dfa23541',
+      imageLink:
+        'https://miro.medium.com/max/334/1*BoIkAVSloc4lcxiR-0G8Rw.jpeg',
+    },
+    {
+      title:
+        'Building An Image Recommendation System For News Articles using Word and Sentence Embeddings',
+      time: '2019-12-17 17:40:34',
+      rawTime: '1576604434921',
+      link:
+        'https://towardsdatascience.com/building-an-image-recommendation-system-for-news-articles-using-word-and-sentence-embeddings-a5acb485a445',
+      clapCount: 54,
+      voterCount: 16,
+      rating: 16,
+      tags: [
+        'Machine Learning',
+        'NLP',
+        'Word Embeddings',
+        'Sentence Embedding',
+        'Towards Data Science',
+      ],
+      externalID: 'a5acb485a445',
+      imageLink:
+        'https://miro.medium.com/max/334/1*cEaeMuTvINqIgyYQMSJWUA.jpeg',
+    },
+  ],
+};

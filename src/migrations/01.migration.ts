@@ -1,4 +1,4 @@
-export function migration(connection, fn) {
+export function migration01(connection, fn) {
   connection.query(
     `CREATE TABLE IF NOT EXISTS resources(
   resources_id INT NOT NULL AUTO_INCREMENT,

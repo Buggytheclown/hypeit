@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DbModule } from './db.module';
 import { PostModel } from './post.service';
-import { postsMock } from './posts.mock';
+import { postsMocks } from './posts.mock';
 import { PostResources } from '../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
 
@@ -20,15 +20,53 @@ describe('post model test', () => {
     postModel = app.get<PostModel>(PostModel);
   });
 
-  it('postDelivery should isert and update posts', async done => {
+  afterEach(async () => postModel.deleteAllPosts());
+
+  it('postDelivery should insert HABR posts', async done => {
     await postModel.savePosts({
-      posts: postsMock,
+      posts: postsMocks.habr,
+      resource: PostResources.HABR,
+    });
+
+    const posts = await postModel.getPosts();
+
+    expect(withSortedTags(posts)).toEqual(
+      withSortedTags(
+        postsMocks.habr.map(post => ({
+          ..._.omit(post, ['totalVotes', 'totalViews']),
+          resources_id: 1,
+        })),
+      ),
+    );
+    done();
+  });
+
+  it('postDelivery should insert MEDIUM posts', async done => {
+    await postModel.savePosts({
+      posts: postsMocks.medium,
+      resource: PostResources.MEDIUM,
+    });
+    const posts = await postModel.getPosts();
+    expect(withSortedTags(posts)).toEqual(
+      withSortedTags(
+        postsMocks.medium.map(post => ({
+          ..._.omit(post, ['clapCount', 'voterCount']),
+          resources_id: 2,
+        })),
+      ),
+    );
+    done();
+  });
+
+  it('postDelivery should insert and update HABR posts', async done => {
+    await postModel.savePosts({
+      posts: postsMocks.habr,
       resource: PostResources.HABR,
     });
     const posts = await postModel.getPosts();
     expect(withSortedTags(posts)).toEqual(
       withSortedTags(
-        postsMock.map(post => ({
+        postsMocks.habr.map(post => ({
           ..._.omit(post, ['totalVotes', 'totalViews']),
           resources_id: 1,
         })),
@@ -36,7 +74,7 @@ describe('post model test', () => {
     );
 
     await postModel.savePosts({
-      posts: postsMock.map(post => ({
+      posts: postsMocks.habr.map(post => ({
         ...post,
         totalVotes: post.totalVotes + 1,
       })),
@@ -45,7 +83,7 @@ describe('post model test', () => {
     const postsUpdated = await postModel.getPosts();
     expect(withSortedTags(postsUpdated)).toEqual(
       withSortedTags(
-        postsMock.map(post => ({
+        postsMocks.habr.map(post => ({
           ..._.omit(post, ['totalVotes', 'totalViews']),
           rating: post.rating + 1,
           resources_id: 1,

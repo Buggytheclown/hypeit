@@ -61,4 +61,18 @@ export class AppController {
     await this.postDeliveryService.saveBestOfTheMonth();
     return 'ok';
   }
+
+  @Get('/update/medium')
+  async updateMediumPosts() {
+    await this.postDeliveryService.saveMediumBestOfTheWeek();
+    await this.postDeliveryService.saveMediumBestOfTheMonth();
+    return 'ok';
+  }
+
+  @Get('/update/habr')
+  async updateHabrPosts() {
+    await this.postDeliveryService.saveHabrBestOfTheWeek();
+    await this.postDeliveryService.saveHabrBestOfTheMonth();
+    return 'ok';
+  }
 }

@@ -30,7 +30,6 @@ export type MediumPostRatingInfo = Required<
 
 export const mediumPostDataSchema = yup.object({
   ...basePostDataFields,
-  rawTime: yup.string().nullable(),
   ...mediumPostRatingInfoFields,
 });
 
