@@ -15,6 +15,7 @@ export class DBConnection {
       timezone: configService.get('TIMEZONE'),
       multipleStatements: true,
       dateStrings: true,
+      charset: 'utf8mb4',
     });
 
     this.connection.connect(err => {

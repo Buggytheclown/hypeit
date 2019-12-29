@@ -1,13 +1,14 @@
-import { migration01 } from './01.migration';
-import { migration02 } from './02.migration';
 import {
   clearBD,
   connection,
   execMigration,
   logOperation,
 } from './migrations.helper';
+import { migration01 } from './01.migration';
+import { migration02 } from './02.migration';
+import { migration03 } from './03.migration';
 
-const migrations = [clearBD, migration01, migration02];
+const migrations = [clearBD, migration01, migration02, migration03];
 
 Promise.resolve()
   .then(() =>

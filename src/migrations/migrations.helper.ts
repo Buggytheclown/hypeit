@@ -38,6 +38,7 @@ export const connection = (() => {
     database,
     multipleStatements: true,
     dateStrings: true,
+    charset: 'utf8mb4',
   });
 
   con.connect(err => {

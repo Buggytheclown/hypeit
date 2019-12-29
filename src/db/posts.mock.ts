@@ -13,10 +13,10 @@ export const postsMocks = {
       externalID: "externalID escape me's!%-<>.,\\",
     },
     {
-      title: 'Checking the Ark Compiler Recently Made Open-Source by Huawei',
+      title: 'Checking 🦕 the Ark Compiler Recently Made Open-Source by Huawei',
       time: '2019-12-02 06:39:00',
       tags: [
-        'PVS-Studio corporate blog',
+        'PVS-Studio corporate blog 🦕',
         'Open source',
         'C++',
         'Compilers',
