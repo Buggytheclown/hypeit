@@ -18,18 +18,12 @@ export class PostDeliveryService {
 
   async saveHabrBestOfTheWeek() {
     const habrData = await this.habrPostGrabberService.getBestOfTheWeek();
-    return await this.postModel.savePosts(habrData).catch(e => {
-      console.error(e);
-      throw e;
-    });
+    return await this.postModel.savePosts(habrData);
   }
 
   async saveMediumBestOfTheWeek() {
     const mediumData = await this.mediumPostGrabberService.getBestOfTheWeek();
-    return await this.postModel.savePosts(mediumData).catch(e => {
-      console.error(e);
-      throw e;
-    });
+    return await this.postModel.savePosts(mediumData);
   }
 
   async saveBestOfTheMonth() {
@@ -39,17 +33,11 @@ export class PostDeliveryService {
 
   async saveHabrBestOfTheMonth() {
     const habrData = await this.habrPostGrabberService.getBestOfTheMonth();
-    return await this.postModel.savePosts(habrData).catch(e => {
-      console.error(e);
-      throw e;
-    });
+    return await this.postModel.savePosts(habrData);
   }
 
   async saveMediumBestOfTheMonth() {
     const mediumData = await this.mediumPostGrabberService.getBestOfTheMonth();
-    return await this.postModel.savePosts(mediumData).catch(e => {
-      console.error(e);
-      throw e;
-    });
+    return await this.postModel.savePosts(mediumData);
   }
 }

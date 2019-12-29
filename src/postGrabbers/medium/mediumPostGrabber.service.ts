@@ -5,24 +5,26 @@ import {
   MediumPostData,
   PostResources,
 } from '../../services/postDelivery/post.interfaces';
-import { writeData } from '../../helpers/helpers';
+import { MediumRawData } from './medium.interface';
+import * as _ from 'lodash';
 
 export interface MediumResourses {
   posts: MediumPostData[];
   resource: PostResources.MEDIUM;
 }
 
-function wrapAsResource<T>(
-  data: T,
-): {
-  posts: T;
+function proceedPosts(
+  rawPosts: Promise<MediumRawData[]>,
+  mediumParserService: MediumParserService,
+): Promise<{
+  posts: MediumPostData[];
   resource: PostResources.MEDIUM;
-} {
-  return { posts: data, resource: PostResources.MEDIUM };
+}> {
+  return rawPosts
+    .then(pages => pages.map(mediumParserService.parse))
+    .then(_.flatten)
+    .then(posts => ({ posts, resource: PostResources.MEDIUM }));
 }
-
-// TODO: increase limit
-// TODO: split big limit into smaller(max 25 posts)
 
 @Injectable()
 export class MediumPostGrabberService {
@@ -32,14 +34,16 @@ export class MediumPostGrabberService {
   ) {}
 
   async getBestOfTheWeek(): Promise<MediumResourses> {
-    const rawData = await this.mediumHttpService
-      .getBestOfTheWeek(25)
-      .then(writeData);
-    return wrapAsResource(this.mediumParserService.parse(rawData));
+    return proceedPosts(
+      this.mediumHttpService.getBestOfTheWeek(),
+      this.mediumParserService,
+    );
   }
 
   async getBestOfTheMonth(): Promise<MediumResourses> {
-    const rawData = await this.mediumHttpService.getBestOfTheMonth(25);
-    return wrapAsResource(this.mediumParserService.parse(rawData));
+    return proceedPosts(
+      this.mediumHttpService.getBestOfTheMonth(),
+      this.mediumParserService,
+    );
   }
 }

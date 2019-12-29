@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import * as moment from 'moment';
 import { MediumRawData } from './medium.interface';
 import { mediumRequestPayload } from './mediumRequestPayload';
+import * as _ from 'lodash';
 
 interface MediumRequestPayload {
   operationName: string;
@@ -16,7 +17,7 @@ interface MediumRequestPayload {
 
 function setPayloadOptions(
   payload: MediumRequestPayload,
-  options: { limit: number; to: number },
+  options: { limit?: number; to: number },
 ): MediumRequestPayload {
   return {
     ...payload,
@@ -24,45 +25,53 @@ function setPayloadOptions(
       ...payload.variables,
       feedPagingOptions: {
         ...payload.variables.feedPagingOptions,
-        limit: options.limit,
+        // limit:25 is a maximum for medium API
+        limit: options.limit || 25,
         to: options.to.toString(),
       },
     },
   };
 }
 
-function millisecondsWasInXDays(daysAgo: number): number {
+function millisecondsWasInXDaysAgo(daysAgo: number): number {
   return moment({ hour: 0, minute: 0 })
     .subtract(daysAgo, 'days')
     .valueOf();
 }
 
-function mediumRequest({
+function baseMediumRequest({
   daysAgo,
-  limit,
 }: {
   daysAgo: number;
-  limit: number;
 }): Promise<MediumRawData> {
   return fetch(`https://medium.com/_/graphql`, {
     method: 'POST',
     body: JSON.stringify(
       setPayloadOptions(mediumRequestPayload, {
-        limit,
-        to: millisecondsWasInXDays(7),
+        to: millisecondsWasInXDaysAgo(daysAgo),
       }),
     ),
     headers: { 'Content-Type': 'application/json' },
   }).then(res => res.json());
 }
 
+function mediumRequest({
+  daysAgo,
+}: {
+  daysAgo: number;
+}): Promise<MediumRawData[]> {
+  return Promise.all(
+    _.range(daysAgo).map(dayAgo => baseMediumRequest({ daysAgo: dayAgo })),
+  );
+}
+
 @Injectable()
 export class MediumHttpService {
-  getBestOfTheWeek(limit: number): Promise<MediumRawData> {
-    return mediumRequest({ limit, daysAgo: 7 });
+  getBestOfTheWeek(): Promise<MediumRawData[]> {
+    return mediumRequest({ daysAgo: 7 });
   }
 
-  getBestOfTheMonth(limit: number): Promise<MediumRawData> {
-    return mediumRequest({ limit, daysAgo: 30 });
+  getBestOfTheMonth(): Promise<MediumRawData[]> {
+    return mediumRequest({ daysAgo: 30 });
   }
 }

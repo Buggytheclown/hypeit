@@ -7,7 +7,7 @@ export const habrMockParsed = [
     time: `${moment()
       .subtract(1, 'days')
       .format('YYYY-MM-DD')} 07:17:00`,
-    tags: ['PVS-Studio corporate blog', 'Information Security'],
+    tags: ['pvs-studio corporate blog', 'information security'],
     imageLink:
       'https://habrastorage.org/webt/wn/yg/mo/wnygmobm1xqfcuxn4cmsqzay8lg.png',
     link: 'https://habr.com/en/company/pvs-studio/blog/477838/',
@@ -19,7 +19,7 @@ export const habrMockParsed = [
   {
     title: 'Checking the Ark Compiler Recently Made Open-Source by Huawei',
     time: '2019-12-02 06:39:00',
-    tags: ['PVS-Studio corporate blog', 'Open source', 'C++', 'Compilers', 'C'],
+    tags: ['pvs-studio corporate blog', 'open source', 'c++', 'compilers', 'c'],
     imageLink:
       'https://habrastorage.org/getpro/habr/post_images/e03/5c8/f22/e035c8f22108a3bbe00865f9307244fe.png',
     link: 'https://habr.com/en/company/pvs-studio/blog/478282/',
@@ -32,11 +32,11 @@ export const habrMockParsed = [
     title: 'СodeSide. The new game for Russian AI Cup',
     time: '2019-12-02 16:31:00',
     tags: [
-      'Mail.ru Group corporate blog',
-      'Abnormal programming',
-      'Sport programming',
-      'Entertaining tasks',
-      'Artificial Intelligence',
+      'mail.ru group corporate blog',
+      'abnormal programming',
+      'sport programming',
+      'entertaining tasks',
+      'artificial intelligence',
     ],
     imageLink:
       'https://habrastorage.org/webt/tw/r9/w5/twr9w5yd649q0nvqdja9fxnftbw.jpeg',
@@ -50,10 +50,10 @@ export const habrMockParsed = [
     title: 'Windows Terminal Preview v0.7 Release',
     time: `${moment().format('YYYY-MM-DD')} 07:00:00`,
     tags: [
-      'Microsoft corporate blog',
-      'System administration',
-      'GitHub',
-      'Development for Windows',
+      'microsoft corporate blog',
+      'system administration',
+      'github',
+      'development for windows',
     ],
     imageLink:
       'https://habrastorage.org/getpro/habr/post_images/8fd/846/426/8fd8464262f2a92659d4f2acb085a840.gif',
@@ -67,11 +67,11 @@ export const habrMockParsed = [
     title: 'AI-assisted IntelliSense for your team’s codebase',
     time: '2019-11-29 07:00:00',
     tags: [
-      'Microsoft corporate blog',
-      'Programming',
-      'Visual Studio',
-      'Machine learning',
-      'Artificial Intelligence',
+      'microsoft corporate blog',
+      'programming',
+      'visual studio',
+      'machine learning',
+      'artificial intelligence',
     ],
     imageLink:
       'https://habrastorage.org/webt/jo/zt/kk/joztkkbm3d1zf17-0q7n10xjrzk.jpeg',
@@ -86,11 +86,11 @@ export const habrMockParsed = [
       'Dynamic CDN for Low Latency WebRTC Streaming with Stream Access Control',
     time: '2019-12-02 09:19:00',
     tags: [
-      'Flashphoner corporate blog',
-      'Website development',
-      'Working with video',
-      'Programming',
-      'Video conferencing',
+      'flashphoner corporate blog',
+      'website development',
+      'working with video',
+      'programming',
+      'video conferencing',
     ],
     imageLink:
       'https://habrastorage.org/webt/zo/-h/xu/zo-hxunxkji95ubq9vioprymxqm.png',

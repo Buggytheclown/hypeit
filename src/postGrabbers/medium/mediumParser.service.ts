@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import {
   MediumPostData,
-  mediumPostDataArraySchema,
   mediumPostDataSchema,
 } from '../../services/postDelivery/post.interfaces';
-import * as yup from 'yup';
 import * as moment from 'moment';
 import { MediumRawData, MediumRawDataSchema } from './medium.interface';
+import * as _ from 'lodash';
+import { writeLog } from '../../helpers/helpers';
 
 function formatDataTime(dateTime?: number): string {
   const format = 'YYYY-MM-DD HH:mm:ss';
@@ -48,14 +48,14 @@ export class MediumParserService {
             link: post.mediumUrl,
             clapCount: post.clapCount,
             voterCount: post.voterCount,
-            tags: post.tags.map(({ displayTitle }) => displayTitle),
+            tags: post.tags.map(({ displayTitle }) => _.toLower(displayTitle)),
             externalID: post.id,
             imageLink: `https://miro.medium.com/max/334/${post.previewImage.id}`,
           },
           { strict: true },
         );
       } catch (e) {
-        console.log(post);
+        writeLog('MediumParserServiceCantParse', post);
         throw e;
       }
     });

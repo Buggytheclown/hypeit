@@ -9,6 +9,39 @@ function withSortedTags(posts) {
   return posts.map(post => ({ ...post, tags: post.tags.slice().sort() }));
 }
 
+function withSortedPosts(posts) {
+  return _.sortBy(posts, [o => o.externalID]);
+}
+
+function withClearedMediumRatingInfo(posts) {
+  return posts.map(post => ({
+    ..._.omit(post, ['clapCount', 'voterCount']),
+    resources_id: 2,
+  }));
+}
+
+function withClearedHabrRatingInfo(posts) {
+  return posts.map(post => ({
+    ..._.omit(post, ['totalVotes', 'totalViews']),
+    resources_id: 1,
+  }));
+}
+const prepareDbPosts = _.flow([withSortedPosts, withSortedTags]);
+
+const prepareMockMediumPosts = _.flow([
+  post => _.uniqBy(post, (el: { externalID: string }) => el.externalID),
+  withSortedPosts,
+  withSortedTags,
+  withClearedMediumRatingInfo,
+]);
+
+const prepareMockHabrPosts = _.flow([
+  post => _.uniqBy(post, (el: { externalID: string }) => el.externalID),
+  withSortedPosts,
+  withSortedTags,
+  withClearedHabrRatingInfo,
+]);
+
 describe('post model test', () => {
   let postModel: PostModel;
 
@@ -30,13 +63,8 @@ describe('post model test', () => {
 
     const posts = await postModel.getPosts();
 
-    expect(withSortedTags(posts)).toEqual(
-      withSortedTags(
-        postsMocks.habr.map(post => ({
-          ..._.omit(post, ['totalVotes', 'totalViews']),
-          resources_id: 1,
-        })),
-      ),
+    expect(prepareDbPosts(posts)).toEqual(
+      prepareMockHabrPosts(postsMocks.habr),
     );
     done();
   });
@@ -46,14 +74,11 @@ describe('post model test', () => {
       posts: postsMocks.medium,
       resource: PostResources.MEDIUM,
     });
+
     const posts = await postModel.getPosts();
-    expect(withSortedTags(posts)).toEqual(
-      withSortedTags(
-        postsMocks.medium.map(post => ({
-          ..._.omit(post, ['clapCount', 'voterCount']),
-          resources_id: 2,
-        })),
-      ),
+
+    expect(prepareDbPosts(posts)).toEqual(
+      prepareMockMediumPosts(postsMocks.medium),
     );
     done();
   });
@@ -63,14 +88,11 @@ describe('post model test', () => {
       posts: postsMocks.habr,
       resource: PostResources.HABR,
     });
+
     const posts = await postModel.getPosts();
-    expect(withSortedTags(posts)).toEqual(
-      withSortedTags(
-        postsMocks.habr.map(post => ({
-          ..._.omit(post, ['totalVotes', 'totalViews']),
-          resources_id: 1,
-        })),
-      ),
+
+    expect(prepareDbPosts(posts)).toEqual(
+      prepareMockHabrPosts(postsMocks.habr),
     );
 
     await postModel.savePosts({
@@ -80,13 +102,14 @@ describe('post model test', () => {
       })),
       resource: PostResources.HABR,
     });
+
     const postsUpdated = await postModel.getPosts();
-    expect(withSortedTags(postsUpdated)).toEqual(
-      withSortedTags(
+
+    expect(prepareDbPosts(postsUpdated)).toEqual(
+      prepareMockHabrPosts(
         postsMocks.habr.map(post => ({
-          ..._.omit(post, ['totalVotes', 'totalViews']),
+          ...post,
           rating: post.rating + 1,
-          resources_id: 1,
         })),
       ),
     );

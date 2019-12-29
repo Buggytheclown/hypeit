@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import * as yup from 'yup';
 import { esc } from './helpers';
 import { PostResourcesData } from '../services/postDelivery/postResourses.interfaces';
+import { writeLog } from '../helpers/helpers';
 
 const dbPostsSchema = yup.array(
   yup.object({
@@ -183,10 +184,11 @@ function findInsertedTags({
 > {
   const query = `
     SELECT tags_id, name FROM tags
-    WHERE name IN (${extractedTags.map(el => `${esc(el)}`).join(',')})
+    WHERE name IN (${extractedTags.map(el => esc(el)).join(',')})
   `;
-
-  return dBConnection.query(query).then(({ results }) => results);
+  return dBConnection.query(query).then(({ results }) => {
+    return results;
+  });
 }
 
 function createPostsTagsRelations({
@@ -209,10 +211,19 @@ function createPostsTagsRelations({
 
   const postIdsTagsIds = _.flatMap(posts, ({ externalID, tags }) => {
     const posts_id = insertedPostsByExternalPostId[externalID].posts_id;
-    return tags.map(tagName => [
-      posts_id,
-      insertedTagsByTagsName[tagName].tags_id,
-    ]);
+    return tags.map(tagName => {
+      if (!insertedTagsByTagsName[tagName]) {
+        writeLog('!insertedTagsByTagsName[tagName]', {
+          tagName,
+          externalID,
+          tags,
+        });
+        throw new Error(
+          `NONONo tagName: ${tagName}, externalID: ${externalID}`,
+        );
+      }
+      return [posts_id, insertedTagsByTagsName[tagName].tags_id];
+    });
   });
 
   const query = `
@@ -235,6 +246,44 @@ function withPostRating({ posts, resource }) {
   return posts.map(post => ({ ...post, rating: calculator(post) }));
 }
 
+function assertAllPostWasFound(
+  posts: Array<{ externalID: string }>,
+  insertedPosts: Array<{ external_posts_id: string }>,
+) {
+  const insertedPostsByExternalPostId = _.keyBy(
+    insertedPosts,
+    ({ external_posts_id }) => external_posts_id,
+  );
+
+  const notFoundPosts = posts.filter(
+    post => !(post.externalID in insertedPostsByExternalPostId),
+  );
+  if (notFoundPosts.length) {
+    writeLog('notFoundPosts', notFoundPosts);
+    throw new Error(`${notFoundPosts.length} posts id was not found`);
+  }
+}
+
+function assertAllTagsWasFound(
+  extractedTags: string[],
+  insertedTags: Array<{ name: string }>,
+) {
+  const difference = _.difference(
+    extractedTags,
+    insertedTags.map(tag => tag.name),
+  );
+  if (difference.length) {
+    writeLog('assertAllTagsWasFoundDifference', difference);
+    throw new Error(`${difference.length} tags name was not found`);
+  }
+}
+
+const extractTags = _.flow([
+  arr => arr.map(({ tags }) => tags),
+  _.flatten,
+  _.uniq,
+]);
+
 @Injectable()
 export class PostModel {
   constructor(private readonly dBConnection: DBConnection) {}
@@ -252,11 +301,9 @@ export class PostModel {
       dBConnection: this.dBConnection,
     });
 
-    const extractedTags: string[] = _.flow([
-      arr => arr.map(({ tags }) => tags),
-      _.flatten,
-      _.uniq,
-    ])(posts);
+    assertAllPostWasFound(posts, insertedPosts);
+
+    const extractedTags: string[] = extractTags(posts);
 
     await insertTags({
       extractedTags,
@@ -268,6 +315,8 @@ export class PostModel {
       resource,
       dBConnection: this.dBConnection,
     });
+
+    assertAllTagsWasFound(extractedTags, insertedTags);
 
     await createPostsTagsRelations({
       posts,

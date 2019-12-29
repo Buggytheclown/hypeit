@@ -6,6 +6,8 @@ import {
   habrPostDataSchema,
 } from '../../services/postDelivery/post.interfaces';
 import { Moment } from 'moment';
+import * as _ from 'lodash';
+import { writeLog } from '../../helpers/helpers';
 
 function parseDateTimeString(rawTime: string): Moment {
   if (rawTime.includes('today')) {
@@ -51,7 +53,7 @@ function parsePosts($, ind, el): HabrPostData {
 
   const tags = $el
     .find('.post__hubs li a')
-    .map((_, el2) => $(el2).text())
+    .map((ind, el2) => _.toLower($(el2).text()))
     .toArray();
 
   const link = $el.find('.post__title a').attr('href');
@@ -101,7 +103,7 @@ export class HabrParserService {
             strict: true,
           });
         } catch (e) {
-          console.log($.html(el));
+          writeLog('HabrParserServiceCantparse', $.html(el), )
           throw e;
         }
       })

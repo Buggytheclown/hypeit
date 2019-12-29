@@ -41,6 +41,7 @@ export class AppController {
     private readonly postModel: PostModel,
   ) {}
 
+  // TODO: show total count
   @Get('/')
   @Render('index')
   async getPosts(@Query() query: unknown) {
@@ -64,7 +65,6 @@ export class AppController {
 
   @Get('/update/medium')
   async updateMediumPosts() {
-    await this.postDeliveryService.saveMediumBestOfTheWeek();
     await this.postDeliveryService.saveMediumBestOfTheMonth();
     return 'ok';
   }
