@@ -79,7 +79,10 @@ async function insertPosts({
   dBConnection: DBConnection;
 }) {
   const resourcesId = await dBConnection
-    .query(`SELECT resources_id FROM resources WHERE name = ${esc(resource)}`)
+    .query(
+      `SELECT resources_id
+            FROM resources WHERE name = ${esc(resource)}`,
+    )
     .then(({ results: [firstResult] }) => (firstResult || {}).resources_id);
 
   if (!resourcesId) {
@@ -324,6 +327,21 @@ export class PostModel {
       insertedTags,
       dBConnection: this.dBConnection,
     });
+  }
+
+  async countPosts({ lastXDays }: { lastXDays?: number }): Promise<number> {
+    const query = `
+      SELECT COUNT(*) as count FROM posts
+      ${
+        lastXDays
+          ? `WHERE time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`
+          : ''
+      };`;
+
+    return this.dBConnection
+      .query(query)
+      .then(({ results: [{ count }] }) => count)
+      .then(res => yup.number().validateSync(res));
   }
 
   async getPosts(

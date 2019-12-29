@@ -41,7 +41,6 @@ export class AppController {
     private readonly postModel: PostModel,
   ) {}
 
-  // TODO: show total count
   @Get('/')
   @Render('index')
   async getPosts(@Query() query: unknown) {
@@ -53,13 +52,30 @@ export class AppController {
       offset: 20 * (queryParams.page - 1),
     });
 
-    return { posts, queryParams };
+    return {
+      posts,
+      queryParams,
+      totalPosts: await this.postModel.countPosts({
+        lastXDays: queryParams.bestof,
+      }),
+      currentPage: queryParams.page,
+      resources: {
+        1: 'https://habr.com/images/favicon-32x32.png',
+        2: 'https://cdn-static-1.medium.com/_/fp/icons/favicon-rebrand-medium.3Y6xpZ-0FSdWDnPM3hSBIA.ico',
+      },
+    };
   }
 
   @Get('/update')
   async updatePosts() {
     await this.postDeliveryService.saveBestOfTheWeek();
     await this.postDeliveryService.saveBestOfTheMonth();
+    return 'ok';
+  }
+
+  @Get('/update/week')
+  async updatePostsForWeek() {
+    await this.postDeliveryService.saveBestOfTheWeek();
     return 'ok';
   }
 
