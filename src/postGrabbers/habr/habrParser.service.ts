@@ -7,7 +7,7 @@ import {
 } from '../../services/postDelivery/post.interfaces';
 import { Moment } from 'moment';
 import * as _ from 'lodash';
-import { writeLog } from '../../helpers/helpers';
+import { WriteLog, writeLog } from '../../helpers/helpers';
 
 function parseDateTimeString(rawTime: string): Moment {
   if (rawTime.includes('today')) {
@@ -85,6 +85,7 @@ function parsePosts($, ind, el): HabrPostData {
 
 @Injectable()
 export class HabrParserService {
+  @WriteLog()
   parse(data: string): HabrPostData[] {
     const $ = cheerio.load(data);
     const posts = $('.posts_list .content-list__item_post');
@@ -103,7 +104,7 @@ export class HabrParserService {
             strict: true,
           });
         } catch (e) {
-          writeLog('HabrParserServiceCantparse', $.html(el), )
+          writeLog('HabrParserServiceCantparse', $.html(el));
           throw e;
         }
       })

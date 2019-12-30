@@ -37,7 +37,7 @@ export class HabrPostGrabberService {
     resource: PostResources.HABR;
   }> {
     return proceedPosts(
-      this.habrHttpService.getBestOfTheWeek(10),
+      this.habrHttpService.getBestOfTheWeek(7),
       this.habrParserService,
     );
   }

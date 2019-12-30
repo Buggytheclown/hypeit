@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 import * as yup from 'yup';
 import { esc } from './helpers';
 import { PostResourcesData } from '../services/postDelivery/postResourses.interfaces';
-import { writeLog } from '../helpers/helpers';
+import { WriteLog, writeLog } from '../helpers/helpers';
 
 const dbPostsSchema = yup.array(
   yup.object({
@@ -128,7 +128,7 @@ async function insertPosts({
         title, time, rawTime, link,
         rating, resources_id, external_posts_id, image_link,
         total_views, total_votes, clap_count, voter_count)
-      VALUES ${values} ON DUPLICATE KEY UPDATE rating = VALUES(rating), total_views = VALUES(total_views), total_votes = VALUES(total_votes);
+      VALUES ${values} ON DUPLICATE KEY UPDATE rating = VALUES(rating), total_views = VALUES(total_views), total_votes = VALUES(total_votes), clap_count = VALUES(clap_count), voter_count= VALUES(voter_count);
     `;
   return dBConnection.query(insertPostsQuery);
 }
@@ -291,7 +291,11 @@ const extractTags = _.flow([
 export class PostModel {
   constructor(private readonly dBConnection: DBConnection) {}
 
+  @WriteLog()
   async savePosts({ posts, resource }: PostResourcesData) {
+    if (!posts.length) {
+      return;
+    }
     await insertPosts({
       posts: withPostRating({ posts, resource }),
       resource,
@@ -329,6 +333,7 @@ export class PostModel {
     });
   }
 
+  @WriteLog()
   async countPosts({ lastXDays }: { lastXDays?: number }): Promise<number> {
     const query = `
       SELECT COUNT(*) as count FROM posts
@@ -344,6 +349,7 @@ export class PostModel {
       .then(res => yup.number().validateSync(res));
   }
 
+  @WriteLog()
   async getPosts(
     {
       limit,

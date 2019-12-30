@@ -6,7 +6,7 @@ import {
 import * as moment from 'moment';
 import { MediumRawData, MediumRawDataSchema } from './medium.interface';
 import * as _ from 'lodash';
-import { writeLog } from '../../helpers/helpers';
+import { WriteLog, writeLog } from '../../helpers/helpers';
 
 function formatDataTime(dateTime?: number): string {
   const format = 'YYYY-MM-DD HH:mm:ss';
@@ -22,6 +22,7 @@ function formatDataTime(dateTime?: number): string {
 
 @Injectable()
 export class MediumParserService {
+  @WriteLog()
   parse(mediumRawData: MediumRawData): MediumPostData[] {
     const mediumRawDataValidated: MediumRawData = MediumRawDataSchema.validateSync(
       mediumRawData,
@@ -33,7 +34,7 @@ export class MediumParserService {
     const posts = [
       ...topic.featuredPosts.postPreviews,
       ...topic.latestPosts.postPreviews,
-      // TODO: ignore popular posts as they doth not have date
+      // ignore popular posts as they doth not have date
       // ...topic.popularPosts.postPreviews,
     ].map(({ post }) => post);
 
