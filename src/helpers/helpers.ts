@@ -1,8 +1,9 @@
 import * as fs from 'fs';
+import * as moment from 'moment';
 
 export function writeLog<T>(info: string, data: T): T {
   fs.writeFileSync(
-    `./logs/${Date.now()}.${info}.json`,
+    `./logs/${moment().format()}.${info}.json`,
     (JSON.stringify as any)(data, 4, 4),
   );
   return data;
@@ -29,4 +30,8 @@ export function WriteLog() {
     };
     return descriptor;
   };
+}
+
+export function exhaustiveCheck(param: never): never {
+  throw new Error('should not reach here');
 }

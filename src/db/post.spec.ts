@@ -26,6 +26,13 @@ function withClearedHabrRatingInfo(posts) {
     resources_id: 1,
   }));
 }
+
+function withClearedDevtoRatingInfo(posts) {
+  return posts.map(post => ({
+    ..._.omit(post, ['score']),
+    resources_id: 3,
+  }));
+}
 const prepareDbPosts = _.flow([withSortedPosts, withSortedTags]);
 
 const prepareMockMediumPosts = _.flow([
@@ -40,6 +47,13 @@ const prepareMockHabrPosts = _.flow([
   withSortedPosts,
   withSortedTags,
   withClearedHabrRatingInfo,
+]);
+
+const prepareMockDevtoPosts = _.flow([
+  post => _.uniqBy(post, (el: { externalID: string }) => el.externalID),
+  withSortedPosts,
+  withSortedTags,
+  withClearedDevtoRatingInfo,
 ]);
 
 describe('post model test', () => {
@@ -80,6 +94,20 @@ describe('post model test', () => {
     expect(prepareDbPosts(posts)).toEqual(
       prepareMockMediumPosts(postsMocks.medium),
     );
+    done();
+  });
+
+  it('postDelivery should insert DEVTO posts', async done => {
+    const mockPosts = postsMocks.devto;
+    await postModel.savePosts({
+      posts: mockPosts,
+      resource: PostResources.DEVTO,
+    });
+
+    const dbPosts = await postModel.getPosts();
+
+    expect(prepareDbPosts(dbPosts)).toEqual(prepareMockDevtoPosts(mockPosts));
+
     done();
   });
 

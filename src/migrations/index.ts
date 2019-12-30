@@ -7,8 +7,9 @@ import {
 import { migration01 } from './01.migration';
 import { migration02 } from './02.migration';
 import { migration03 } from './03.migration';
+import { migration04 } from './04.migrations';
 
-const migrations = [clearBD, migration01, migration02, migration03];
+const migrations = [clearBD, migration01, migration02, migration03, migration04];
 
 Promise.resolve()
   .then(() =>

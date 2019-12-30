@@ -3,6 +3,7 @@ import * as yup from 'yup';
 export enum PostResources {
   HABR = 'habr',
   MEDIUM = 'medium',
+  DEVTO = 'devto',
 }
 
 const basePostDataFields = {
@@ -49,6 +50,21 @@ export const habrPostDataSchema = yup.object({
   ...habrPostRatingInfoFields,
 });
 
+const devtoPostRatingInfoFields = {
+  score: yup.number(),
+};
+
+const devtoPostRatingInfoSchema = yup.object(devtoPostRatingInfoFields);
+
+export type DevtoPostRatingInfo = Required<
+  yup.InferType<typeof devtoPostRatingInfoSchema>
+>;
+
+export const devtoPostDataSchema = yup.object({
+  ...basePostDataFields,
+  ...devtoPostRatingInfoFields,
+});
+
 export type PostsRatingInfo = MediumPostRatingInfo | HabrPostRatingInfo;
 
 export const postDataArraySchema = yup.array(postDataSchema);
@@ -61,4 +77,8 @@ export type MediumPostData = Required<
 >;
 export type HabrPostData = Required<
   yup.InferType<typeof habrPostDataSchema>
+>;
+
+export type DevtoPostData = Required<
+  yup.InferType<typeof devtoPostDataSchema>
 >;

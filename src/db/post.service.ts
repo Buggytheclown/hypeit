@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DBConnection } from './dBConnection.service';
 import {
+  DevtoPostRatingInfo,
   HabrPostRatingInfo,
   MediumPostRatingInfo,
   PostData,
@@ -10,7 +11,7 @@ import * as _ from 'lodash';
 import * as yup from 'yup';
 import { esc } from './helpers';
 import { PostResourcesData } from '../services/postDelivery/postResourses.interfaces';
-import { WriteLog, writeLog } from '../helpers/helpers';
+import { exhaustiveCheck, WriteLog, writeLog } from '../helpers/helpers';
 
 const dbPostsSchema = yup.array(
   yup.object({
@@ -26,24 +27,37 @@ const dbPostsSchema = yup.array(
   }),
 );
 
+const dbResoursesSchema = yup.array(
+  yup.object({
+    resources_id: yup.number(),
+    name: yup.string(),
+    link: yup.string(),
+    favicon: yup.string(),
+  }),
+);
+
+type DbResourses = yup.InferType<typeof dbResoursesSchema>;
+
 type PostWithRating = PostResourcesData['posts'] extends Array<infer Post>
   ? Post & { rating: number }
   : never;
 
 function getRatingInfo(
   post,
-  resource,
+  resource: PostResources,
 ): {
   totalViews: number | null;
   totalVotes: number | null;
   voterCount: number | null;
   clapCount: number | null;
+  score: number | null;
 } {
   const nullRatingInfo = {
     totalViews: null,
     totalVotes: null,
     voterCount: null,
     clapCount: null,
+    score: null,
   };
   if (resource === PostResources.HABR) {
     return {
@@ -60,6 +74,15 @@ function getRatingInfo(
       clapCount: post.clapCount,
     };
   }
+
+  if (resource === PostResources.DEVTO) {
+    return {
+      ...nullRatingInfo,
+      score: post.score,
+    };
+  }
+
+  exhaustiveCheck(resource);
 }
 
 function toNullable<T>(value: T): T | 'NULL' {
@@ -101,10 +124,13 @@ async function insertPosts({
         imageLink,
       } = post;
 
-      const { totalViews, totalVotes, voterCount, clapCount } = getRatingInfo(
-        post,
-        resource,
-      );
+      const {
+        totalViews,
+        totalVotes,
+        voterCount,
+        clapCount,
+        score,
+      } = getRatingInfo(post, resource);
 
       return `(${[
         esc(title),
@@ -119,6 +145,7 @@ async function insertPosts({
         toNullable(totalVotes),
         toNullable(clapCount),
         toNullable(voterCount),
+        toNullable(score),
       ].join(',')})`;
     })
     .join(',');
@@ -127,8 +154,15 @@ async function insertPosts({
       INSERT INTO posts(
         title, time, rawTime, link,
         rating, resources_id, external_posts_id, image_link,
-        total_views, total_votes, clap_count, voter_count)
-      VALUES ${values} ON DUPLICATE KEY UPDATE rating = VALUES(rating), total_views = VALUES(total_views), total_votes = VALUES(total_votes), clap_count = VALUES(clap_count), voter_count= VALUES(voter_count);
+        total_views, total_votes, clap_count, voter_count,
+        score)
+      VALUES ${values} ON DUPLICATE KEY UPDATE
+        rating = VALUES(rating),
+        total_views = VALUES(total_views),
+        total_votes = VALUES(total_votes),
+        clap_count = VALUES(clap_count),
+        voter_count = VALUES(voter_count),
+        score = VALUES(score);
     `;
   return dBConnection.query(insertPostsQuery);
 }
@@ -237,15 +271,22 @@ function createPostsTagsRelations({
   return dBConnection.query(query);
 }
 
-const calculators = {
-  [PostResources.HABR]: ({ totalVotes, totalViews }: HabrPostRatingInfo) =>
-    totalVotes,
-  [PostResources.MEDIUM]: ({ clapCount, voterCount }: MediumPostRatingInfo) =>
-    voterCount,
-};
+function getRatingCalculator(resource: PostResources) {
+  switch (resource) {
+    case PostResources.HABR:
+      return ({ totalVotes, totalViews }: HabrPostRatingInfo) => totalVotes;
+    case PostResources.MEDIUM:
+      return ({ clapCount, voterCount }: MediumPostRatingInfo) => voterCount;
+    case PostResources.DEVTO:
+      // 5 times is an average defference between poststs from devto and habr/medium
+      return ({ score }: DevtoPostRatingInfo) => score / 5;
+    default:
+      exhaustiveCheck(resource);
+  }
+}
 
 function withPostRating({ posts, resource }) {
-  const calculator = calculators[resource];
+  const calculator = getRatingCalculator(resource);
   return posts.map(post => ({ ...post, rating: calculator(post) }));
 }
 
@@ -389,5 +430,13 @@ export class PostModel {
     TRUNCATE TABLE posts_tags;
     SET FOREIGN_KEY_CHECKS = 1;`;
     return this.dBConnection.query(query);
+  }
+
+  async getResources(): Promise<DbResourses> {
+    const query = `SELECT * FROM resources;`;
+    return this.dBConnection
+      .query(query)
+      .then(({ results }) => results)
+      .then(res => dbResoursesSchema.validateSync(res));
   }
 }

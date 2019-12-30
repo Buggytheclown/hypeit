@@ -52,11 +52,23 @@ export class AppController {
   async getPosts(@Query() query: unknown) {
     const queryParams: postsQueryParamsType = extractQuery(query);
 
+    const postsPerPage = 10;
+
     const posts = await this.postModel.getPosts({
-      limit: 20,
+      limit: postsPerPage,
       lastXDays: queryParams.bestof,
-      offset: 20 * (queryParams.page - 1),
+      offset: postsPerPage * (queryParams.page - 1),
     });
+
+    const resources = await this.postModel.getResources().then(res =>
+      res.reduce(
+        (acc, { resources_id, favicon }) => ({
+          ...acc,
+          [resources_id]: favicon,
+        }),
+        {},
+      ),
+    );
 
     return {
       posts,
@@ -65,16 +77,12 @@ export class AppController {
         lastXDays: queryParams.bestof,
       }),
       currentPage: queryParams.page,
-      resources: {
-        1: 'https://habr.com/images/favicon-32x32.png',
-        2: 'https://cdn-static-1.medium.com/_/fp/icons/favicon-rebrand-medium.3Y6xpZ-0FSdWDnPM3hSBIA.ico',
-      },
+      resources,
     };
   }
 
-  @Get('/update')
+  @Get('/update/month')
   async updatePosts() {
-    await this.postDeliveryService.saveBestOfTheWeek();
     await this.postDeliveryService.saveBestOfTheMonth();
     return 'ok';
   }
@@ -87,14 +95,19 @@ export class AppController {
 
   @Get('/update/medium')
   async updateMediumPosts() {
-    await this.postDeliveryService.saveMediumBestOfTheMonth();
+    await this.postDeliveryService.saveMediumBestOfTheWeek();
     return 'ok';
   }
 
   @Get('/update/habr')
   async updateHabrPosts() {
     await this.postDeliveryService.saveHabrBestOfTheWeek();
-    await this.postDeliveryService.saveHabrBestOfTheMonth();
+    return 'ok';
+  }
+
+  @Get('/update/devto')
+  async updateDevtoPosts() {
+    await this.postDeliveryService.saveDevtoBestOfTheWeek();
     return 'ok';
   }
 }

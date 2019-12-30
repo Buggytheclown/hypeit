@@ -17,7 +17,6 @@ describe('mediumPostGrabber', () => {
 
   it('WHEN mock loaded THEN should parse it right', async () => {
     const parsed = mediumParserService.parse(mediumData1Mock as any);
-    fs.writeFileSync('parsed', JSON.stringify(parsed))
     expect(parsed).toEqual(mediumData1Parsed);
   });
 });
