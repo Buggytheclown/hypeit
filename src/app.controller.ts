@@ -34,6 +34,12 @@ function extractQuery(query) {
   }
 }
 
+// TODO: add saveBest posts as a stream, to fetch for ~5 pages->parse->save
+// TODO: update parsing process in real time
+// TODO: autorise
+// TODO: bookmark
+// TODO: hide watched posts
+
 @Controller()
 export class AppController {
   constructor(
