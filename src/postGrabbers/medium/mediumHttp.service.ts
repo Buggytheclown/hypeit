@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import fetch from 'node-fetch';
 import * as moment from 'moment';
 import { MediumRawData } from './medium.interface';
 import { mediumRequestPayload } from './mediumRequestPayload';
-import * as _ from 'lodash';
+import { loadChunked } from '../../helpers/helpers';
 
 interface MediumRequestPayload {
   operationName: string;
@@ -39,12 +38,8 @@ function millisecondsWasInXDaysAgo(daysAgo: number): number {
     .valueOf();
 }
 
-function baseMediumRequest({
-  daysAgo,
-}: {
-  daysAgo: number;
-}): Promise<MediumRawData> {
-  return fetch(`https://medium.com/_/graphql`, {
+function buildRequestOptions(daysAgo: number) {
+  return {
     method: 'POST',
     body: JSON.stringify(
       setPayloadOptions(mediumRequestPayload, {
@@ -52,7 +47,7 @@ function baseMediumRequest({
       }),
     ),
     headers: { 'Content-Type': 'application/json' },
-  }).then(res => res.json());
+  };
 }
 
 function mediumRequest({
@@ -60,15 +55,20 @@ function mediumRequest({
 }: {
   daysAgo: number;
 }): Promise<MediumRawData[]> {
-  return Promise.all(
-    _.range(daysAgo).map(dayAgo => baseMediumRequest({ daysAgo: dayAgo })),
+  return loadChunked(
+    page => ({
+      url: `https://medium.com/_/graphql`,
+      options: buildRequestOptions(page),
+      transformerType: loadChunked.transformerType.JSON,
+    }),
+    { count: daysAgo },
   );
 }
 
 @Injectable()
 export class MediumHttpService {
   getBestOfTheWeek(): Promise<MediumRawData[]> {
-    return mediumRequest({ daysAgo: 7 });
+    return mediumRequest({ daysAgo: 10 });
   }
 
   getBestOfTheMonth(): Promise<MediumRawData[]> {

@@ -39,6 +39,7 @@ function extractQuery(query) {
 // TODO: autorise
 // TODO: bookmark
 // TODO: hide watched posts
+// TODO: move to a cloud
 
 @Controller()
 export class AppController {

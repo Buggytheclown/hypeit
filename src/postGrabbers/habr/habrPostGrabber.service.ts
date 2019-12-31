@@ -37,7 +37,7 @@ export class HabrPostGrabberService {
     resource: PostResources.HABR;
   }> {
     return proceedPosts(
-      this.habrHttpService.getBestOfTheWeek(7),
+      this.habrHttpService.getBestOfTheWeek(10),
       this.habrParserService,
     );
   }
@@ -47,7 +47,7 @@ export class HabrPostGrabberService {
     resource: PostResources.HABR;
   }> {
     return proceedPosts(
-      this.habrHttpService.getBestOfTheMonth(20),
+      this.habrHttpService.getBestOfTheMonth(30),
       this.habrParserService,
     );
   }
