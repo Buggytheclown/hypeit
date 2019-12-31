@@ -11,8 +11,8 @@
         }
 
         body {
-            background: #efefef;
             color: rgba(58, 58, 58, 1);
+            background-color: rgb(23, 28, 32);
         }
 
         .container {
@@ -87,9 +87,10 @@
 
         .content-box {
             width: 100%;
-            border: 0px solid rgba(230, 230, 230, 1);
-            background-color: rgba(255, 255, 255, 1);
+            background-color: rgb(34, 39, 43);
             box-shadow: 0px -1px 2px rgba(58, 58, 58, 0.1), 1px 1px 2px rgba(58, 58, 58, 0.1);
+            border: 1px solid #393d41;
+            border-radius: 2px;
         }
 
         .content-box-thumb {
@@ -101,24 +102,6 @@
         .content-box-header {
             font-size: 1.75rem;
             margin: 0.75rem 0rem 0rem 0rem;
-        }
-
-        .content-box-blurb {
-            font-size: 0.85rem;
-            display: block;
-            display: -webkit-box;
-            margin: 0rem;
-            max-width: 100%;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .readmore-link {
-            display: block;
-            margin: 5px 5px 0px 5px;
-            text-align: right;
         }
 
     </style>
@@ -157,8 +140,14 @@
             font-size: 25px;
             text-align: center;
         }
-        .total-posts{
+
+        .total-posts {
             margin: 5px;
+            color:rgb(191, 191, 191);
+        }
+
+        .content-box-header__link {
+            color: rgb(191, 191, 191);
         }
     </style>
 </head>
@@ -181,7 +170,7 @@
                 <article class="grid-item content-box">
                     <div class="inner">
                         <h1 class="content-box-header">
-                            <a href={{link}} target="_blank">
+                            <a class="content-box-header__link" href={{link}} target="_blank">
                                 <img class="post-header__img" src="{{ get ../resources resources_id }} "/>
                                 {{title}}
                             </a>
