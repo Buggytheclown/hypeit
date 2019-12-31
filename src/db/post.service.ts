@@ -334,6 +334,9 @@ export class PostModel {
 
   @WriteLog()
   async savePosts({ posts, resource }: PostResourcesData) {
+    console.log(
+      `savePosts resource: ${resource}, posts.length: ${posts.length}`,
+    );
     if (!posts.length) {
       return;
     }

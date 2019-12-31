@@ -101,7 +101,7 @@ export function loadChunked<T>(
             });
         }),
       );
-      return [...acc, ...curReses];
+      return [...acc, ...curReses.filter(Boolean)];
     },
     Promise.resolve([]),
   );
