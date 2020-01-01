@@ -1,22 +1,27 @@
 import * as mysql from 'mysql';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '../services/config/config.service';
+import { ConfigServiceProvider } from '../services/config/config.module';
+
+const configService: ConfigService = ConfigServiceProvider.useValue;
+
+export const DbOptions = {
+  host: configService.get('DATABASE_HOST'),
+  user: configService.get('DATABASE_USER'),
+  password: configService.get('DATABASE_PASSWORD'),
+  database: configService.get('DATABASE'),
+  timezone: configService.get('TIMEZONE'),
+  multipleStatements: true,
+  dateStrings: true,
+  charset: 'utf8mb4',
+};
 
 @Injectable()
 export class DBConnection {
   connection: any;
 
-  constructor(private readonly configService: ConfigService) {
-    this.connection = mysql.createConnection({
-      host: configService.get('DATABASE_HOST'),
-      user: configService.get('DATABASE_USER'),
-      password: configService.get('DATABASE_PASSWORD'),
-      database: configService.get('DATABASE'),
-      timezone: configService.get('TIMEZONE'),
-      multipleStatements: true,
-      dateStrings: true,
-      charset: 'utf8mb4',
-    });
+  constructor() {
+    this.connection = mysql.createConnection(DbOptions);
 
     this.connection.connect(err => {
       if (err) {

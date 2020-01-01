@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 import fetch from 'node-fetch';
 import AbortController from 'abort-controller';
 
+export const salt = '$2b$10$1eVGD1C.gGrDQnrkUikBwu';
+
 export function writeLog<T>(info: string, data: T): T {
   fs.writeFileSync(
     `./logs/${moment().format()}.${info}.json`,

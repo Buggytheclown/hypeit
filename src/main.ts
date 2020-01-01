@@ -5,6 +5,12 @@ import { AppModule } from './app.module';
 import * as _ from 'lodash';
 import * as hbs from 'hbs';
 import * as moment from 'moment';
+import * as session from 'express-session';
+import * as express_mysql_session from 'express-mysql-session';
+import { DbOptions } from './db/dBConnection.service';
+
+const MySQLStore = express_mysql_session(session);
+const sessionStore = new MySQLStore(DbOptions);
 
 hbs.registerHelper('extendQuery', (options: any): string => {
   const queryParams = options.data.root.queryParams;
@@ -57,6 +63,18 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('hbs');
+  app.use(
+    session({
+      key: 'sid',
+      secret: 'secret_string',
+      store: sessionStore,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        expires: 600000,
+      },
+    }),
+  );
 
   await app.listen(3000);
 }

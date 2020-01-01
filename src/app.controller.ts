@@ -3,13 +3,19 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Post,
   Query,
+  Redirect,
   Render,
   Req,
+  Request,
+  Res,
 } from '@nestjs/common';
 import { PostDeliveryService } from './services/postDelivery/postDelivery.service';
 import { PostModel } from './db/post.service';
 import * as yup from 'yup';
+import { exhaustiveCheck } from './helpers/helpers';
+import { UserService } from './db/user.service';
 
 const postsQueryParamsSchema = yup.object({
   page: yup
@@ -24,34 +30,58 @@ const postsQueryParamsSchema = yup.object({
     .default(7),
 });
 
-type postsQueryParamsType = yup.InferType<typeof postsQueryParamsSchema>;
+type PostsQueryParamsType = yup.InferType<typeof postsQueryParamsSchema>;
 
-function extractQuery(query) {
+enum AUTH_TYPE {
+  LOGIN = 'LOGIN',
+  REGISTER = 'REGISTER',
+}
+const authBodySchema = yup.object({
+  form_type: yup.mixed().oneOf([AUTH_TYPE.LOGIN, AUTH_TYPE.REGISTER]),
+  username: yup.string().min(3),
+  password: yup.string().min(5),
+  password2: yup.string().min(5),
+});
+
+type AuthBodyType = yup.InferType<typeof authBodySchema>;
+
+function extractData(data, schema): yup.InferType<typeof schema> {
   try {
-    return postsQueryParamsSchema.validateSync(query);
+    return schema.validateSync(data);
   } catch (e) {
     throw new HttpException(e, HttpStatus.BAD_REQUEST);
   }
 }
 
-// TODO: add saveBest posts as a stream, to fetch for ~5 pages->parse->save
-// TODO: update parsing process in real time
-// TODO: autorise
-// TODO: bookmark
-// TODO: hide watched posts
-// TODO: move to a cloud
+function setRedirectInfo({
+  response,
+  status,
+  url,
+}: {
+  response: any;
+  status: number;
+  url: string;
+}) {
+  response.setHeader('Location', '/');
+  response.statusCode = 303;
+  return {};
+}
 
 @Controller()
 export class AppController {
   constructor(
     private readonly postDeliveryService: PostDeliveryService,
     private readonly postModel: PostModel,
+    private readonly userService: UserService,
   ) {}
 
   @Get('/')
   @Render('index')
-  async getPosts(@Query() query: unknown) {
-    const queryParams: postsQueryParamsType = extractQuery(query);
+  async getPosts(@Req() request, @Query() query: unknown) {
+    const queryParams: PostsQueryParamsType = extractData(
+      query,
+      postsQueryParamsSchema,
+    );
 
     const postsPerPage = 10;
 
@@ -79,7 +109,78 @@ export class AppController {
       }),
       currentPage: queryParams.page,
       resources,
+      user: request.session.user,
     };
+  }
+
+  @Get('/auth')
+  @Render('auth')
+  async getAuth(@Req() request, @Res() response: any) {
+    if (request.session.user) {
+      return setRedirectInfo({ response, status: 303, url: `/` });
+    }
+    return {};
+  }
+
+  @Post('/auth')
+  @Render('auth')
+  async postAuth(@Req() request: any, @Res() response: any) {
+    const body: AuthBodyType = extractData(request.body, authBodySchema);
+    const formType: AUTH_TYPE = body.form_type;
+
+    const userData = {
+      name: body.username,
+      password: body.password,
+    };
+
+    if (formType === AUTH_TYPE.REGISTER) {
+      if (await this.userService.isUsernameExist(userData)) {
+        throw new HttpException(
+          'Username is already taken',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      if (userData.password !== body.password2) {
+        throw new HttpException(
+          'password does not match',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      await this.userService.saveUser(userData);
+
+      request.session.user = await this.userService.getVerifiedUser(userData);
+
+      return setRedirectInfo({ response, status: 303, url: `/` });
+    }
+
+    if (formType === AUTH_TYPE.LOGIN) {
+      const user = await this.userService.getVerifiedUser(userData);
+      if (!user) {
+        throw new HttpException(
+          'Username or password is incorrect',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      request.session.user = user;
+
+      return setRedirectInfo({ response, status: 303, url: `/` });
+    }
+
+    exhaustiveCheck(formType);
+  }
+
+  @Post('/auth/logout')
+  async logout(@Req() request: any) {
+    return new Promise((res, rej) => {
+      request.session.destroy((err => {
+        if (err) {
+          rej(err);
+        } else {
+          setRedirectInfo({ response: request.res, status: 303, url: `/` });
+          res();
+        }
+      }) as any);
+    });
   }
 
   @Get('/update/month')

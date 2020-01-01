@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>HypeIT</title>
+    <!--https://codepen.io/cliffpyles/pen/OVPJay-->
+</head>
+<body>
+<b>Login</b><br><br>
+<form method="POST" action="/auth">
+    <table border="0">
+        <tbody>
+        <tr>
+            <input type="hidden" name="form_type" value="LOGIN">
+            <td>username:</td>
+            <td>
+                <input type="text"
+                       name="username"
+                       size="20"
+                       autocorrect="off"
+                       spellcheck="false"
+                       autocapitalize="off"
+                       autofocus="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td>password:</td>
+            <td>
+                <input type="password" name="password" size="20">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <input type="submit" value="login"></form>
+
+<!--<a href="forgot">Forgot your password?</a><br><br>-->
+<br>
+<br>
+<b>Create Account</b><br><br>
+<form method="POST" action="/auth">
+    <table border="0">
+        <tbody>
+        <tr>
+            <td>username:</td>
+            <input type="hidden" name="form_type" value="REGISTER">
+            <td>
+                <input type="text" name="username" size="20" autocorrect="off" spellcheck="false" autocapitalize="off">
+            </td>
+        </tr>
+        <tr>
+            <td>password:</td>
+            <td>
+                <input type="password" name="password" size="20">
+            </td>
+        </tr>
+        <tr>
+            <td>verify password:</td>
+            <td>
+                <input type="password" name="password2" size="20">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <input type="submit" value="create account"></form>
+</body>

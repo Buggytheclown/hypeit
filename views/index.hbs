@@ -50,12 +50,6 @@
             color: rgba(255, 255, 255, 0.35);
         }
 
-        .logo {
-            font-family: "Oswald", Helvetica, Arial, sans-serif;
-            font-size: 1em;
-            letter-spacing: 0.15rem;
-        }
-
         .logo i {
             font-size: 1.2em;
             margin-right: 6px;
@@ -115,11 +109,6 @@
             height: 21px;
         }
 
-        .post-header__rating {
-            line-height: 32px;
-            vertical-align: text-bottom;
-        }
-
         .cbh__time {
             margin: 10px 0;
             color: rgb(102, 102, 102);
@@ -143,11 +132,23 @@
 
         .total-posts {
             margin: 5px;
-            color:rgb(191, 191, 191);
+            color: rgb(191, 191, 191);
         }
 
         .content-box-header__link {
             color: rgb(191, 191, 191);
+        }
+
+        .content-box-header__link:visited {
+            color: rgb(95, 95, 95);
+        }
+
+        .auth-container, .auth-container a {
+            color: rgb(191, 191, 191);
+            text-align: right;
+            margin: 20px;
+        }
+
         }
     </style>
 </head>
@@ -155,9 +156,20 @@
 
 
 <div id="contentBoxApp">
+    <div class="auth-container">
+        {{#if user}}
+            Hello, {{user.name}}
+            <form method="post" action="/auth/logout">
+                <input type="submit" value="logout">
+            </form>
+        {{else}}
+            <a href="/auth">Login or create account</a>
+        {{/if}}
+    </div>
     <div id="GridCtrl">
 
         <div class="container dynamic-grid">
+
 
             <div class="filters">
                 <a href="?bestof=1">Day</a>
@@ -182,11 +194,6 @@
                             </p>
                         </h1>
                         <img class="content-box-thumb" src="{{ imageLink }}"/>
-
-                        <!--<p class="content-box-blurb">-->
-                        <!--{{ gridItem.blurbText }}-->
-                        <!--</p>-->
-
                     </div>
                 </article>
             {{/each}}
