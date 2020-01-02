@@ -175,7 +175,7 @@
                 <a href="?bestof=1">Day</a>
                 <a href="?bestof=7">Week</a>
                 <a href="?bestof=30">Month</a>
-                <p class="total-posts">({{totalPosts}})</p>
+                <p class="total-posts">({{totalSeenPosts}}/{{totalPosts}})</p>
             </div>
 
             {{#each posts}}
@@ -201,11 +201,15 @@
         </div>
 
         <div class="pagination">
-            {{#if (cmp currentPage '>' 1)}}
-                <a href="{{ extendQuery page=(math currentPage '-' 1) }}"> <<< </a>
+            {{#if user}}
+                <a href="{{ extendQuery isNextPage=true}}">Next >>> </a>
+            {{else}}
+                {{#if (cmp currentPage '>' 1)}}
+                    <a href="{{ extendQuery page=(math currentPage '-' 1) }}"> <<< </a>
+                {{/if}}
+                <span>{{ currentPage }}</span>
+                <a href="{{ extendQuery page=(math currentPage '+' 1) }}"> >>> </a>
             {{/if}}
-            <span>{{ currentPage }}</span>
-            <a href="{{ extendQuery page=(math currentPage '+' 1) }}"> >>> </a>
         </div>
     </div>
 </div>

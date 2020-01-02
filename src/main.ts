@@ -70,9 +70,6 @@ async function bootstrap() {
       store: sessionStore,
       resave: false,
       saveUninitialized: false,
-      cookie: {
-        expires: 600000,
-      },
     }),
   );
 

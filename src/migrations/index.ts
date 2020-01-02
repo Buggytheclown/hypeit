@@ -9,6 +9,7 @@ import { migration02 } from './02.migration';
 import { migration03 } from './03.migration';
 import { migration04 } from './04.migrations';
 import { migration05 } from './05.migrations';
+import { migration06 } from './06.migrations';
 
 const migrations = [
   clearBD,
@@ -17,6 +18,7 @@ const migrations = [
   migration03,
   migration04,
   migration05,
+  migration06,
 ];
 
 Promise.resolve()

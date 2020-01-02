@@ -5,10 +5,8 @@ import {
   HttpStatus,
   Post,
   Query,
-  Redirect,
   Render,
   Req,
-  Request,
   Res,
 } from '@nestjs/common';
 import { PostDeliveryService } from './services/postDelivery/postDelivery.service';
@@ -28,6 +26,7 @@ const postsQueryParamsSchema = yup.object({
     .nullable()
     .min(0)
     .default(7),
+  isNextPage: yup.boolean().nullable(),
 });
 
 type PostsQueryParamsType = yup.InferType<typeof postsQueryParamsSchema>;
@@ -36,16 +35,19 @@ enum AUTH_TYPE {
   LOGIN = 'LOGIN',
   REGISTER = 'REGISTER',
 }
+
 const authBodySchema = yup.object({
   form_type: yup.mixed().oneOf([AUTH_TYPE.LOGIN, AUTH_TYPE.REGISTER]),
   username: yup.string().min(3),
   password: yup.string().min(5),
   password2: yup.string().min(5),
 });
-
 type AuthBodyType = yup.InferType<typeof authBodySchema>;
 
-function extractData(data, schema): yup.InferType<typeof schema> {
+const seenPostsIdSchema = yup.array(yup.number());
+type SeenPostsIdType = yup.InferType<typeof seenPostsIdSchema>;
+
+function extractData(data, schema) {
   try {
     return schema.validateSync(data);
   } catch (e) {
@@ -62,8 +64,8 @@ function setRedirectInfo({
   status: number;
   url: string;
 }) {
-  response.setHeader('Location', '/');
-  response.statusCode = 303;
+  response.setHeader('Location', url);
+  response.statusCode = status;
   return {};
 }
 
@@ -83,23 +85,33 @@ export class AppController {
       postsQueryParamsSchema,
     );
 
-    const postsPerPage = 10;
+    if (
+      queryParams.isNextPage &&
+      request.session.user &&
+      request.session.seenPostsId
+    ) {
+      const seenPostsId: SeenPostsIdType = extractData(
+        request.session.seenPostsId,
+        seenPostsIdSchema,
+      );
 
+      await this.postModel.saveSeenPosts({
+        postsId: seenPostsId as number[],
+        userId: request.session.user.user_id,
+      });
+    }
+
+    const postsPerPage = 10;
     const posts = await this.postModel.getPosts({
       limit: postsPerPage,
       lastXDays: queryParams.bestof,
       offset: postsPerPage * (queryParams.page - 1),
+      userId: request.session.user?.user_id,
     });
 
-    const resources = await this.postModel.getResources().then(res =>
-      res.reduce(
-        (acc, { resources_id, favicon }) => ({
-          ...acc,
-          [resources_id]: favicon,
-        }),
-        {},
-      ),
-    );
+    if (request.session.user) {
+      request.session.seenPostsId = posts.map(({ posts_id }) => posts_id);
+    }
 
     return {
       posts,
@@ -107,8 +119,14 @@ export class AppController {
       totalPosts: await this.postModel.countPosts({
         lastXDays: queryParams.bestof,
       }),
+      totalSeenPosts: request.session.user
+        ? await this.postModel.countSeenPosts({
+            lastXDays: queryParams.bestof,
+            userId: request.session.user.user_id,
+          })
+        : postsPerPage * (queryParams.page - 1),
       currentPage: queryParams.page,
-      resources,
+      resources: await this.postModel.getResourcesMap(),
       user: request.session.user,
     };
   }

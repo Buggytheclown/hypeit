@@ -15,6 +15,7 @@ import { exhaustiveCheck, WriteLog, writeLog } from '../helpers/helpers';
 
 const dbPostsSchema = yup.array(
   yup.object({
+    posts_id: yup.number(),
     title: yup.string(),
     time: yup.string(),
     rawTime: yup.string(),
@@ -394,25 +395,61 @@ export class PostModel {
   }
 
   @WriteLog()
+  async countSeenPosts({
+    lastXDays,
+    userId,
+  }: {
+    lastXDays?: number;
+    userId: number;
+  }): Promise<number> {
+    const whereClause = [
+      lastXDays &&
+        `time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`,
+      userId &&
+        `posts.posts_id IN (SELECT posts_id FROM seen_users_posts WHERE user_id = ${userId})`,
+    ]
+      .filter(Boolean)
+      .join(' AND ');
+    const query = `
+      SELECT COUNT(*) as count FROM posts
+      ${whereClause ? `WHERE ${whereClause}` : ''}`;
+
+    return this.dBConnection
+      .query(query)
+      .then(({ results: [{ count }] }) => count)
+      .then(res => yup.number().validateSync(res));
+  }
+
+  @WriteLog()
   async getPosts(
     {
       limit,
       lastXDays,
       offset,
-    }: { limit: number; lastXDays?: number; offset: number } = {
+      userId,
+    }: {
+      limit: number;
+      lastXDays?: number;
+      offset: number;
+      userId?: number;
+    } = {
       limit: 100,
       offset: 0,
     },
   ): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
+    const whereClause = [
+      lastXDays &&
+        `time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`,
+      userId &&
+        `posts.posts_id NOT IN (SELECT posts_id FROM seen_users_posts WHERE user_id = ${userId})`,
+    ]
+      .filter(Boolean)
+      .join(' AND ');
     const query = `
-      SELECT title, time, rawTime, link, rating, resources_id, image_link as imageLink, external_posts_id as externalID, JSON_ARRAYAGG(name) as tags FROM posts
+      SELECT posts.posts_id, title, time, rawTime, link, rating, resources_id, image_link as imageLink, external_posts_id as externalID, JSON_ARRAYAGG(name) as tags FROM posts
                 JOIN posts_tags on posts.posts_id = posts_tags.posts_id
                 JOIN tags on posts_tags.tags_id = tags.tags_id
-      ${
-        lastXDays
-          ? `WHERE time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`
-          : ''
-      }
+      ${whereClause ? `WHERE ${whereClause}` : ''}
       GROUP BY posts.posts_id
       ORDER BY rating DESC
       LIMIT ${offset}, ${limit}
@@ -435,11 +472,32 @@ export class PostModel {
     return this.dBConnection.query(query);
   }
 
-  async getResources(): Promise<DbResourses> {
+  async getResourcesMap(): Promise<{ [resources_id: string]: string }> {
     const query = `SELECT * FROM resources;`;
     return this.dBConnection
       .query(query)
       .then(({ results }) => results)
-      .then(res => dbResoursesSchema.validateSync(res));
+      .then(res => dbResoursesSchema.validateSync(res))
+      .then(res =>
+        res.reduce(
+          (acc, { resources_id, favicon }) => ({
+            ...acc,
+            [resources_id]: favicon,
+          }),
+          {},
+        ),
+      );
+  }
+
+  saveSeenPosts({ postsId, userId }: { postsId: number[]; userId: number }) {
+    if (!postsId.length) {
+      return;
+    }
+    const query = `
+    INSERT IGNORE INTO seen_users_posts(posts_id, user_id) VALUES ${postsId
+      .map(postId => `(${postId}, ${userId})`)
+      .join(',')}
+  `;
+    return this.dBConnection.query(query);
   }
 }
