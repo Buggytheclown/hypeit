@@ -36,6 +36,13 @@ enum AUTH_TYPE {
   REGISTER = 'REGISTER',
 }
 
+const postsBookmarkBodySchema = yup.object({
+  postId: yup.number().required(),
+  bookmark: yup.boolean().required(),
+});
+
+type PostsBookmarkBody = yup.InferType<typeof postsBookmarkBodySchema>;
+
 const authBodySchema = yup.object({
   form_type: yup.mixed().oneOf([AUTH_TYPE.LOGIN, AUTH_TYPE.REGISTER]),
   username: yup.string().min(3),
@@ -107,6 +114,7 @@ export class AppController {
       lastXDays: queryParams.bestof,
       offset: postsPerPage * (queryParams.page - 1),
       userId: request.session.user?.user_id,
+      onlyNotSeen: true,
     });
 
     if (request.session.user) {
@@ -199,6 +207,46 @@ export class AppController {
         }
       }) as any);
     });
+  }
+
+  @Post('/posts/bookmark')
+  async toggleBookmark(@Req() request: any) {
+    if (!request.session.user) {
+      throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+    }
+
+    const body: PostsBookmarkBody = extractData(
+      request.body,
+      postsBookmarkBodySchema,
+    );
+
+    await this.postModel.toggleBookmarked({
+      userId: request.session.user.user_id,
+      postId: body.postId,
+      bookmark: body.bookmark,
+    });
+  }
+
+  @Get('/bookmarked')
+  @Render('index')
+  async getBookmarked(@Req() request) {
+    if (!request.session.user) {
+      throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+    }
+    const posts = await this.postModel.getPosts({
+      userId: request.session.user.user_id,
+      onlyBookmarked: true,
+    });
+
+    return {
+      posts,
+      queryParams: {},
+      totalPosts: posts.length,
+      totalSeenPosts: 0,
+      currentPage: 1,
+      resources: await this.postModel.getResourcesMap(),
+      user: request.session.user,
+    };
   }
 
   @Get('/update/month')

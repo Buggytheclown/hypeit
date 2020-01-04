@@ -25,6 +25,7 @@ const dbPostsSchema = yup.array(
     rating: yup.number(),
     resources_id: yup.number(),
     tags: yup.array(yup.string()),
+    bookmarked: yup.boolean(),
   }),
 );
 
@@ -105,7 +106,7 @@ async function insertPosts({
   const resourcesId = await dBConnection
     .query(
       `SELECT resources_id
-            FROM resources WHERE name = ${esc(resource)}`,
+         FROM resources WHERE name = ${esc(resource)}`,
     )
     .then(({ results: [firstResult] }) => (firstResult || {}).resources_id);
 
@@ -412,7 +413,7 @@ export class PostModel {
       .join(' AND ');
     const query = `
       SELECT COUNT(*) as count FROM posts
-      ${whereClause ? `WHERE ${whereClause}` : ''}`;
+    ${whereClause ? `WHERE ${whereClause}` : ''}`;
 
     return this.dBConnection
       .query(query)
@@ -421,38 +422,46 @@ export class PostModel {
   }
 
   @WriteLog()
-  async getPosts(
-    {
-      limit,
-      lastXDays,
-      offset,
-      userId,
-    }: {
-      limit: number;
-      lastXDays?: number;
-      offset: number;
-      userId?: number;
-    } = {
-      limit: 100,
-      offset: 0,
-    },
-  ): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
+  async getPosts({
+    limit = 100,
+    lastXDays,
+    offset=0,
+    userId,
+    onlyNotSeen = false,
+    onlyBookmarked = false,
+  }: {
+    limit?: number;
+    lastXDays?: number;
+    offset?: number;
+    userId?: number;
+    onlyBookmarked?: boolean;
+    onlyNotSeen?: boolean;
+  }): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
     const whereClause = [
       lastXDays &&
         `time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`,
-      userId &&
+      onlyNotSeen &&
+        userId &&
         `posts.posts_id NOT IN (SELECT posts_id FROM seen_users_posts WHERE user_id = ${userId})`,
+      onlyBookmarked && `bp.bookmarked_users_posts IS NOT NULL`,
     ]
       .filter(Boolean)
       .join(' AND ');
     const query = `
-      SELECT posts.posts_id, title, time, rawTime, link, rating, resources_id, image_link as imageLink, external_posts_id as externalID, JSON_ARRAYAGG(name) as tags FROM posts
-                JOIN posts_tags on posts.posts_id = posts_tags.posts_id
-                JOIN tags on posts_tags.tags_id = tags.tags_id
-      ${whereClause ? `WHERE ${whereClause}` : ''}
-      GROUP BY posts.posts_id
-      ORDER BY rating DESC
-      LIMIT ${offset}, ${limit}
+      SELECT posts.posts_id, title, time,
+             rawTime, link, rating, resources_id,
+             image_link as imageLink, external_posts_id as externalID,
+             JSON_ARRAYAGG(name) as tags, MAX(bp.bookmarked_users_posts IS NOT NULL) as bookmarked
+        FROM posts
+                  JOIN posts_tags on posts.posts_id = posts_tags.posts_id
+                  JOIN tags on posts_tags.tags_id = tags.tags_id
+                  LEFT JOIN (SELECT bookmarked_users_posts, posts_id FROM bookmarked_users_posts WHERE ${
+                    userId ? `user_id = ${userId}` : 'FALSE'
+                  }) as bp on posts.posts_id = bp.posts_id
+        ${whereClause ? `WHERE ${whereClause}` : ''}
+        GROUP BY posts.posts_id
+        ORDER BY rating DESC
+        LIMIT ${offset}, ${limit}
 `;
     return this.dBConnection
       .query(query)
@@ -462,6 +471,7 @@ export class PostModel {
       .then(res => dbPostsSchema.validateSync(res));
   }
 
+  @WriteLog()
   async deleteAllPosts() {
     const query = `
     SET FOREIGN_KEY_CHECKS = 0;
@@ -472,8 +482,10 @@ export class PostModel {
     return this.dBConnection.query(query);
   }
 
+  @WriteLog()
   async getResourcesMap(): Promise<{ [resources_id: string]: string }> {
-    const query = `SELECT * FROM resources;`;
+    const query = `SELECT *
+                   FROM resources;`;
     return this.dBConnection
       .query(query)
       .then(({ results }) => results)
@@ -489,6 +501,7 @@ export class PostModel {
       );
   }
 
+  @WriteLog()
   saveSeenPosts({ postsId, userId }: { postsId: number[]; userId: number }) {
     if (!postsId.length) {
       return;
@@ -500,4 +513,23 @@ export class PostModel {
   `;
     return this.dBConnection.query(query);
   }
+
+  @WriteLog()
+  toggleBookmarked({
+    postId,
+    userId,
+    bookmark,
+  }: {
+    postId: number;
+    userId: number;
+    bookmark: boolean;
+  }) {
+    if (bookmark) {
+      const query = `INSERT IGNORE INTO bookmarked_users_posts(posts_id, user_id) VALUE (${postId}, ${userId})`;
+      return this.dBConnection.query(query);
+    }
+    const query = `DELETE FROM bookmarked_users_posts WHERE posts_id=${postId} AND user_id=${userId};`;
+    return this.dBConnection.query(query);
+  }
+
 }
