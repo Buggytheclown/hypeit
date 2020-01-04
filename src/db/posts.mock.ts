@@ -11,6 +11,8 @@ export const postsMocks = {
       rating: 27,
       rawTime: "rawTime escape me's!%-<>.,\\",
       externalID: "externalID escape me's!%-<>.,\\",
+      bookmarked: false,
+      posts_id: 1,
     },
     {
       title: 'Checking 🦕 the Ark Compiler Recently Made Open-Source by Huawei',
@@ -30,6 +32,8 @@ export const postsMocks = {
       rating: 24,
       rawTime: 'December 2, 2019 at 09:39 AM',
       externalID: '478282',
+      bookmarked: false,
+      posts_id: 2,
     },
   ],
   medium: [
@@ -52,6 +56,8 @@ export const postsMocks = {
       externalID: 'bcd4dfa23541',
       imageLink:
         'https://miro.medium.com/max/334/1*BoIkAVSloc4lcxiR-0G8Rw.jpeg',
+      bookmarked: false,
+      posts_id: 1,
     },
     {
       title:
@@ -73,6 +79,8 @@ export const postsMocks = {
       externalID: 'a5acb485a445',
       imageLink:
         'https://miro.medium.com/max/334/1*cEaeMuTvINqIgyYQMSJWUA.jpeg',
+      bookmarked: false,
+      posts_id: 2,
     },
   ],
   devto: [
@@ -87,6 +95,8 @@ export const postsMocks = {
       imageLink: null,
       score: 183,
       rating: 37,
+      bookmarked: false,
+      posts_id: 1,
     },
     {
       title: 'Top 4 platforms for learning how to code (2020 edition)',
@@ -99,6 +109,8 @@ export const postsMocks = {
       imageLink: null,
       score: 181,
       rating: 36,
+      bookmarked: false,
+      posts_id: 2,
     },
   ],
 };

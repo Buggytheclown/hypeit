@@ -436,7 +436,7 @@ export class PostModel {
     userId?: number;
     onlyBookmarked?: boolean;
     onlyNotSeen?: boolean;
-  }): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
+  } = {}): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
     const whereClause = [
       lastXDays &&
         `time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`,
