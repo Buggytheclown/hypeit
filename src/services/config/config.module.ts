@@ -3,7 +3,7 @@ import { ConfigService } from './config.service';
 
 export const ConfigServiceProvider = {
   provide: ConfigService,
-  useValue: new ConfigService(`${process.env.NODE_ENV || 'dev'}.env`),
+  useValue: new ConfigService(`env.${process.env.NODE_ENV || 'dev'}.env`),
 };
 
 @Module({

@@ -11,6 +11,7 @@ export const DbOptions = {
   password: configService.get('DATABASE_PASSWORD'),
   database: configService.get('DATABASE'),
   timezone: configService.get('TIMEZONE'),
+  port: configService.get('DATABASE_PORT'),
   multipleStatements: true,
   dateStrings: true,
   charset: 'utf8mb4',

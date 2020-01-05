@@ -35,6 +35,7 @@ export const connection = (() => {
     host: configService.get('DATABASE_HOST'),
     user: configService.get('DATABASE_USER'),
     password: configService.get('DATABASE_PASSWORD'),
+    port: configService.get('DATABASE_PORT'),
     database,
     multipleStatements: true,
     dateStrings: true,

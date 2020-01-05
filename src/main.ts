@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import * as session from 'express-session';
 import * as express_mysql_session from 'express-mysql-session';
 import { DbOptions } from './db/dBConnection.service';
+import { ConfigServiceProvider } from './services/config/config.module';
 
 const MySQLStore = express_mysql_session(session);
 const sessionStore = new MySQLStore(DbOptions);
@@ -73,6 +74,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
+  await app.listen(ConfigServiceProvider.useValue.get('PORT'));
 }
 bootstrap();
