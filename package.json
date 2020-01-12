@@ -24,9 +24,10 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^6.7.2",
-    "@nestjs/core": "^6.7.2",
+    "@nestjs/common": "^6.10.14",
+    "@nestjs/core": "^6.10.14",
     "@nestjs/platform-express": "^6.7.2",
+    "@nestjs/schedule": "^0.1.1",
     "@types/lodash": "^4.14.149",
     "abort-controller": "^3.0.0",
     "bcrypt": "^3.0.7",
