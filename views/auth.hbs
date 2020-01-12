@@ -19,64 +19,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HypeIT</title>
     <!--https://codepen.io/cliffpyles/pen/OVPJay-->
-</head>
-<body>
-<b>Login</b><br><br>
-<form method="POST" action="/auth">
-    <table border="0">
-        <tbody>
-        <tr>
-            <input type="hidden" name="form_type" value="LOGIN">
-            <td>username:</td>
-            <td>
-                <input type="text"
-                       name="username"
-                       size="20"
-                       autocorrect="off"
-                       spellcheck="false"
-                       autocapitalize="off"
-                       autofocus="true"/>
-            </td>
-        </tr>
-        <tr>
-            <td>password:</td>
-            <td>
-                <input type="password" name="password" size="20">
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <br>
-    <input type="submit" value="login"></form>
 
-<!--<a href="forgot">Forgot your password?</a><br><br>-->
-<br>
-<br>
-<b>Create Account</b><br><br>
-<form method="POST" action="/auth">
-    <table border="0">
-        <tbody>
-        <tr>
-            <td>username:</td>
-            <input type="hidden" name="form_type" value="REGISTER">
-            <td>
-                <input type="text" name="username" size="20" autocorrect="off" spellcheck="false" autocapitalize="off">
-            </td>
-        </tr>
-        <tr>
-            <td>password:</td>
-            <td>
-                <input type="password" name="password" size="20">
-            </td>
-        </tr>
-        <tr>
-            <td>verify password:</td>
-            <td>
-                <input type="password" name="password2" size="20">
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
+</head>
+
+<body>
+{{> header (object user=user) }}
+<div class="login-container col-sm-6 col-sm-offset-4">
+    <b>Login</b><br><br>
+    <form method="POST" action="/auth">
+        <input type="hidden" name="form_type" value="LOGIN">
+        <div class="form-group">
+            <input name="username" type="text" class="form-control" id="register_username"
+                   placeholder="Username">
+        </div>
+
+        <div class="form-group">
+            <input name="password" type="password" class="form-control" id="register_password"
+                   placeholder="Password">
+        </div>
+
+        <br>
+        <input class="btn btn-default" type="submit" value="login"></form>
+
+    <!--<a href="forgot">Forgot your password?</a><br><br>-->
     <br>
-    <input type="submit" value="create account"></form>
+    <br>
+    <b>Create Account</b><br><br>
+    <form method="POST" action="/auth">
+
+        <input type="hidden" name="form_type" value="REGISTER">
+        <div class="form-group">
+            <input name="username" type="text" class="form-control" id="register_username" placeholder="Username">
+        </div>
+
+
+        <div class="form-group">
+            <input name="password" type="password" class="form-control" id="register_password"
+                   placeholder="Password">
+        </div>
+
+        <div class="form-group">
+            <input name="password2" type="password" class="form-control" id="register_password"
+                   placeholder="Password">
+        </div>
+
+        <br>
+        <input class="btn btn-default" type="submit" value="create account"></form>
+</div>
 </body>

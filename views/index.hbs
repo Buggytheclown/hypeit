@@ -17,268 +17,31 @@
     <meta charset="utf-8"/>
     <title>HypeIT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--https://codepen.io/cliffpyles/pen/OVPJay-->
-    <style>
-        body * {
-            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body {
-            margin: 0;
-            color: rgba(58, 58, 58, 1);
-            background-color: rgb(23, 28, 32);
-        }
-
-        .container {
-            /*max-width: 1280px;*/
-            /*width: 90%;*/
-            margin: 0px auto;
-        }
-
-        .form-field input {
-            font-size: 1rem;
-            line-height: 1.4rem;
-            height: 1.4rem;
-            max-width: 100%;
-            display: inline-block;
-            padding: 4px 7px;
-            border: 1px solid rgba(32, 60, 84, 0.95);
-            background: rgba(22, 42, 59, 0.95);
-            outline: 0px;
-            color: rgba(136, 176, 210, 0.95);
-        }
-
-        .form-field input::-webkit-input-placeholder {
-            color: rgba(255, 255, 255, 0.35);
-        }
-
-        .form-field input:-moz-placeholder {
-            color: rgba(255, 255, 255, 0.35);
-        }
-
-        .form-field input::-moz-placeholder {
-            color: rgba(255, 255, 255, 0.35);
-        }
-
-        .form-field input:-ms-input-placeholder {
-            color: rgba(255, 255, 255, 0.35);
-        }
-
-        .logo i {
-            font-size: 1.2em;
-            margin-right: 6px;
-        }
-
-        .dynamic-grid {
-            position: relative;
-            z-index: 1;
-            columns: 240px 1;
-            max-width: 650px;
-            column-gap: 15px;
-        }
-
-        .dynamic-grid.container {
-            padding-top: 1rem;
-        }
-
-        .grid-item {
-            position: relative;
-            display: inline-block;
-            margin: 1rem;
-            max-width: 100%;
-            column-break-inside: avoid;
-        }
-
-        .grid-item .inner {
-            padding: 1rem 1rem 1rem 1rem;
-        }
-
-        .content-box {
-            width: 100%;
-            background-color: rgb(34, 39, 43);
-            box-shadow: 0px -1px 2px rgba(58, 58, 58, 0.1), 1px 1px 2px rgba(58, 58, 58, 0.1);
-            border: 1px solid #393d41;
-            border-radius: 2px;
-        }
-
-        .content-box-thumb {
-            display: block;
-            max-width: 100%;
-            height: auto;
-        }
-
-        .content-box-header {
-            font-size: 1.75rem;
-            margin: 0.75rem 0rem 0rem 0rem;
-        }
-
-    </style>
-
-    <style>
-        a {
-            text-decoration: none !important;
-        }
-
-        .post-header__img {
-            height: 21px;
-        }
-
-        .cbh__time {
-            margin: 10px 0;
-            color: rgb(102, 102, 102);
-            font-size: 15px;
-        }
-
-        .cbh__time__image {
-            height: 13px;
-        }
-
-        .pagination {
-            font-size: 30px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .pagination a {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .filters {
-            font-size: 25px;
-            text-align: center;
-        }
-
-        .total-posts {
-            margin: 5px;
-            color: rgb(191, 191, 191);
-        }
-
-        .content-box-header__link {
-            color: rgb(191, 191, 191);
-        }
-
-        .content-box-header__link:visited {
-            color: rgb(95, 95, 95);
-        }
-
-        .auth-container {
-            color: rgb(191, 191, 191);
-            float: right;
-            margin: 20px;
-        }
-
-        .auth-container a {
-            color: rgb(191, 191, 191);
-        }
-
-        .bookmark-icon {
-            width: 18px;
-            fill: rgb(191, 191, 191);
-            float: right;
-            cursor: pointer;
-        }
-
-        .bookmark-icon--true, .bookmark-icon--false, .bookmark-icon--loading {
-            display: none;
-        }
-
-        [data-bookmarked="true"] .bookmark-icon--true {
-            display: block;
-        }
-
-        [data-bookmarked="false"] .bookmark-icon--false {
-            display: block;
-        }
-
-        [data-bookmarked="loading"] .bookmark-icon--loading {
-            display: block;
-        }
-
-        .fa-spin {
-            animation: fa-spin 2s linear infinite;
-        }
-
-        @-webkit-keyframes fa-spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(360deg);
-                transform: rotate(360deg);
-            }
-        }
-
-        .navigation {
-            float: left;
-            margin: 20px;
-            margin-left: 40%;
-        }
-
-        @media screen and (max-width: 1000px) {
-            .navigation {
-                margin-left: 10px;
-            }
-        }
-
-        .navigation a {
-            color: rgba(255, 255, 255, 0.7);
-            font-family: "Roboto", "Open Sans", Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            line-height: 22px;
-            font-weight: 400;
-            margin-right: 20px;
-        }
-
-        .header {
-            background-color: rgb(31, 35, 39);
-        }
-
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
-        .auth-container__form {
-            display: inline-block;
-        }
-
-        .contentBoxApp {
-            margin-right: 30px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
 </head>
 <body>
 
-<div class="header clearfix">
-    <div class="navigation">
-        <a href="/?bestof=1">DAY</a>
-        <a href="/?bestof=7">WEEK</a>
-        <a href="/?bestof=30">MONTH</a>
-        {{#if user}}<a href="/bookmarked">BOOKMARKED</a>{{/if}}
-    </div>
-    <div class="auth-container">
-        {{#if user}}
-            Hello, {{user.name}}
-            <form class="auth-container__form" method="post" action="/auth/logout">
-                <input type="submit" value="logout">
-            </form>
-        {{else}}
-            <a href="/auth">Login or create account</a>
-        {{/if}}
-    </div>
-</div>
+{{> header (object user=user) }}
 
 <div class="contentBoxApp">
 
 
     <div class="container dynamic-grid">
+        {{# if (cmp url '===' '/bookmarked')}}
+            <div class="filters">
+                <p class="total-posts">({{totalPosts}})</p>
+            </div>
+        {{else}}
+            <div class="filters">
+                <a href="/?bestof=1" {{#if (cmp queryParams.bestof '===' 1)}}class="link-active"{{/if}}>Day</a>
+                <a href="/?bestof=7" {{#if (cmp queryParams.bestof '===' 7)}}class="link-active"{{/if}}>Week</a>
+                <a href="/?bestof=30"{{#if (cmp queryParams.bestof '===' 30)}}class="link-active"{{/if}}>Month</a>
+                <p class="total-posts">({{totalSeenPosts}}/{{totalPosts}})</p>
+            </div>
+        {{/if}}
 
-        <div class="filters">
-            <p class="total-posts">({{totalSeenPosts}}/{{totalPosts}})</p>
-        </div>
 
         {{#each posts}}
             <article class="grid-item content-box">
@@ -290,7 +53,7 @@
                         </a>
 
                         {{#if ../user}}
-                            <div class="js_bookmark-container" data-postId="{{posts_id}}"
+                            <div class="js_bookmark-container clearfix bookmark-container" data-postId="{{posts_id}}"
                                  data-bookmarked="{{bookmarked}}">
                                 <svg class="bookmark-icon bookmark-icon--false" aria-hidden="true" focusable="false"
                                      data-prefix="far"
@@ -331,17 +94,19 @@
 
     </div>
 
-    <div class="pagination">
-        {{#if user}}
-            <a href="{{ extendQuery isNextPage=true}}">Next >>> </a>
-        {{else}}
-            {{#if (cmp currentPage '>' 1)}}
-                <a href="{{ extendQuery page=(math currentPage '-' 1) }}"> <<< </a>
+    {{# if (cmp url '!==' '/bookmarked')}}
+        <div class="pagination">
+            {{#if user}}
+                <a href="{{ extendQuery isNextPage=true}}">Next >>> </a>
+            {{else}}
+                {{#if (cmp currentPage '>' 1)}}
+                    <a href="{{ extendQuery page=(math currentPage '-' 1) }}"> <<< </a>
+                {{/if}}
+                <span class="pagination__page">{{ currentPage }}</span>
+                <a href="{{ extendQuery page=(math currentPage '+' 1) }}"> >>> </a>
             {{/if}}
-            <span>{{ currentPage }}</span>
-            <a href="{{ extendQuery page=(math currentPage '+' 1) }}"> >>> </a>
-        {{/if}}
-    </div>
+        </div>
+    {{/if}}
 </div>
 
 <script>

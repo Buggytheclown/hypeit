@@ -156,6 +156,7 @@ export class AppController {
       currentPage: queryParams.page,
       resources: await this.postModel.getResourcesMap(),
       user: request.session.user,
+      url: '/',
     };
   }
 
@@ -266,6 +267,7 @@ export class AppController {
       currentPage: 1,
       resources: await this.postModel.getResourcesMap(),
       user: request.session.user,
+      url: '/bookmarked',
     };
   }
 
@@ -298,5 +300,13 @@ export class AppController {
     }
 
     exhaustiveCheck(updateBodyType);
+  }
+
+  @Get('/about')
+  @Render('about')
+  async getAbout(@Req() request) {
+    return {
+      user: request.session.user,
+    };
   }
 }
