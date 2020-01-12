@@ -51,6 +51,26 @@ const authBodySchema = yup.object({
 });
 type AuthBodyType = yup.InferType<typeof authBodySchema>;
 
+enum UPDATE_TYPE {
+  DEVTO = 'DEVTO',
+  MEDIUM = 'MEDIUM',
+  HABR = 'HABR',
+  WEEK = 'WEEK',
+  MONTH = 'MONTH',
+}
+const updateBodySchema = yup.object({
+  update_type: yup
+    .mixed()
+    .oneOf([
+      UPDATE_TYPE.DEVTO,
+      UPDATE_TYPE.HABR,
+      UPDATE_TYPE.MEDIUM,
+      UPDATE_TYPE.WEEK,
+      UPDATE_TYPE.MONTH,
+    ]),
+});
+type UpdateBodyType = yup.InferType<typeof updateBodySchema>;
+
 const seenPostsIdSchema = yup.array(yup.number());
 type SeenPostsIdType = yup.InferType<typeof seenPostsIdSchema>;
 
@@ -249,33 +269,34 @@ export class AppController {
     };
   }
 
-  @Get('/update/month')
-  async updatePosts() {
-    await this.postDeliveryService.saveBestOfTheMonth();
-    return 'ok';
+  @Get('/update')
+  @Render('update')
+  async getUpdate() {
+    return {};
   }
 
-  @Get('/update/week')
-  async updatePostsForWeek() {
-    await this.postDeliveryService.saveBestOfTheWeek();
-    return 'ok';
-  }
+  @Post('/update')
+  async update(@Req() request, @Query() query: unknown) {
+    const body: UpdateBodyType = extractData(request.body, updateBodySchema);
+    const updateBodyType: UPDATE_TYPE = body.update_type;
 
-  @Get('/update/medium')
-  async updateMediumPosts() {
-    await this.postDeliveryService.saveMediumBestOfTheWeek();
-    return 'ok';
-  }
+    if (updateBodyType === UPDATE_TYPE.MEDIUM) {
+      await this.postDeliveryService.saveMediumBestOfTheWeek();
+      return 'ok';
+    } else if (updateBodyType === UPDATE_TYPE.HABR) {
+      await this.postDeliveryService.saveHabrBestOfTheWeek();
+      return 'ok';
+    } else if (updateBodyType === UPDATE_TYPE.DEVTO) {
+      await this.postDeliveryService.saveDevtoBestOfTheWeek();
+      return 'ok';
+    } else if (updateBodyType === UPDATE_TYPE.WEEK) {
+      await this.postDeliveryService.saveBestOfTheWeek();
+      return 'ok';
+    } else if (updateBodyType === UPDATE_TYPE.MONTH) {
+      await this.postDeliveryService.saveBestOfTheMonth();
+      return 'ok';
+    }
 
-  @Get('/update/habr')
-  async updateHabrPosts() {
-    await this.postDeliveryService.saveHabrBestOfTheWeek();
-    return 'ok';
-  }
-
-  @Get('/update/devto')
-  async updateDevtoPosts() {
-    await this.postDeliveryService.saveDevtoBestOfTheWeek();
-    return 'ok';
+    exhaustiveCheck(updateBodyType);
   }
 }
