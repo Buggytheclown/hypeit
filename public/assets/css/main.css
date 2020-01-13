@@ -192,7 +192,6 @@ a {
     display: table;
 }
 
-
 .about-info {
     white-space: pre-line;
 }
@@ -200,6 +199,8 @@ a {
 .about-container {
     color: rgb(191, 191, 191);
     margin: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 .login-container {

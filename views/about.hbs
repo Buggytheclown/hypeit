@@ -26,17 +26,20 @@
 <body>
 {{> header (object user=user) }}
 <div class="about-container">
-    <h3>About</h3>
-    <p class="about-info">
-        This is a news aggregator from Medium, Habr, DevTo with sorting by relative rating:
+    <div>
+        <h3 class="text-center">About</h3>
+        <p class="about-info">
+            News aggregator from Medium, Habr, DevTo.
 
-        Habr rating is `totalVotes`,
-        Medium rating is `voterCount` // `!clapCount`
-        Devto rating is `score/5` // `5` - magic number for the correct placement of posts among others
+            Sort by relative rating:
+            Habr rating is `totalVotes`,
+            Medium rating is `voterCount` // `!clapCount`
+            Devto rating is `score/5` // `5` - magic number for the correct placement of posts among others
 
-        For registered users, we hide viewed posts.
+            For registered users, we hide viewed posts.
 
-        For any suggestions or bug report you can contact: buggy.the.clown.md@gmail.com
-    </p>
+            For any suggestions or bug report you can contact: <a href = "mailto: buggy.the.clown.md@gmail.com">buggy.the.clown.md@gmail.com</a>
+        </p>
+    </div>
 </div>
 </body>
