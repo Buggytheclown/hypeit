@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { PostDeliveryModule } from './services/postDelivery/postDelivery.module';
 import { DbModule } from './db/db.module';
 import { TasksModule } from './services/tasks/tasks.module';
+import { CustomLoggerModule } from './services/logger/customLogger.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { TasksModule } from './services/tasks/tasks.module';
     PostDeliveryModule,
     DbModule,
     TasksModule,
+    CustomLoggerModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [],

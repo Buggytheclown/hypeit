@@ -8,17 +8,23 @@ import * as express_mysql_session from 'express-mysql-session';
 import { DbOptions } from './db/dBConnection.service';
 import { ConfigServiceProvider } from './services/config/config.module';
 import { registerHbsHelpers } from './hbs.helpers';
+import { CustomLoggerService } from './services/logger/customLogger.service';
 
 async function bootstrap() {
   registerHbsHelpers();
-  const MySQLStore = express_mysql_session(session);
-  const sessionStore = new MySQLStore(DbOptions);
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const loggerService = app.get<CustomLoggerService>(CustomLoggerService);
+
+  app.useLogger(loggerService);
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   hbs.registerPartials(join(__dirname, '..', 'views/partials'));
   app.setViewEngine('hbs');
+
+  const MySQLStore = express_mysql_session(session);
+  const sessionStore = new MySQLStore(DbOptions);
   app.use(
     session({
       key: 'sid',

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DBConnection } from './dBConnection.service';
 import * as bcrypt from 'bcrypt';
 import { esc } from './helpers';
-import { salt, WriteLog } from '../helpers/helpers';
+import { salt } from '../helpers/helpers';
 import * as yup from 'yup';
 import * as _ from 'lodash';
 
@@ -17,7 +17,6 @@ type DbUser = yup.InferType<typeof dbUserSchema>;
 export class UserService {
   constructor(private readonly dBConnection: DBConnection) {}
 
-  @WriteLog()
   async saveUser({ name, password }: { name: string; password: string }) {
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -27,7 +26,6 @@ export class UserService {
     return this.dBConnection.query(query);
   }
 
-  @WriteLog()
   async getVerifiedUser({
     name,
     password,
@@ -47,7 +45,6 @@ export class UserService {
     return null;
   }
 
-  @WriteLog()
   async isUsernameExist({ name }: { name: string }): Promise<boolean> {
     const query = `SELECT * FROM users WHERE name = ${esc(name)}`;
     return this.dBConnection.query(query).then(({ results: [data] }) => !!data);

@@ -6,7 +6,7 @@ import {
 import * as moment from 'moment';
 import { MediumRawData, MediumRawDataSchema } from './medium.interface';
 import * as _ from 'lodash';
-import { WriteLog, writeLog } from '../../helpers/helpers';
+import { writeLog } from '../../helpers/helpers';
 
 function formatDataTime(dateTime?: number): string {
   const format = 'YYYY-MM-DD HH:mm:ss';
@@ -22,7 +22,6 @@ function formatDataTime(dateTime?: number): string {
 
 @Injectable()
 export class MediumParserService {
-  @WriteLog()
   parse(mediumRawData: MediumRawData): MediumPostData[] {
     const mediumRawDataValidated: MediumRawData = MediumRawDataSchema.validateSync(
       mediumRawData,

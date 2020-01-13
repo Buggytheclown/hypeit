@@ -3,7 +3,7 @@ import {
   DevtoPostData,
   devtoPostDataSchema,
 } from '../../services/postDelivery/post.interfaces';
-import { writeLog, WriteLog } from '../../helpers/helpers';
+import { writeLog } from '../../helpers/helpers';
 import {
   DevtoRawData,
   DevtoRawDataSchema,
@@ -44,7 +44,6 @@ function parsePosts({
 
 @Injectable()
 export class DevtoParserService {
-  @WriteLog()
   parse(rawData: DevtoRawData): DevtoPostData[] {
     const rawDataValidated: DevtoRawData = DevtoRawDataSchema.validateSync(
       rawData,

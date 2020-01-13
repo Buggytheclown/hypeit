@@ -4,6 +4,7 @@ import { PostModel } from './post.service';
 import { postsMocks } from './posts.mock';
 import { PostResources } from '../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
+import { AppModule } from '../app.module';
 
 function withSortedTags(posts) {
   return posts.map(post => ({ ...post, tags: post.tags.slice().sort() }));
@@ -61,7 +62,7 @@ describe('post model test', () => {
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      imports: [DbModule],
+      imports: [AppModule],
     }).compile();
 
     postModel = app.get<PostModel>(PostModel);

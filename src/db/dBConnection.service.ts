@@ -2,6 +2,7 @@ import * as mysql from 'mysql';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '../services/config/config.service';
 import { ConfigServiceProvider } from '../services/config/config.module';
+import { CustomLoggerService } from '../services/logger/customLogger.service';
 
 const configService: ConfigService = ConfigServiceProvider.useValue;
 
@@ -21,16 +22,16 @@ export const DbOptions = {
 export class DBConnection {
   connection: any;
 
-  constructor() {
+  constructor(private readonly cls: CustomLoggerService) {
     this.connection = mysql.createConnection(DbOptions);
 
     this.connection.connect(err => {
       if (err) {
-        console.error('error connecting: ' + err.stack);
+        this.cls.error('error connecting: ' + err.stack);
         return;
       }
 
-      console.log('connected as id ' + this.connection.threadId);
+      this.cls.log('connected as id ' + this.connection.threadId);
     });
   }
 

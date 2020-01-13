@@ -11,7 +11,8 @@ import * as _ from 'lodash';
 import * as yup from 'yup';
 import { esc } from './helpers';
 import { PostResourcesData } from '../services/postDelivery/postResourses.interfaces';
-import { exhaustiveCheck, WriteLog, writeLog } from '../helpers/helpers';
+import { exhaustiveCheck } from '../helpers/helpers';
+import { CustomLoggerService } from '../services/logger/customLogger.service';
 
 const dbPostsSchema = yup.array(
   yup.object({
@@ -235,11 +236,13 @@ function createPostsTagsRelations({
   insertedPosts,
   insertedTags,
   dBConnection,
+  cls,
 }: {
   posts: PostData[];
   insertedPosts: Array<{ posts_id: number; external_posts_id: string }>;
   insertedTags: Array<{ tags_id: number; name: string }>;
   dBConnection: DBConnection;
+  cls: CustomLoggerService;
 }) {
   const insertedPostsByExternalPostId = _.keyBy(
     insertedPosts,
@@ -252,11 +255,13 @@ function createPostsTagsRelations({
     const posts_id = insertedPostsByExternalPostId[externalID].posts_id;
     return tags.map(tagName => {
       if (!insertedTagsByTagsName[tagName]) {
-        writeLog('!insertedTagsByTagsName[tagName]', {
-          tagName,
-          externalID,
-          tags,
-        });
+        cls.error(
+          `!insertedTagsByTagsName[tagName]: ${JSON.stringify({
+            tagName,
+            externalID,
+            tags,
+          })}`,
+        );
         throw new Error(
           `NONONo tagName: ${tagName}, externalID: ${externalID}`,
         );
@@ -292,10 +297,15 @@ function withPostRating({ posts, resource }) {
   return posts.map(post => ({ ...post, rating: calculator(post) }));
 }
 
-function assertAllPostWasFound(
-  posts: Array<{ externalID: string }>,
-  insertedPosts: Array<{ external_posts_id: string }>,
-) {
+function assertAllPostWasFound({
+  posts,
+  insertedPosts,
+  cls,
+}: {
+  posts: Array<{ externalID: string }>;
+  insertedPosts: Array<{ external_posts_id: string }>;
+  cls: CustomLoggerService;
+}) {
   const insertedPostsByExternalPostId = _.keyBy(
     insertedPosts,
     ({ external_posts_id }) => external_posts_id,
@@ -305,21 +315,26 @@ function assertAllPostWasFound(
     post => !(post.externalID in insertedPostsByExternalPostId),
   );
   if (notFoundPosts.length) {
-    writeLog('notFoundPosts', notFoundPosts);
+    cls.error(`notFoundPosts: ${notFoundPosts}`);
     throw new Error(`${notFoundPosts.length} posts id was not found`);
   }
 }
 
-function assertAllTagsWasFound(
-  extractedTags: string[],
-  insertedTags: Array<{ name: string }>,
-) {
+function assertAllTagsWasFound({
+  extractedTags,
+  insertedTags,
+  cls,
+}: {
+  extractedTags: string[];
+  insertedTags: Array<{ name: string }>;
+  cls: CustomLoggerService;
+}) {
   const difference = _.difference(
     extractedTags,
     insertedTags.map(tag => tag.name),
   );
   if (difference.length) {
-    writeLog('assertAllTagsWasFoundDifference', difference);
+    cls.error(`assertAllTagsWasFoundDifference: ${difference}`);
     throw new Error(`${difference.length} tags name was not found`);
   }
 }
@@ -332,11 +347,13 @@ const extractTags = _.flow([
 
 @Injectable()
 export class PostModel {
-  constructor(private readonly dBConnection: DBConnection) {}
+  constructor(
+    private readonly dBConnection: DBConnection,
+    private readonly cls: CustomLoggerService,
+  ) {}
 
-  @WriteLog()
   async savePosts({ posts, resource }: PostResourcesData) {
-    console.log(
+    this.cls.log(
       `savePosts resource: ${resource}, posts.length: ${posts.length}`,
     );
     if (!posts.length) {
@@ -354,7 +371,7 @@ export class PostModel {
       dBConnection: this.dBConnection,
     });
 
-    assertAllPostWasFound(posts, insertedPosts);
+    assertAllPostWasFound({ posts, insertedPosts, cls: this.cls });
 
     const extractedTags: string[] = extractTags(posts);
 
@@ -369,17 +386,17 @@ export class PostModel {
       dBConnection: this.dBConnection,
     });
 
-    assertAllTagsWasFound(extractedTags, insertedTags);
+    assertAllTagsWasFound({ extractedTags, insertedTags, cls: this.cls });
 
     await createPostsTagsRelations({
       posts,
       insertedPosts,
       insertedTags,
       dBConnection: this.dBConnection,
+      cls: this.cls,
     });
   }
 
-  @WriteLog()
   async countPosts({ lastXDays }: { lastXDays?: number }): Promise<number> {
     const query = `
       SELECT COUNT(*) as count FROM posts
@@ -395,7 +412,6 @@ export class PostModel {
       .then(res => yup.number().validateSync(res));
   }
 
-  @WriteLog()
   async countSeenPosts({
     lastXDays,
     userId,
@@ -421,11 +437,10 @@ export class PostModel {
       .then(res => yup.number().validateSync(res));
   }
 
-  @WriteLog()
   async getPosts({
     limit = 100,
     lastXDays,
-    offset=0,
+    offset = 0,
     userId,
     onlyNotSeen = false,
     onlyBookmarked = false,
@@ -471,7 +486,6 @@ export class PostModel {
       .then(res => dbPostsSchema.validateSync(res));
   }
 
-  @WriteLog()
   async deleteAllPosts() {
     const query = `
     SET FOREIGN_KEY_CHECKS = 0;
@@ -482,7 +496,6 @@ export class PostModel {
     return this.dBConnection.query(query);
   }
 
-  @WriteLog()
   async getResourcesMap(): Promise<{ [resources_id: string]: string }> {
     const query = `SELECT *
                    FROM resources;`;
@@ -501,7 +514,6 @@ export class PostModel {
       );
   }
 
-  @WriteLog()
   saveSeenPosts({ postsId, userId }: { postsId: number[]; userId: number }) {
     if (!postsId.length) {
       return;
@@ -514,7 +526,6 @@ export class PostModel {
     return this.dBConnection.query(query);
   }
 
-  @WriteLog()
   toggleBookmarked({
     postId,
     userId,
@@ -531,5 +542,4 @@ export class PostModel {
     const query = `DELETE FROM bookmarked_users_posts WHERE posts_id=${postId} AND user_id=${userId};`;
     return this.dBConnection.query(query);
   }
-
 }
