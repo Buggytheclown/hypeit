@@ -56,7 +56,7 @@ body {
 .grid-item {
     position: relative;
     display: inline-block;
-    margin: 1rem;
+    margin: 1rem 0;
     max-width: 100%;
     column-break-inside: avoid;
 }
@@ -192,9 +192,6 @@ a {
     display: table;
 }
 
-.contentBoxApp {
-    margin-right: 30px;
-}
 
 .about-info {
     white-space: pre-line;
