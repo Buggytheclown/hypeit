@@ -3,6 +3,7 @@ import { MediumParserService } from './mediumParser.service';
 import { MediumHttpService } from './mediumHttp.service';
 import {
   MediumPostData,
+  PostGrabber,
   PostResources,
 } from '../../services/postDelivery/post.interfaces';
 import { MediumRawData } from './medium.interface';
@@ -27,23 +28,24 @@ function proceedPosts(
 }
 
 @Injectable()
-export class MediumPostGrabberService {
+export class MediumPostGrabberService implements PostGrabber {
+  resource = PostResources.MEDIUM;
   constructor(
     private readonly mediumParserService: MediumParserService,
     private readonly mediumHttpService: MediumHttpService,
   ) {}
 
-  async getBestOfTheWeek(): Promise<MediumResourses> {
+  getBestOfTheWeek = async (): Promise<MediumResourses> => {
     return proceedPosts(
       this.mediumHttpService.getBestOfTheWeek(),
       this.mediumParserService,
     );
-  }
+  };
 
-  async getBestOfTheMonth(): Promise<MediumResourses> {
+  getBestOfTheMonth = async (): Promise<MediumResourses> => {
     return proceedPosts(
       this.mediumHttpService.getBestOfTheMonth(),
       this.mediumParserService,
     );
-  }
+  };
 }

@@ -1,9 +1,16 @@
 import * as yup from 'yup';
+import { PostResourcesData } from './postResourses.interfaces';
 
 export enum PostResources {
   HABR = 'habr',
   MEDIUM = 'medium',
   DEVTO = 'devto',
+}
+
+export interface PostGrabber {
+  resource: PostResources;
+  getBestOfTheWeek(): Promise<PostResourcesData>;
+  getBestOfTheMonth(): Promise<PostResourcesData>;
 }
 
 const basePostDataFields = {
@@ -75,10 +82,6 @@ export type PostData = Required<yup.InferType<typeof postDataSchema>>;
 export type MediumPostData = Required<
   yup.InferType<typeof mediumPostDataSchema>
 >;
-export type HabrPostData = Required<
-  yup.InferType<typeof habrPostDataSchema>
->;
+export type HabrPostData = Required<yup.InferType<typeof habrPostDataSchema>>;
 
-export type DevtoPostData = Required<
-  yup.InferType<typeof devtoPostDataSchema>
->;
+export type DevtoPostData = Required<yup.InferType<typeof devtoPostDataSchema>>;

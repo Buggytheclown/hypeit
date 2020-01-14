@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HabrParserService } from './habrParser.service';
 import {
   HabrPostData,
+  PostGrabber,
   PostResources,
 } from '../../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
@@ -26,29 +27,31 @@ export interface HabrResourses {
 }
 
 @Injectable()
-export class HabrPostGrabberService {
+export class HabrPostGrabberService implements PostGrabber {
+  resource = PostResources.HABR;
+
   constructor(
     private readonly habrParserService: HabrParserService,
     private readonly habrHttpService: HabrHttpService,
   ) {}
 
-  getBestOfTheWeek(): Promise<{
+  getBestOfTheWeek = (): Promise<{
     posts: HabrPostData[];
     resource: PostResources.HABR;
-  }> {
+  }> => {
     return proceedPosts(
       this.habrHttpService.getBestOfTheWeek(10),
       this.habrParserService,
     );
-  }
+  };
 
-  getBestOfTheMonth(): Promise<{
+  getBestOfTheMonth = (): Promise<{
     posts: HabrPostData[];
     resource: PostResources.HABR;
-  }> {
+  }> => {
     return proceedPosts(
       this.habrHttpService.getBestOfTheMonth(30),
       this.habrParserService,
     );
-  }
+  };
 }

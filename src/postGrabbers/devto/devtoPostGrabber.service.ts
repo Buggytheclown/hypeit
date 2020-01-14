@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
   DevtoPostData,
+  PostGrabber,
   PostResources,
 } from '../../services/postDelivery/post.interfaces';
 import { DevtoHttpService } from './devtoHttp.service';
@@ -24,25 +25,27 @@ function wrapAsResources<T>(
 }
 
 @Injectable()
-export class DevtoPostGrabberService {
+export class DevtoPostGrabberService implements PostGrabber {
+  resource = PostResources.DEVTO;
+
   constructor(
     private readonly devtoHttpService: DevtoHttpService,
     private readonly devtoParserService: DevtoParserService,
   ) {}
 
-  async getBestOfTheWeek(): Promise<DevtoResourses> {
+  getBestOfTheWeek = async (): Promise<DevtoResourses> => {
     return wrapAsResources(
       this.devtoParserService.parse(
         await this.devtoHttpService.getBestOfTheWeek(),
       ),
     );
-  }
+  };
 
-  async getBestOfTheMonth(): Promise<DevtoResourses> {
+  getBestOfTheMonth = async (): Promise<DevtoResourses> => {
     return wrapAsResources(
       this.devtoParserService.parse(
         await this.devtoHttpService.getBestOfTheMonth(),
       ),
     );
-  }
+  };
 }
