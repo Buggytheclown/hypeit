@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  Header,
+  HttpCode,
   HttpException,
   HttpStatus,
   Post,
@@ -14,6 +16,8 @@ import { PostModel } from './db/post.service';
 import * as yup from 'yup';
 import { exhaustiveCheck } from './helpers/helpers';
 import { UserService } from './db/user.service';
+import { finalize } from 'rxjs/operators';
+import { PostResources } from './services/postDelivery/post.interfaces';
 
 const postsQueryParamsSchema = yup.object({
   page: yup
@@ -94,6 +98,44 @@ function setRedirectInfo({
   response.setHeader('Location', url);
   response.statusCode = status;
   return {};
+}
+
+function getUpdateTypeData({
+  updateBodyType,
+  period,
+}: {
+  updateBodyType: UPDATE_TYPE;
+  period;
+}) {
+  if (updateBodyType === UPDATE_TYPE.MEDIUM) {
+    return {
+      resource: PostResources.MEDIUM,
+      period: period.WEEK,
+    };
+  }
+  if (updateBodyType === UPDATE_TYPE.HABR) {
+    return {
+      resource: PostResources.HABR,
+      period: period.WEEK,
+    };
+  }
+  if (updateBodyType === UPDATE_TYPE.DEVTO) {
+    return {
+      resource: PostResources.DEVTO,
+      period: period.WEEK,
+    };
+  }
+  if (updateBodyType === UPDATE_TYPE.WEEK) {
+    return {
+      period: period.WEEK,
+    };
+  }
+  if (updateBodyType === UPDATE_TYPE.MONTH) {
+    return {
+      period: period.MONTH,
+    };
+  }
+  exhaustiveCheck(updateBodyType);
 }
 
 @Controller()
@@ -278,28 +320,28 @@ export class AppController {
   }
 
   @Post('/update')
-  async update(@Req() request, @Query() query: unknown) {
+  @HttpCode(HttpStatus.OK)
+  @Header('Content-Type', 'text/html; charset=utf-8')
+  @Header('Transfer-Encoding', 'chunked')
+  async update(@Req() request, @Query() query: unknown, @Res() response: any) {
     const body: UpdateBodyType = extractData(request.body, updateBodySchema);
     const updateBodyType: UPDATE_TYPE = body.update_type;
 
-    if (updateBodyType === UPDATE_TYPE.MEDIUM) {
-      await this.postDeliveryService.saveMediumBestOfTheWeek();
-      return 'ok';
-    } else if (updateBodyType === UPDATE_TYPE.HABR) {
-      await this.postDeliveryService.saveHabrBestOfTheWeek();
-      return 'ok';
-    } else if (updateBodyType === UPDATE_TYPE.DEVTO) {
-      await this.postDeliveryService.saveDevtoBestOfTheWeek();
-      return 'ok';
-    } else if (updateBodyType === UPDATE_TYPE.WEEK) {
-      await this.postDeliveryService.saveBestOfTheWeek();
-      return 'ok';
-    } else if (updateBodyType === UPDATE_TYPE.MONTH) {
-      await this.postDeliveryService.saveBestOfTheMonth();
-      return 'ok';
-    }
-
-    exhaustiveCheck(updateBodyType);
+    this.postDeliveryService
+      .updatePosts(
+        getUpdateTypeData({
+          updateBodyType,
+          period: this.postDeliveryService.period,
+        }),
+      )
+      .pipe(
+        finalize(() => {
+          response.end();
+        }),
+      )
+      .subscribe(data =>
+        response.write(`<pre>${(JSON.stringify as any)(data, 4, 4)}</pre> \n`),
+      );
   }
 
   @Get('/about')

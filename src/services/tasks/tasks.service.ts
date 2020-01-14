@@ -8,6 +8,10 @@ export class TasksService {
 
   @Cron('0 */4 * * *')
   async handleCron() {
-    await this.postDeliveryService.saveBestOfTheWeek();
+    this.postDeliveryService
+      .updatePosts({
+        period: this.postDeliveryService.period.WEEK,
+      })
+      .subscribe();
   }
 }
