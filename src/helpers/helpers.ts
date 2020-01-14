@@ -22,9 +22,9 @@ export function WriteLog() {
       try {
         const res = oldValue.apply(this, args);
         if (res && res.catch) {
-          return res.catch(ce => {
+          return res.catch(e => {
             writeLog(`${target.constructor.name}->${propertyKey}`, args);
-            throw ce;
+            throw e;
           });
         }
         return res;
