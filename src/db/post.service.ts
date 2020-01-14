@@ -352,12 +352,15 @@ export class PostModel {
     private readonly cls: CustomLoggerService,
   ) {}
 
-  async savePosts({ posts, resource }: PostResourcesData) {
+  savePosts = async ({
+    posts,
+    resource,
+  }: PostResourcesData): Promise<{ savedCount: number }> => {
     this.cls.log(
       `savePosts resource: ${resource}, posts.length: ${posts.length}`,
     );
     if (!posts.length) {
-      return;
+      return { savedCount: posts.length };
     }
     await insertPosts({
       posts: withPostRating({ posts, resource }),
@@ -395,6 +398,8 @@ export class PostModel {
       dBConnection: this.dBConnection,
       cls: this.cls,
     });
+
+    return { savedCount: posts.length };
   }
 
   async countPosts({ lastXDays }: { lastXDays?: number }): Promise<number> {
