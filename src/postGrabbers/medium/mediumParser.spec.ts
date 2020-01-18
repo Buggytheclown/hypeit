@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MediumParserService } from './mediumParser.service';
 import { mediumData1Mock } from './mediumData1.mock';
 import { mediumData1Parsed } from './mediumData1Parsed.mock';
-import * as fs from 'fs';
 
 describe('mediumPostGrabber', () => {
   let mediumParserService: MediumParserService;

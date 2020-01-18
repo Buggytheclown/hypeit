@@ -14,6 +14,7 @@ export class LoggerOptionsService {
 
   constructor(configService: ConfigService) {
     const env = configService.env;
+
     const defaultOptions = {
       transport: LoggerTransports.CONSOLE,
       logLevels: [

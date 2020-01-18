@@ -30,6 +30,7 @@ function proceedPosts(
 @Injectable()
 export class MediumPostGrabberService implements PostGrabber {
   resource = PostResources.MEDIUM;
+
   constructor(
     private readonly mediumParserService: MediumParserService,
     private readonly mediumHttpService: MediumHttpService,
