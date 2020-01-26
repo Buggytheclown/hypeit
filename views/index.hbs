@@ -47,7 +47,7 @@
             <article class="grid-item content-box">
                 <div class="inner">
                     <h1 class="content-box-header">
-                        <a class="content-box-header__link" href={{link}} target="_blank">
+                        <a class="content-box-header__link" href={{link}} target="_blank" rel="noopener">
                             <img class="post-header__img" src="{{ get ../resources resources_id }} "/>
                             {{title}}
                         </a>
@@ -95,14 +95,14 @@
     </div>
 
     {{# if (cmp url '!==' '/bookmarked')}}
-        <div class="pagination">
+        <div class="pagination_block">
             {{#if user}}
                 <a href="{{ extendQuery isNextPage=true}}">Next >>> </a>
             {{else}}
                 {{#if (cmp currentPage '>' 1)}}
                     <a href="{{ extendQuery page=(math currentPage '-' 1) }}"> <<< </a>
                 {{/if}}
-                <span class="pagination__page">{{ currentPage }}</span>
+                <span class="pagination_block__page">{{ currentPage }}</span>
                 <a href="{{ extendQuery page=(math currentPage '+' 1) }}"> >>> </a>
             {{/if}}
         </div>

@@ -103,20 +103,21 @@ a {
     height: 13px;
 }
 
-.pagination {
+.pagination_block {
     font-size: 20px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 50px;
     display: flex;
     justify-content: center;
     color: rgba(255, 255, 255, 0.7);
 }
 
-.pagination__page {
+.pagination_block__page {
     margin: 0 10px;
 }
 
-.pagination a {
+.pagination_block a {
     color: rgba(255, 255, 255, 0.7);
 }
 
