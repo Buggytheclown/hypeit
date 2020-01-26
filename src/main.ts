@@ -9,6 +9,7 @@ import { DbOptions } from './db/dBConnection.service';
 import { ConfigServiceProvider } from './services/config/config.module';
 import { registerHbsHelpers } from './hbs.helpers';
 import { CustomLoggerService } from './services/logger/customLogger.service';
+import * as moment from 'moment';
 
 async function bootstrap() {
   registerHbsHelpers();
@@ -32,6 +33,11 @@ async function bootstrap() {
       store: sessionStore,
       resave: false,
       saveUninitialized: false,
+      cookie: {
+        expires: moment()
+          .add(1, 'years')
+          .toDate(),
+      },
     }),
   );
 
