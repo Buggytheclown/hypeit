@@ -13,130 +13,29 @@ import {
 } from '@nestjs/common';
 import { PostDeliveryService } from './services/postDelivery/postDelivery.service';
 import { PostModel } from './db/post.service';
-import * as yup from 'yup';
 import { exhaustiveCheck } from './helpers/helpers';
 import { UserService } from './db/user.service';
 import { finalize } from 'rxjs/operators';
-import { PostResources } from './services/postDelivery/post.interfaces';
-
-const postsQueryParamsSchema = yup.object({
-  page: yup
-    .number()
-    .nullable()
-    .min(1)
-    .default(1),
-  bestof: yup
-    .number()
-    .nullable()
-    .min(0)
-    .default(7),
-  isNextPage: yup.boolean().nullable(),
-});
-
-type PostsQueryParamsType = yup.InferType<typeof postsQueryParamsSchema>;
-
-enum AUTH_TYPE {
-  LOGIN = 'LOGIN',
-  REGISTER = 'REGISTER',
-}
-
-const postsBookmarkBodySchema = yup.object({
-  postId: yup.number().required(),
-  bookmark: yup.boolean().required(),
-});
-
-type PostsBookmarkBody = yup.InferType<typeof postsBookmarkBodySchema>;
-
-const authBodySchema = yup.object({
-  form_type: yup.mixed().oneOf([AUTH_TYPE.LOGIN, AUTH_TYPE.REGISTER]),
-  username: yup.string().min(3),
-  password: yup.string().min(5),
-  password2: yup.string().min(5),
-});
-type AuthBodyType = yup.InferType<typeof authBodySchema>;
-
-enum UPDATE_TYPE {
-  DEVTO = 'DEVTO',
-  MEDIUM = 'MEDIUM',
-  HABR = 'HABR',
-  WEEK = 'WEEK',
-  MONTH = 'MONTH',
-}
-const updateBodySchema = yup.object({
-  update_type: yup
-    .mixed()
-    .oneOf([
-      UPDATE_TYPE.DEVTO,
-      UPDATE_TYPE.HABR,
-      UPDATE_TYPE.MEDIUM,
-      UPDATE_TYPE.WEEK,
-      UPDATE_TYPE.MONTH,
-    ]),
-});
-type UpdateBodyType = yup.InferType<typeof updateBodySchema>;
-
-const seenPostsIdSchema = yup.array(yup.number());
-type SeenPostsIdType = yup.InferType<typeof seenPostsIdSchema>;
-
-function extractData(data, schema) {
-  try {
-    return schema.validateSync(data);
-  } catch (e) {
-    throw new HttpException(e, HttpStatus.BAD_REQUEST);
-  }
-}
-
-function setRedirectInfo({
-  response,
-  status,
-  url,
-}: {
-  response: any;
-  status: number;
-  url: string;
-}) {
-  response.setHeader('Location', url);
-  response.statusCode = status;
-  return {};
-}
-
-function getUpdateTypeData({
-  updateBodyType,
-  period,
-}: {
-  updateBodyType: UPDATE_TYPE;
-  period;
-}) {
-  if (updateBodyType === UPDATE_TYPE.MEDIUM) {
-    return {
-      resource: PostResources.MEDIUM,
-      period: period.WEEK,
-    };
-  }
-  if (updateBodyType === UPDATE_TYPE.HABR) {
-    return {
-      resource: PostResources.HABR,
-      period: period.WEEK,
-    };
-  }
-  if (updateBodyType === UPDATE_TYPE.DEVTO) {
-    return {
-      resource: PostResources.DEVTO,
-      period: period.WEEK,
-    };
-  }
-  if (updateBodyType === UPDATE_TYPE.WEEK) {
-    return {
-      period: period.WEEK,
-    };
-  }
-  if (updateBodyType === UPDATE_TYPE.MONTH) {
-    return {
-      period: period.MONTH,
-    };
-  }
-  exhaustiveCheck(updateBodyType);
-}
+import { ProxyService } from './services/htmlproxy/proxy.service';
+import {
+  AUTH_TYPE,
+  authBodySchema,
+  AuthBodyType,
+  extractData,
+  getUpdateTypeData,
+  htmlProxyQueryParamsSchema,
+  HtmlProxyQueryParamsType,
+  PostsBookmarkBody,
+  postsBookmarkBodySchema,
+  postsQueryParamsSchema,
+  PostsQueryParamsType,
+  seenPostsIdSchema,
+  SeenPostsIdType,
+  setRedirectInfo,
+  UPDATE_TYPE,
+  updateBodySchema,
+  UpdateBodyType,
+} from './app.controller.helpers';
 
 @Controller()
 export class AppController {
@@ -144,6 +43,7 @@ export class AppController {
     private readonly postDeliveryService: PostDeliveryService,
     private readonly postModel: PostModel,
     private readonly userService: UserService,
+    private readonly proxyService: ProxyService,
   ) {}
 
   @Get('/')
@@ -336,7 +236,7 @@ export class AppController {
       )
       .pipe(
         finalize(() => {
-          response.end();
+          response.write(`<pre>---DONE---</pre> \n`), response.end();
         }),
       )
       .subscribe(data =>
@@ -350,5 +250,25 @@ export class AppController {
     return {
       user: request.session.user,
     };
+  }
+
+  @Get('/htmlproxy')
+  async getHtmlProxy(@Req() request, @Query() query: unknown) {
+    const queryParams: HtmlProxyQueryParamsType = extractData(
+      query,
+      htmlProxyQueryParamsSchema,
+    );
+
+    return this.proxyService.proxyHtml(queryParams.url);
+  }
+
+  @Get('/proxy')
+  async getProxy(@Req() request, @Query() query: unknown) {
+    const queryParams: HtmlProxyQueryParamsType = extractData(
+      query,
+      htmlProxyQueryParamsSchema,
+    );
+
+    return this.proxyService.proxy(queryParams.url);
   }
 }

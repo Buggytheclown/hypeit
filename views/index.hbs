@@ -47,8 +47,13 @@
             <article class="grid-item content-box">
                 <div class="inner">
                     <h1 class="content-box-header">
+                        <img class="post-header__img" src="{{ get ../resources resources_id }} "/>
+
+                        {{#if (cmp resources_id '===' 2)}}
+                            <a href="/htmlproxy?url={{link}}" target="_blank" rel="noopener">=></a>
+                        {{/if}}
+
                         <a class="content-box-header__link" href={{link}} target="_blank" rel="noopener">
-                            <img class="post-header__img" src="{{ get ../resources resources_id }} "/>
                             {{title}}
                         </a>
 

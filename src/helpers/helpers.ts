@@ -87,6 +87,7 @@ export function loadChunked<T>(
           const { url, options, transformerType } = reqBuilder(curPage);
 
           const { controller, timeout } = prepareTimeoutController(timeoutTime);
+          // TODO: replace with timeoutFetch
           return fetch(url, { signal: controller.signal, ...options })
             .then(getTransformer(transformerType))
             .catch(err => {
