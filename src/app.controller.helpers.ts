@@ -15,6 +15,7 @@ export const postsQueryParamsSchema = yup.object({
     .min(0)
     .default(7),
   isNextPage: yup.boolean().nullable(),
+  tagName: yup.string().nullable(),
 });
 
 export type PostsQueryParamsType = yup.InferType<typeof postsQueryParamsSchema>;

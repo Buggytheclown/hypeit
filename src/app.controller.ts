@@ -77,6 +77,7 @@ export class AppController {
       offset: postsPerPage * (queryParams.page - 1),
       userId: request.session.user?.user_id,
       onlyNotSeen: true,
+      tagName: queryParams.tagName,
     });
 
     if (request.session.user) {

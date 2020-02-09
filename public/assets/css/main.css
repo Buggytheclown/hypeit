@@ -14,7 +14,15 @@ body {
     margin: 0px auto;
 }
 
-.link-active {
+.filters__link {
+    color: rgb(95, 95, 95);
+}
+
+.filters__link:hover {
+    color: rgb(191, 191, 191);
+}
+
+.filters__link.filters__link--active {
     color: rgb(191, 191, 191);
 }
 
@@ -99,6 +107,14 @@ a {
     font-size: 15px;
 }
 
+.cbh__time a:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.cbh__time a {
+    color: rgb(102, 102, 102);
+}
+
 .cbh__time__image {
     height: 13px;
 }
@@ -135,7 +151,7 @@ a {
     color: rgb(191, 191, 191);
 }
 
-.content-box-header__link:visited {
+.content-box-header__link:visited, .content-box-header__link:hover {
     color: rgb(95, 95, 95);
 }
 
@@ -217,7 +233,7 @@ a {
 }
 
 /* HEADER */
-.header .header-link-style a {
+.header .header-link-style a, .header .header-link-style button {
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
     font-weight: 400;

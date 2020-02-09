@@ -400,7 +400,7 @@ export class PostModel {
     });
 
     return { savedCount: posts.length };
-  }
+  };
 
   async countPosts({ lastXDays }: { lastXDays?: number }): Promise<number> {
     const query = `
@@ -449,6 +449,7 @@ export class PostModel {
     userId,
     onlyNotSeen = false,
     onlyBookmarked = false,
+    tagName,
   }: {
     limit?: number;
     lastXDays?: number;
@@ -456,13 +457,14 @@ export class PostModel {
     userId?: number;
     onlyBookmarked?: boolean;
     onlyNotSeen?: boolean;
+    tagName?: string;
   } = {}): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
     const whereClause = [
       lastXDays &&
-        `time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`,
+        `time BETWEEN CURDATE() - INTERVAL ${esc(lastXDays)} DAY AND CURDATE() + INTERVAL 1 DAY`,
       onlyNotSeen &&
         userId &&
-        `posts.posts_id NOT IN (SELECT posts_id FROM seen_users_posts WHERE user_id = ${userId})`,
+        `posts.posts_id NOT IN (SELECT posts_id FROM seen_users_posts WHERE user_id = ${esc(userId)})`,
       onlyBookmarked && `bp.bookmarked_users_posts IS NOT NULL`,
     ]
       .filter(Boolean)
@@ -476,10 +478,11 @@ export class PostModel {
                   JOIN posts_tags on posts.posts_id = posts_tags.posts_id
                   JOIN tags on posts_tags.tags_id = tags.tags_id
                   LEFT JOIN (SELECT bookmarked_users_posts, posts_id FROM bookmarked_users_posts WHERE ${
-                    userId ? `user_id = ${userId}` : 'FALSE'
+                    userId ? `user_id = ${esc(userId)}` : 'FALSE'
                   }) as bp on posts.posts_id = bp.posts_id
         ${whereClause ? `WHERE ${whereClause}` : ''}
         GROUP BY posts.posts_id
+        ${tagName ? `HAVING (${esc(tagName)} MEMBER OF (tags))` : ''}
         ORDER BY rating DESC
         LIMIT ${offset}, ${limit}
 `;

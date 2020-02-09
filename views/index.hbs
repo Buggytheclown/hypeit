@@ -35,9 +35,9 @@
             </div>
         {{else}}
             <div class="filters">
-                <a href="/?bestof=1" {{#if (cmp queryParams.bestof '===' 1)}}class="link-active"{{/if}}>Day</a>
-                <a href="/?bestof=7" {{#if (cmp queryParams.bestof '===' 7)}}class="link-active"{{/if}}>Week</a>
-                <a href="/?bestof=30"{{#if (cmp queryParams.bestof '===' 30)}}class="link-active"{{/if}}>Month</a>
+                <a href="/?bestof=1" class="filters__link {{#if (cmp queryParams.bestof '===' 1)}}filters__link--active{{/if}}">Day</a>
+                <a href="/?bestof=7" class="filters__link {{#if (cmp queryParams.bestof '===' 7)}}filters__link--active{{/if}}">Week</a>
+                <a href="/?bestof=30"class="filters__link {{#if (cmp queryParams.bestof '===' 30)}}filters__link--active{{/if}}">Month</a>
                 <p class="total-posts">({{totalSeenPosts}}/{{totalPosts}})</p>
             </div>
         {{/if}}
@@ -83,7 +83,7 @@
                                 </svg>
                             </div>
                         {{/if}}
-
+                        <p class="cbh__time"> {{#each tags}} <a href="/?bestOf=30&tagName={{this}}">#{{this}}</a> {{/each}}</p>
                         <p class="cbh__time">
                             {{rating}}
                             <img class="cbh__time__image"
