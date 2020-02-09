@@ -3,7 +3,7 @@ import { migrationsList } from './migrationsList';
 
 Promise.resolve()
   .then(() =>
-    migrationsList.reduce(
+    [migrationsList[migrationsList.length - 1]].reduce(
       (acc, cur) => acc.then(() => logOperation(cur.name, execMigration(cur))),
       Promise.resolve(),
     ),

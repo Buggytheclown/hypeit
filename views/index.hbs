@@ -35,9 +35,12 @@
             </div>
         {{else}}
             <div class="filters">
-                <a href="/?bestof=1" class="filters__link {{#if (cmp queryParams.bestof '===' 1)}}filters__link--active{{/if}}">Day</a>
-                <a href="/?bestof=7" class="filters__link {{#if (cmp queryParams.bestof '===' 7)}}filters__link--active{{/if}}">Week</a>
-                <a href="/?bestof=30"class="filters__link {{#if (cmp queryParams.bestof '===' 30)}}filters__link--active{{/if}}">Month</a>
+                <a href="/?bestof=1"
+                   class="filters__link {{#if (cmp queryParams.bestof '===' 1)}}filters__link--active{{/if}}">Day</a>
+                <a href="/?bestof=7"
+                   class="filters__link {{#if (cmp queryParams.bestof '===' 7)}}filters__link--active{{/if}}">Week</a>
+                <a href="/?bestof=30"
+                   class="filters__link {{#if (cmp queryParams.bestof '===' 30)}}filters__link--active{{/if}}">Month</a>
                 <p class="total-posts">({{totalSeenPosts}}/{{totalPosts}})</p>
             </div>
         {{/if}}
@@ -47,18 +50,24 @@
             <article class="grid-item content-box">
                 <div class="inner">
                     <h1 class="content-box-header">
-                        <img class="post-header__img" src="{{ get ../resources resources_id }} "/>
+                        <img class="post-header__img" src="{{ get ../resources resources_id }}"/>
 
-                        {{#if (cmp resources_id '===' 2)}}
-                            <a href="/htmlproxy?url={{link}}" target="_blank" rel="noopener">=></a>
-                        {{/if}}
+                        <span data-locator="post-links-container"
+                              data-user="{{../user}}"
+                              data-postId="{{posts_id}}">
+                            {{#if (cmp resources_id '===' 2)}}
+                                <a href="/htmlproxy?url={{link}}" target="_blank" rel="noopener">=></a>
+                            {{/if}}
 
-                        <a class="content-box-header__link" href={{link}} target="_blank" rel="noopener">
-                            {{title}}
-                        </a>
+                            <a class="content-box-header__link" href={{link}} target="_blank" rel="noopener">
+                                {{title}}
+                            </a>
+                        </span>
 
                         {{#if ../user}}
-                            <div class="js_bookmark-container clearfix bookmark-container" data-postId="{{posts_id}}"
+                            <div class="clearfix bookmark-container"
+                                 data-locator="bookmark-container"
+                                 data-postId="{{posts_id}}"
                                  data-bookmarked="{{bookmarked}}">
                                 <svg class="bookmark-icon bookmark-icon--false" aria-hidden="true" focusable="false"
                                      data-prefix="far"
@@ -83,7 +92,8 @@
                                 </svg>
                             </div>
                         {{/if}}
-                        <p class="cbh__time"> {{#each tags}} <a href="/?bestOf=30&tagName={{this}}">#{{this}}</a> {{/each}}</p>
+                        <p class="cbh__time"> {{#each tags}}
+                            <a href="/?bestOf=30&tagName={{this}}">#{{this}}</a> {{/each}}</p>
                         <p class="cbh__time">
                             {{rating}}
                             <img class="cbh__time__image"
@@ -115,7 +125,7 @@
 </div>
 
 <script>
-    document.querySelectorAll('.js_bookmark-container').forEach(el => {
+    document.querySelectorAll('[data-locator="bookmark-container"]').forEach(el => {
         el.addEventListener('click', function() {
 
             const bookmarkedStates = {
@@ -155,6 +165,26 @@
             }).catch((e) => {
                 console.error(e);
                 this.setAttribute('data-bookmarked', parseBool[bookmarked]);
+            });
+        });
+    });
+
+    document.querySelectorAll('[data-locator="post-links-container"]').forEach(el => {
+        el.addEventListener('click', function() {
+            if (!this.getAttribute('data-user')) {
+                return;
+            }
+
+            fetch('/posts/opened', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    postId: this.getAttribute('data-postId'),
+                }),
+            }).catch((e) => {
+                console.error(e);
             });
         });
     });

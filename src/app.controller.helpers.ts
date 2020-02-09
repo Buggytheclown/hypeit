@@ -32,6 +32,12 @@ export const postsBookmarkBodySchema = yup.object({
 
 export type PostsBookmarkBody = yup.InferType<typeof postsBookmarkBodySchema>;
 
+export const postsOpenedBodySchema = yup.object({
+  postId: yup.number().required(),
+});
+
+export type PostsOpenedBody = yup.InferType<typeof postsOpenedBodySchema>;
+
 export const authBodySchema = yup.object({
   form_type: yup.mixed().oneOf([AUTH_TYPE.LOGIN, AUTH_TYPE.REGISTER]),
   username: yup.string().min(3),

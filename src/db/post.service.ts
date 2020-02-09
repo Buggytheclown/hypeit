@@ -461,10 +461,14 @@ export class PostModel {
   } = {}): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
     const whereClause = [
       lastXDays &&
-        `time BETWEEN CURDATE() - INTERVAL ${esc(lastXDays)} DAY AND CURDATE() + INTERVAL 1 DAY`,
+        `time BETWEEN CURDATE() - INTERVAL ${esc(
+          lastXDays,
+        )} DAY AND CURDATE() + INTERVAL 1 DAY`,
       onlyNotSeen &&
         userId &&
-        `posts.posts_id NOT IN (SELECT posts_id FROM seen_users_posts WHERE user_id = ${esc(userId)})`,
+        `posts.posts_id NOT IN (SELECT posts_id FROM seen_users_posts WHERE user_id = ${esc(
+          userId,
+        )})`,
       onlyBookmarked && `bp.bookmarked_users_posts IS NOT NULL`,
     ]
       .filter(Boolean)
@@ -544,10 +548,21 @@ export class PostModel {
     bookmark: boolean;
   }) {
     if (bookmark) {
-      const query = `INSERT IGNORE INTO bookmarked_users_posts(posts_id, user_id) VALUE (${postId}, ${userId})`;
+      const query = `INSERT IGNORE INTO bookmarked_users_posts(posts_id, user_id) VALUE (${esc(
+        postId,
+      )}, ${esc(userId)})`;
       return this.dBConnection.query(query);
     }
-    const query = `DELETE FROM bookmarked_users_posts WHERE posts_id=${postId} AND user_id=${userId};`;
+    const query = `DELETE FROM bookmarked_users_posts WHERE posts_id=${esc(
+      postId,
+    )} AND user_id=${esc(userId)};`;
+    return this.dBConnection.query(query);
+  }
+
+  saveOpenedPost({ userId, postId }: { userId: number; postId: number }) {
+    const query = `INSERT IGNORE INTO opened_users_posts(posts_id, user_id) VALUE (${esc(
+      postId,
+    )}, ${esc(userId)})`;
     return this.dBConnection.query(query);
   }
 }

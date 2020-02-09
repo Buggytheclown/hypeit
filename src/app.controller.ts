@@ -27,6 +27,8 @@ import {
   HtmlProxyQueryParamsType,
   PostsBookmarkBody,
   postsBookmarkBodySchema,
+  PostsOpenedBody,
+  postsOpenedBodySchema,
   postsQueryParamsSchema,
   PostsQueryParamsType,
   seenPostsIdSchema,
@@ -271,5 +273,22 @@ export class AppController {
     );
 
     return this.proxyService.proxy(queryParams.url);
+  }
+
+  @Post('/posts/opened')
+  async addOpenedPost(@Req() request: any) {
+    if (!request.session.user) {
+      throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+    }
+
+    const body: PostsOpenedBody = extractData(
+      request.body,
+      postsOpenedBodySchema,
+    );
+
+    await this.postModel.saveOpenedPost({
+      userId: request.session.user.user_id,
+      postId: body.postId,
+    });
   }
 }
