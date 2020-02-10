@@ -240,7 +240,8 @@ export class AppController {
       )
       .pipe(
         finalize(() => {
-          response.write(`<pre>---DONE---</pre> \n`), response.end();
+          response.write(`<pre>---DONE---</pre> \n`);
+          response.end();
         }),
       )
       .subscribe(data =>

@@ -83,7 +83,8 @@ export class ProxyService {
         });
 
         return $.html();
-      });
+      })
+      .catch(e => e.code);
   }
 
   proxy(url: string) {
@@ -91,6 +92,7 @@ export class ProxyService {
       .then(res => res.text())
       .then((text: string) =>
         appendTo({ text, element: 'body', data: iframeResizeScriptSender }),
-      );
+      )
+      .catch(e => e.code);
   }
 }
