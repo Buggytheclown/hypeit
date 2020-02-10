@@ -39,6 +39,10 @@ const dbResoursesSchema = yup.array(
   }),
 );
 
+const dbPostLinkSchema = yup.object({
+  link: yup.string().required(),
+});
+
 type DbResourses = yup.InferType<typeof dbResoursesSchema>;
 
 type PostWithRating = PostResourcesData['posts'] extends Array<infer Post>
@@ -564,5 +568,14 @@ export class PostModel {
       postId,
     )}, ${esc(userId)})`;
     return this.dBConnection.query(query);
+  }
+
+  getPostLink({ postId }: { postId: number }): Promise<string> {
+    const query = `SELECT link FROM posts WHERE posts_id = ${esc(postId)}`;
+    return this.dBConnection
+      .query(query)
+      .then(({ results: [row] }) => row)
+      .then(row => dbPostLinkSchema.validateSync(row))
+      .then(row => row.link);
   }
 }

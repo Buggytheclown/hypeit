@@ -27,10 +27,11 @@ import {
   HtmlProxyQueryParamsType,
   PostsBookmarkBody,
   postsBookmarkBodySchema,
-  PostsOpenedBody,
-  postsOpenedBodySchema,
   postsQueryParamsSchema,
   PostsQueryParamsType,
+  REDIRECT_TYPE,
+  redirectQueryParamsSchema,
+  RedirectQueryParamsType,
   seenPostsIdSchema,
   SeenPostsIdType,
   setRedirectInfo,
@@ -275,20 +276,45 @@ export class AppController {
     return this.proxyService.proxy(queryParams.url);
   }
 
-  @Post('/posts/opened')
-  async addOpenedPost(@Req() request: any) {
-    if (!request.session.user) {
-      throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
-    }
-
-    const body: PostsOpenedBody = extractData(
-      request.body,
-      postsOpenedBodySchema,
+  @Get('/redirect')
+  async getRedirect(
+    @Req() request,
+    @Query() query: unknown,
+    @Res() response: any,
+  ) {
+    const queryParams: RedirectQueryParamsType = extractData(
+      query,
+      redirectQueryParamsSchema,
     );
 
-    await this.postModel.saveOpenedPost({
-      userId: request.session.user.user_id,
-      postId: body.postId,
-    });
+    let link;
+    try {
+      link = await this.postModel.getPostLink({
+        postId: queryParams.postId,
+      });
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.NOT_FOUND);
+    }
+
+    if (request.session.user && link) {
+      this.postModel.saveOpenedPost({
+        userId: request.session.user.user_id,
+        postId: queryParams.postId,
+      });
+    }
+
+    if (queryParams.redirectType === REDIRECT_TYPE.DIRECT) {
+      setRedirectInfo({ response, status: 303, url: link });
+      response.end();
+      return;
+    }
+
+    if (queryParams.redirectType === REDIRECT_TYPE.HTMLPROXY) {
+      setRedirectInfo({ response, status: 303, url: `/htmlproxy?url=${link}` });
+      response.end();
+      return;
+    }
+
+    exhaustiveCheck(queryParams.redirectType);
   }
 }

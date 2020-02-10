@@ -32,12 +32,6 @@ export const postsBookmarkBodySchema = yup.object({
 
 export type PostsBookmarkBody = yup.InferType<typeof postsBookmarkBodySchema>;
 
-export const postsOpenedBodySchema = yup.object({
-  postId: yup.number().required(),
-});
-
-export type PostsOpenedBody = yup.InferType<typeof postsOpenedBodySchema>;
-
 export const authBodySchema = yup.object({
   form_type: yup.mixed().oneOf([AUTH_TYPE.LOGIN, AUTH_TYPE.REGISTER]),
   username: yup.string().min(3),
@@ -75,6 +69,22 @@ export const htmlProxyQueryParamsSchema = yup.object({
 
 export type HtmlProxyQueryParamsType = yup.InferType<
   typeof htmlProxyQueryParamsSchema
+>;
+
+export enum REDIRECT_TYPE {
+  HTMLPROXY = 'HTMLPROXY',
+  DIRECT = 'DIRECT',
+}
+export const redirectQueryParamsSchema = yup.object({
+  postId: yup.number().required(),
+  redirectType: yup
+    .mixed<REDIRECT_TYPE>()
+    .oneOf([REDIRECT_TYPE.DIRECT, REDIRECT_TYPE.HTMLPROXY])
+    .default(REDIRECT_TYPE.DIRECT),
+});
+
+export type RedirectQueryParamsType = yup.InferType<
+  typeof redirectQueryParamsSchema
 >;
 
 export function extractData(data, schema) {

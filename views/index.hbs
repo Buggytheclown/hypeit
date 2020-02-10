@@ -52,17 +52,17 @@
                     <h1 class="content-box-header">
                         <img class="post-header__img" src="{{ get ../resources resources_id }}"/>
 
-                        <span data-locator="post-links-container"
-                              data-user="{{../user}}"
-                              data-postId="{{posts_id}}">
-                            {{#if (cmp resources_id '===' 2)}}
-                                <a href="/htmlproxy?url={{link}}" target="_blank" rel="noopener">=></a>
-                            {{/if}}
+                        {{#if (cmp resources_id '===' 2)}}
+                            <a href="/redirect?postId={{posts_id}}&redirectType=HTMLPROXY" target="_blank"
+                            rel="noopener">=></a>
+                        {{/if}}
 
-                            <a class="content-box-header__link" href={{link}} target="_blank" rel="noopener">
-                                {{title}}
-                            </a>
-                        </span>
+                        <a class="content-box-header__link"
+                           href="/redirect?postId={{posts_id}}"
+                        target="_blank"
+                        rel="noopener">
+                        {{title}}
+                        </a>
 
                         {{#if ../user}}
                             <div class="clearfix bookmark-container"
@@ -165,26 +165,6 @@
             }).catch((e) => {
                 console.error(e);
                 this.setAttribute('data-bookmarked', parseBool[bookmarked]);
-            });
-        });
-    });
-
-    document.querySelectorAll('[data-locator="post-links-container"]').forEach(el => {
-        el.addEventListener('click', function() {
-            if (!this.getAttribute('data-user')) {
-                return;
-            }
-
-            fetch('/posts/opened', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    postId: this.getAttribute('data-postId'),
-                }),
-            }).catch((e) => {
-                console.error(e);
             });
         });
     });
