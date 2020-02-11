@@ -314,4 +314,16 @@ export class AppController {
       exhaustiveCheck(queryParams.redirectType);
     }
   }
+
+  @Get('stats/users')
+  @Header('Content-Type', 'text/html; charset=utf-8')
+  async getStatsUsers() {
+    return this.userService
+      .getUsers()
+      .then(users =>
+        users
+          .map(user => `<pre>${(JSON.stringify as any)(user, 4, 4)}</pre> \n`)
+          .join('\n'),
+      );
+  }
 }

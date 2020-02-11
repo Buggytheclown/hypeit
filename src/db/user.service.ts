@@ -13,6 +13,12 @@ const dbUserSchema = yup.object({
 });
 type DbUser = yup.InferType<typeof dbUserSchema>;
 
+const dbUserSimpleSchema = yup.object({
+  user_id: yup.number(),
+  name: yup.string(),
+});
+type DbUserSimple = yup.InferType<typeof dbUserSimpleSchema>;
+
 @Injectable()
 export class UserService {
   constructor(private readonly dBConnection: DBConnection) {}
@@ -48,5 +54,13 @@ export class UserService {
   async isUsernameExist({ name }: { name: string }): Promise<boolean> {
     const query = `SELECT * FROM users WHERE name = ${esc(name)}`;
     return this.dBConnection.query(query).then(({ results: [data] }) => !!data);
+  }
+
+  async getUsers(): Promise<DbUserSimple[]> {
+    const query = `SELECT user_id, name FROM users;`;
+    return this.dBConnection
+      .query(query)
+      .then(({ results }) => results)
+      .then(res => yup.array(dbUserSimpleSchema).validateSync(res));
   }
 }
