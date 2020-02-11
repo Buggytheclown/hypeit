@@ -307,15 +307,11 @@ export class AppController {
     if (queryParams.redirectType === REDIRECT_TYPE.DIRECT) {
       setRedirectInfo({ response, status: 303, url: link });
       response.end();
-      return;
-    }
-
-    if (queryParams.redirectType === REDIRECT_TYPE.HTMLPROXY) {
+    } else if (queryParams.redirectType === REDIRECT_TYPE.HTMLPROXY) {
       setRedirectInfo({ response, status: 303, url: `/htmlproxy?url=${link}` });
       response.end();
-      return;
+    } else {
+      exhaustiveCheck(queryParams.redirectType);
     }
-
-    exhaustiveCheck(queryParams.redirectType);
   }
 }
