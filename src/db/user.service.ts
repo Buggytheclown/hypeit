@@ -45,7 +45,7 @@ export class UserService {
       .then(({ results: [data] }) => data)
       .then(res => dbUserSchema.validateSync(res));
 
-    if (await bcrypt.compare(password, user.password)) {
+    if (user.password && (await bcrypt.compare(password, user.password))) {
       return _.omit(user, 'password');
     }
     return null;
