@@ -18,7 +18,7 @@
     "migrate:test": "NODE_ENV=test ts-node src/migrations/index",
     "migrate:dev": "NODE_ENV=dev ts-node src/migrations/index",
     "migrate:dev:last": "NODE_ENV=dev ts-node src/migrations/migrateLast",
-    "test:pattern": "npm run migrate:dev && npm run test -- --testNamePattern postDelivery",
+    "test:pattern": "npm run migrate:test && npm run test -- --testNamePattern postDelivery",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",

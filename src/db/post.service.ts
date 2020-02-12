@@ -463,6 +463,11 @@ export class PostModel {
     onlyNotSeen?: boolean;
     tagName?: string;
   } = {}): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
+    if ((onlyBookmarked || onlyNotSeen) && !userId) {
+      throw new TypeError(
+        `Configuration error, userId is required if (onlyBookmarked || onlyNotSeen)`,
+      );
+    }
     const whereClause = [
       lastXDays &&
         `time BETWEEN CURDATE() - INTERVAL ${esc(
@@ -542,6 +547,13 @@ export class PostModel {
     return this.dBConnection.query(query);
   }
 
+  clearAllSeenPosts({ userId }: { userId: number }) {
+    const query = `DELETE FROM seen_users_posts WHERE user_id=${esc(
+      userId,
+    )};`;
+    return this.dBConnection.query(query);
+  }
+
   toggleBookmarked({
     postId,
     userId,
@@ -560,6 +572,13 @@ export class PostModel {
     const query = `DELETE FROM bookmarked_users_posts WHERE posts_id=${esc(
       postId,
     )} AND user_id=${esc(userId)};`;
+    return this.dBConnection.query(query);
+  }
+
+  clearAllBookmarked({ userId }: { userId: number }) {
+    const query = `DELETE FROM bookmarked_users_posts WHERE user_id=${esc(
+      userId,
+    )};`;
     return this.dBConnection.query(query);
   }
 

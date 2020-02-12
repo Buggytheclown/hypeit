@@ -5,6 +5,7 @@ import { postsMocks } from './posts.mock';
 import { PostResources } from '../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
 import { AppModule } from '../app.module';
+import { UserService } from './user.service';
 
 function withSortedTags(posts) {
   return posts.map(post => ({ ...post, tags: post.tags.slice().sort() }));
@@ -57,7 +58,7 @@ const prepareMockDevtoPosts = _.flow([
   withClearedDevtoRatingInfo,
 ]);
 
-describe('post model test', () => {
+describe('post model: save', () => {
   let postModel: PostModel;
 
   beforeEach(async () => {
@@ -144,5 +145,157 @@ describe('post model test', () => {
     );
 
     done();
+  });
+});
+
+describe('post model: get', () => {
+  let postModel: PostModel;
+  let userService: UserService;
+  let user;
+
+  beforeAll(async () => {
+    const app: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    postModel = app.get<PostModel>(PostModel);
+
+    await postModel.savePosts({
+      posts: postsMocks.habr,
+      resource: PostResources.HABR,
+    });
+
+    await postModel.savePosts({
+      posts: postsMocks.devto,
+      resource: PostResources.DEVTO,
+    });
+
+    await postModel.savePosts({
+      posts: postsMocks.medium,
+      resource: PostResources.MEDIUM,
+    });
+
+    userService = app.get<UserService>(UserService);
+
+    try {
+      await userService.saveUser({ name: 'admin', password: 'admin' });
+    } catch (e) {}
+
+    user = await userService.getVerifiedUser({
+      name: 'admin',
+      password: 'admin',
+    });
+  });
+
+  afterAll(async () =>
+    Promise.all([
+      postModel.deleteAllPosts(),
+      postModel.clearAllBookmarked({ userId: user.user_id }),
+      postModel.clearAllSeenPosts({ userId: user.user_id }),
+    ]),
+  );
+
+  const postsExternalIds = [
+    '228410',
+    '227370',
+    'bcd4dfa23541',
+    `externalID escape me's!%-<>.,\\`,
+    '478282',
+    'a5acb485a445',
+  ];
+
+  it('should count inserted posts', async () => {
+    const count = await postModel.countPosts({});
+    expect(count).toEqual(postsExternalIds.length);
+  });
+
+  it('should limit/offset', async () => {
+    const posts2off2 = await postModel.getPosts({ offset: 2, limit: 2 });
+    expect(posts2off2.map(el => el.externalID)).toEqual(
+      postsExternalIds.slice(2, 4),
+    );
+  });
+
+  it('should use userId', async () => {
+    const posts = await postModel.getPosts({ userId: user.user_id });
+    expect(posts.map(el => el.externalID)).toEqual(postsExternalIds);
+  });
+
+  it('should use onlyBookmarked', async () => {
+    const posts1 = await postModel.getPosts({
+      userId: user.user_id,
+      onlyBookmarked: true,
+    });
+    expect(posts1).toEqual([]);
+
+    const allPosts = await postModel.getPosts();
+
+    await postModel.toggleBookmarked({
+      postId: allPosts.find(el => el.externalID === postsExternalIds[1])
+        .posts_id,
+      userId: user.user_id,
+      bookmark: false,
+    });
+
+    await postModel.toggleBookmarked({
+      postId: allPosts.find(el => el.externalID === postsExternalIds[1])
+        .posts_id,
+      userId: user.user_id,
+      bookmark: true,
+    });
+
+    await postModel.toggleBookmarked({
+      postId: allPosts.find(el => el.externalID === postsExternalIds[2])
+        .posts_id,
+      userId: user.user_id,
+      bookmark: true,
+    });
+
+    const posts2 = await postModel.getPosts({
+      userId: user.user_id,
+      onlyBookmarked: true,
+    });
+
+    expect(posts2.map(el => el.externalID)).toEqual([
+      postsExternalIds[1],
+      postsExternalIds[2],
+    ]);
+  });
+
+  it('should use onlyNotSeen', async () => {
+    const posts1 = await postModel.getPosts({
+      userId: user.user_id,
+      onlyNotSeen: true,
+    });
+    expect(posts1.map(el => el.externalID)).toEqual(postsExternalIds);
+
+    const allPosts = await postModel.getPosts();
+
+    await postModel.saveSeenPosts({
+      userId: user.user_id,
+      postsId: allPosts
+        .filter(el =>
+          [postsExternalIds[0], postsExternalIds[1]].includes(el.externalID),
+        )
+        .map(el => el.posts_id),
+    });
+
+    const posts2 = await postModel.getPosts({
+      userId: user.user_id,
+      onlyNotSeen: true,
+    });
+
+    expect(posts2.map(el => el.externalID)).toEqual(postsExternalIds.slice(2));
+  });
+
+  it('should use tagName', async () => {
+    const posts1 = await postModel.getPosts({
+      userId: user.user_id,
+      tagName: 'Machine Learning',
+    });
+    expect(posts1.map(el => el.externalID)).toEqual([
+      postsExternalIds[2],
+      postsExternalIds[5],
+    ]);
   });
 });
