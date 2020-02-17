@@ -79,7 +79,7 @@ export class AppController {
       lastXDays: queryParams.bestof,
       offset: postsPerPage * (queryParams.page - 1),
       userId: request.session.user?.user_id,
-      onlyNotSeen: true,
+      onlyNotSeen: !!request.session.user?.user_id,
       tagName: queryParams.tagName,
     });
 
