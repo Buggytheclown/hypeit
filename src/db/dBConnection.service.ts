@@ -34,6 +34,14 @@ export class DBConnection {
     );
   }
 
+  knexUpsert(knexQuery, updateFields: string[]) {
+    return this.knex.raw(
+      `${knexQuery.toString()} ON DUPLICATE KEY UPDATE ${updateFields
+        .map(el => `${el}=VALUES(${el})`)
+        .join(',')}`,
+    );
+  }
+
   constructor(private readonly cls: CustomLoggerService) {
     this.connection = mysql.createConnection(DbOptions);
 
@@ -47,7 +55,6 @@ export class DBConnection {
     });
   }
 
-  /** @deprecated use knex */
   query(query: string): Promise<{ results: any; fields: any }> {
     return new Promise((resolve, reject) => {
       this.connection.query(query, (error, results, fields) => {
