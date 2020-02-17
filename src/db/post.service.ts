@@ -9,7 +9,6 @@ import {
 } from '../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
 import * as yup from 'yup';
-import { esc } from './helpers';
 import { PostResourcesData } from '../services/postDelivery/postResourses.interfaces';
 import { exhaustiveCheck } from '../helpers/helpers';
 import { CustomLoggerService } from '../services/logger/customLogger.service';
@@ -109,69 +108,51 @@ async function insertPosts({
   dBConnection: DBConnection;
 }) {
   const resourcesId = await dBConnection
-    .query(
-      `SELECT resources_id
-         FROM resources WHERE name = ${esc(resource)}`,
-    )
-    .then(({ results: [firstResult] }) => (firstResult || {}).resources_id);
+    .knex('resources')
+    .select('resources_id')
+    .where({ name: resource })
+    .then(([firstResult]) => (firstResult || {}).resources_id);
 
   if (!resourcesId) {
     throw new TypeError(`Cannot find resource_id for resource: ${resource}`);
   }
 
-  const values = posts
-    .map(post => {
-      const {
-        title,
-        time,
-        rawTime,
-        link,
-        rating,
-        externalID,
-        imageLink,
-      } = post;
+  const values = posts.map(post => {
+    const { title, time, rawTime, link, rating, externalID, imageLink } = post;
 
-      const {
-        totalViews,
-        totalVotes,
-        voterCount,
-        clapCount,
-        score,
-      } = getRatingInfo(post, resource);
+    const {
+      totalViews,
+      totalVotes,
+      voterCount,
+      clapCount,
+      score,
+    } = getRatingInfo(post, resource);
 
-      return `(${[
-        esc(title),
-        esc(time),
-        esc(rawTime),
-        esc(link),
-        rating,
-        resourcesId,
-        esc(externalID),
-        esc(imageLink),
-        toNullable(totalViews),
-        toNullable(totalVotes),
-        toNullable(clapCount),
-        toNullable(voterCount),
-        toNullable(score),
-      ].join(',')})`;
-    })
-    .join(',');
+    return {
+      title,
+      time,
+      rawTime,
+      link,
+      rating,
+      resources_id: resourcesId,
+      external_posts_id: externalID,
+      image_link: imageLink,
+      total_views: totalViews,
+      total_votes: totalVotes,
+      clap_count: clapCount,
+      voter_count: voterCount,
+      score,
+    };
+  });
 
-  const insertPostsQuery = `
-      INSERT INTO posts(
-        title, time, rawTime, link,
-        rating, resources_id, external_posts_id, image_link,
-        total_views, total_votes, clap_count, voter_count,
-        score)
-      VALUES ${values} ON DUPLICATE KEY UPDATE
-        rating = VALUES(rating),
-        total_views = VALUES(total_views),
-        total_votes = VALUES(total_votes),
-        clap_count = VALUES(clap_count),
-        voter_count = VALUES(voter_count),
-        score = VALUES(score);
-    `;
-  return dBConnection.query(insertPostsQuery);
+  return dBConnection.knexUpsert(dBConnection.knex('posts').insert(values), [
+    'rating',
+    'total_views',
+    'total_votes',
+    'clap_count',
+    'voter_count',
+    'score',
+  ]);
 }
 
 async function insertTags({
@@ -181,13 +162,18 @@ async function insertTags({
   extractedTags: string[];
   dBConnection: DBConnection;
 }) {
-  const insertTagsQuery = `
-      INSERT IGNORE INTO tags(name)
-      VALUES ${extractedTags.map(el => `(${esc(el)})`).join(',')};
-    `;
-
-  return dBConnection.query(insertTagsQuery);
+  const knexQuery = dBConnection
+    .knex('tags')
+    .insert(extractedTags.map(name => ({ name })));
+  return dBConnection.knexInsertIgnore(knexQuery);
 }
+
+const insertedPostsSchema = yup.array(
+  yup.object({
+    posts_id: yup.number().required(),
+    external_posts_id: yup.string().required(),
+  }),
+);
 
 function findInsertedPosts({
   posts,
@@ -197,20 +183,23 @@ function findInsertedPosts({
   posts: PostData[];
   resource: PostResources;
   dBConnection: DBConnection;
-}): Promise<
-  Array<{
-    posts_id: number;
-    external_posts_id: string;
-  }>
-> {
-  const query = `
-    SELECT posts_id, external_posts_id FROM posts
-    WHERE external_posts_id IN (${posts
-      .map(({ externalID }) => esc(externalID))
-      .join(',')})`;
-
-  return dBConnection.query(query).then(({ results }) => results);
+}) {
+  return dBConnection
+    .knex('posts')
+    .select('posts_id', 'external_posts_id')
+    .whereIn(
+      'external_posts_id',
+      posts.map(({ externalID }) => externalID),
+    )
+    .then(data => insertedPostsSchema.validateSync(data));
 }
+
+const insertedTagsSchema = yup.array(
+  yup.object({
+    tags_id: yup.number().required(),
+    name: yup.string().required(),
+  }),
+);
 
 function findInsertedTags({
   extractedTags,
@@ -220,19 +209,12 @@ function findInsertedTags({
   extractedTags: string[];
   resource: PostResources;
   dBConnection: DBConnection;
-}): Promise<
-  Array<{
-    tags_id: number;
-    name: string;
-  }>
-> {
-  const query = `
-    SELECT tags_id, name FROM tags
-    WHERE name IN (${extractedTags.map(el => esc(el)).join(',')})
-  `;
-  return dBConnection.query(query).then(({ results }) => {
-    return results;
-  });
+}) {
+  return dBConnection
+    .knex('tags')
+    .select('tags_id', 'name')
+    .whereIn('name', extractedTags)
+    .then(data => insertedTagsSchema.validateSync(data));
 }
 
 function createPostsTagsRelations({
@@ -266,20 +248,15 @@ function createPostsTagsRelations({
             tags,
           })}`,
         );
-        throw new Error(
-          `NONONo tagName: ${tagName}, externalID: ${externalID}`,
-        );
+        throw new Error(`No tagName: ${tagName}, externalID: ${externalID}`);
       }
-      return [posts_id, insertedTagsByTagsName[tagName].tags_id];
+      return { posts_id, tags_id: insertedTagsByTagsName[tagName].tags_id };
     });
   });
 
-  const query = `
-    INSERT IGNORE INTO posts_tags(posts_id, tags_id) VALUES ${postIdsTagsIds
-      .map(postIdsTagsId => `(${postIdsTagsId.join(',')})`)
-      .join(',')}
-  `;
-  return dBConnection.query(query);
+  const knexQuery = dBConnection.knex('posts_tags').insert(postIdsTagsIds);
+
+  return dBConnection.knexInsertIgnore(knexQuery);
 }
 
 function getRatingCalculator(resource: PostResources) {
@@ -407,17 +384,18 @@ export class PostModel {
   };
 
   async countPosts({ lastXDays }: { lastXDays?: number }): Promise<number> {
-    const query = `
-      SELECT COUNT(*) as count FROM posts
-      ${
-        lastXDays
-          ? `WHERE time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`
-          : ''
-      };`;
-
     return this.dBConnection
-      .query(query)
-      .then(({ results: [{ count }] }) => count)
+      .knex('posts')
+      .count('*', { as: 'count' })
+      .where(builder =>
+        lastXDays
+          ? builder.whereRaw(
+              'time BETWEEN CURDATE() - INTERVAL ? DAY AND CURDATE() + INTERVAL 1 DAY',
+              [lastXDays],
+            )
+          : builder,
+      )
+      .then(([{ count }]) => count)
       .then(res => yup.number().validateSync(res));
   }
 
@@ -428,21 +406,25 @@ export class PostModel {
     lastXDays?: number;
     userId: number;
   }): Promise<number> {
-    const whereClause = [
-      lastXDays &&
-        `time BETWEEN CURDATE() - INTERVAL ${lastXDays} DAY AND CURDATE() + INTERVAL 1 DAY`,
-      userId &&
-        `posts.posts_id IN (SELECT posts_id FROM seen_users_posts WHERE user_id = ${userId})`,
-    ]
-      .filter(Boolean)
-      .join(' AND ');
-    const query = `
-      SELECT COUNT(*) as count FROM posts
-    ${whereClause ? `WHERE ${whereClause}` : ''}`;
-
     return this.dBConnection
-      .query(query)
-      .then(({ results: [{ count }] }) => count)
+      .knex('posts')
+      .count('*', { as: 'count' })
+      .where(builder =>
+        lastXDays
+          ? builder.whereRaw(
+              'time BETWEEN CURDATE() - INTERVAL ? DAY AND CURDATE() + INTERVAL 1 DAY',
+              [lastXDays],
+            )
+          : builder,
+      )
+      .whereIn(
+        'posts.posts_id',
+        this.dBConnection
+          .knex('seen_users_posts')
+          .select('posts_id')
+          .where({ user_id: userId }),
+      )
+      .then(([{ count }]) => count)
       .then(res => yup.number().validateSync(res));
   }
 
@@ -468,40 +450,75 @@ export class PostModel {
         `Configuration error, userId is required if (onlyBookmarked || onlyNotSeen)`,
       );
     }
-    const whereClause = [
-      lastXDays &&
-        `time BETWEEN CURDATE() - INTERVAL ${esc(
-          lastXDays,
-        )} DAY AND CURDATE() + INTERVAL 1 DAY`,
-      onlyNotSeen &&
-        userId &&
-        `posts.posts_id NOT IN (SELECT posts_id FROM seen_users_posts WHERE user_id = ${esc(
-          userId,
-        )})`,
-      onlyBookmarked && `bp.bookmarked_users_posts IS NOT NULL`,
-    ]
-      .filter(Boolean)
-      .join(' AND ');
-    const query = `
-      SELECT posts.posts_id, title, time,
-             rawTime, link, rating, resources_id,
-             image_link as imageLink, external_posts_id as externalID,
-             JSON_ARRAYAGG(name) as tags, MAX(bp.bookmarked_users_posts IS NOT NULL) as bookmarked
-        FROM posts
-                  JOIN posts_tags on posts.posts_id = posts_tags.posts_id
-                  JOIN tags on posts_tags.tags_id = tags.tags_id
-                  LEFT JOIN (SELECT bookmarked_users_posts, posts_id FROM bookmarked_users_posts WHERE ${
-                    userId ? `user_id = ${esc(userId)}` : 'FALSE'
-                  }) as bp on posts.posts_id = bp.posts_id
-        ${whereClause ? `WHERE ${whereClause}` : ''}
-        GROUP BY posts.posts_id
-        ${tagName ? `HAVING (${esc(tagName)} MEMBER OF (tags))` : ''}
-        ORDER BY rating DESC
-        LIMIT ${offset}, ${limit}
-`;
-    return this.dBConnection
-      .query(query)
-      .then(({ results }) =>
+
+    const knexQuery = this.dBConnection
+      .knex('posts')
+      .join('posts_tags', 'posts.posts_id', 'posts_tags.posts_id')
+      .join('tags', 'posts_tags.tags_id', 'tags.tags_id')
+      .leftJoin(
+        this.dBConnection
+          .knex('bookmarked_users_posts')
+          .select('bookmarked_users_posts', 'posts_id')
+          .where(builder =>
+            userId
+              ? builder.where({ user_id: userId })
+              : builder.whereRaw('FALSE'),
+          )
+          .as('bp'),
+        'posts.posts_id',
+        'bp.posts_id',
+      )
+      .select(
+        'posts.posts_id',
+        'title',
+        'time',
+        'rawTime',
+        'link',
+        'rating',
+        'resources_id',
+        'image_link as imageLink',
+        'external_posts_id as externalID',
+        this.dBConnection.knex.raw('JSON_ARRAYAGG(name) as tags'),
+        this.dBConnection.knex.raw(
+          'MAX(bp.bookmarked_users_posts IS NOT NULL) as bookmarked',
+        ),
+      )
+      .where(builder =>
+        lastXDays
+          ? builder.whereRaw(
+              'time BETWEEN CURDATE() - INTERVAL ? DAY AND CURDATE() + INTERVAL 1 DAY',
+              [lastXDays],
+            )
+          : builder,
+      )
+      .where(builder =>
+        onlyNotSeen && userId
+          ? builder.whereNotIn(
+              'posts.posts_id',
+              this.dBConnection
+                .knex('seen_users_posts')
+                .select('posts_id')
+                .where({ user_id: userId }),
+            )
+          : builder,
+      )
+      .where(builder =>
+        onlyBookmarked
+          ? builder.whereNotNull(`bp.bookmarked_users_posts`)
+          : builder,
+      )
+      .groupBy('posts.posts_id')
+      .modify(builder =>
+        tagName
+          ? builder.havingRaw(`(? MEMBER OF (tags))`, [tagName])
+          : builder,
+      )
+      .orderBy('rating', 'desc')
+      .limit(limit)
+      .offset(offset);
+
+    return knexQuery
+      .then(results =>
         results.map(row => ({ ...row, tags: JSON.parse(row.tags) })),
       )
       .then(res => dbPostsSchema.validateSync(res));
@@ -514,15 +531,13 @@ export class PostModel {
     TRUNCATE TABLE tags;
     TRUNCATE TABLE posts_tags;
     SET FOREIGN_KEY_CHECKS = 1;`;
-    return this.dBConnection.query(query);
+    return this.dBConnection.knex.raw(query);
   }
 
   async getResourcesMap(): Promise<{ [resources_id: string]: string }> {
-    const query = `SELECT *
-                   FROM resources;`;
     return this.dBConnection
-      .query(query)
-      .then(({ results }) => results)
+      .knex('resources')
+      .select('*')
       .then(res => dbResoursesSchema.validateSync(res))
       .then(res =>
         res.reduce(
@@ -539,19 +554,19 @@ export class PostModel {
     if (!postsId.length) {
       return;
     }
-    const query = `
-    INSERT IGNORE INTO seen_users_posts(posts_id, user_id) VALUES ${postsId
-      .map(postId => `(${postId}, ${userId})`)
-      .join(',')}
-  `;
-    return this.dBConnection.query(query);
+
+    const knexQuery = this.dBConnection
+      .knex('seen_users_posts')
+      .insert(postsId.map(postId => ({ posts_id: postId, user_id: userId })));
+
+    return this.dBConnection.knexInsertIgnore(knexQuery);
   }
 
   clearAllSeenPosts({ userId }: { userId: number }) {
-    const query = `DELETE FROM seen_users_posts WHERE user_id=${esc(
-      userId,
-    )};`;
-    return this.dBConnection.query(query);
+    return this.dBConnection
+      .knex('seen_users_posts')
+      .where({ user_id: userId })
+      .del();
   }
 
   toggleBookmarked({
@@ -564,36 +579,39 @@ export class PostModel {
     bookmark: boolean;
   }) {
     if (bookmark) {
-      const query = `INSERT IGNORE INTO bookmarked_users_posts(posts_id, user_id) VALUE (${esc(
-        postId,
-      )}, ${esc(userId)})`;
-      return this.dBConnection.query(query);
+      const knexQuery = this.dBConnection
+        .knex('bookmarked_users_posts')
+        .insert({ posts_id: postId, user_id: userId });
+
+      return this.dBConnection.knexInsertIgnore(knexQuery);
     }
-    const query = `DELETE FROM bookmarked_users_posts WHERE posts_id=${esc(
-      postId,
-    )} AND user_id=${esc(userId)};`;
-    return this.dBConnection.query(query);
+
+    return this.dBConnection
+      .knex('bookmarked_users_posts')
+      .where({ posts_id: postId, user_id: userId })
+      .del();
   }
 
   clearAllBookmarked({ userId }: { userId: number }) {
-    const query = `DELETE FROM bookmarked_users_posts WHERE user_id=${esc(
-      userId,
-    )};`;
-    return this.dBConnection.query(query);
+    return this.dBConnection
+      .knex('bookmarked_users_posts')
+      .where({ user_id: userId })
+      .del();
   }
 
   saveOpenedPost({ userId, postId }: { userId: number; postId: number }) {
-    const query = `INSERT IGNORE INTO opened_users_posts(posts_id, user_id) VALUE (${esc(
-      postId,
-    )}, ${esc(userId)})`;
-    return this.dBConnection.query(query);
+    const knexQuery = this.dBConnection
+      .knex('opened_users_posts')
+      .insert({ posts_id: postId, user_id: userId });
+
+    return this.dBConnection.knexInsertIgnore(knexQuery);
   }
 
   getPostLink({ postId }: { postId: number }): Promise<string> {
-    const query = `SELECT link FROM posts WHERE posts_id = ${esc(postId)}`;
-    return this.dBConnection
-      .query(query)
-      .then(({ results: [row] }) => row)
+    return (this.dBConnection.knex as any)('posts')
+      .select('link')
+      .where({ posts_id: postId })
+      .then(([row]) => row)
       .then(row => dbPostLinkSchema.validateSync(row))
       .then(row => row.link);
   }
