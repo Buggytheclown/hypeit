@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DBConnection } from './dBConnection.service';
 import * as bcrypt from 'bcrypt';
-import { esc } from './helpers';
 import { salt } from '../helpers/helpers';
 import * as yup from 'yup';
 import * as _ from 'lodash';
@@ -26,10 +25,9 @@ export class UserService {
   async saveUser({ name, password }: { name: string; password: string }) {
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const query = `INSERT INTO users(name, password) VALUE (${esc(name)}, ${esc(
-      hashedPassword,
-    )})`;
-    return this.dBConnection.query(query);
+    return this.dBConnection
+      .knex('users')
+      .insert({ name, password: hashedPassword });
   }
 
   async getVerifiedUser({
@@ -39,10 +37,11 @@ export class UserService {
     name: string;
     password: string;
   }): Promise<Omit<DbUser, 'password'> | null> {
-    const query = `SELECT * FROM users WHERE name = ${esc(name)}`;
     const user: DbUser = await this.dBConnection
-      .query(query)
-      .then(({ results: [data] }) => data)
+      .knex('users')
+      .select('*')
+      .where({ name })
+      .then(([data]) => data)
       .then(res => dbUserSchema.validateSync(res));
 
     if (user.password && (await bcrypt.compare(password, user.password))) {
@@ -52,15 +51,18 @@ export class UserService {
   }
 
   async isUsernameExist({ name }: { name: string }): Promise<boolean> {
-    const query = `SELECT * FROM users WHERE name = ${esc(name)}`;
-    return this.dBConnection.query(query).then(({ results: [data] }) => !!data);
+    return this.dBConnection
+      .knex('users')
+      .select('*')
+      .where({ name })
+      .then(([data]) => !!data);
   }
 
   async getUsers(): Promise<DbUserSimple[]> {
-    const query = `SELECT user_id, name FROM users;`;
     return this.dBConnection
-      .query(query)
-      .then(({ results }) => results)
+      .knex('users')
+      .select('user_id', 'name')
+      .where({ name })
       .then(res => yup.array(dbUserSimpleSchema).validateSync(res));
   }
 }
