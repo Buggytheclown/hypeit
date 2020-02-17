@@ -245,6 +245,13 @@ describe('post model: get', () => {
     });
 
     await postModel.toggleBookmarked({
+      postId: allPosts.find(el => el.externalID === postsExternalIds[1])
+        .posts_id,
+      userId: user.user_id,
+      bookmark: true,
+    });
+
+    await postModel.toggleBookmarked({
       postId: allPosts.find(el => el.externalID === postsExternalIds[2])
         .posts_id,
       userId: user.user_id,
@@ -271,6 +278,9 @@ describe('post model: get', () => {
 
     const allPosts = await postModel.getPosts();
 
+    const count0 = await postModel.countSeenPosts({ userId: user.user_id });
+    expect(count0).toEqual(0);
+
     await postModel.saveSeenPosts({
       userId: user.user_id,
       postsId: allPosts
@@ -279,6 +289,9 @@ describe('post model: get', () => {
         )
         .map(el => el.posts_id),
     });
+
+    const count2 = await postModel.countSeenPosts({ userId: user.user_id });
+    expect(count2).toEqual(2);
 
     const posts2 = await postModel.getPosts({
       userId: user.user_id,
@@ -297,5 +310,15 @@ describe('post model: get', () => {
       postsExternalIds[2],
       postsExternalIds[5],
     ]);
+  });
+
+  it('should use getPostLink', async () => {
+    const posts = await postModel.getPosts();
+
+    const link = await postModel.getPostLink({
+      postId: posts[0].posts_id,
+    });
+
+    expect(posts[0].link).toEqual(link);
   });
 });
