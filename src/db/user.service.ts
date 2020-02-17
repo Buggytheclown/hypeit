@@ -27,7 +27,8 @@ export class UserService {
 
     return this.dBConnection
       .knex('users')
-      .insert({ name, password: hashedPassword });
+      .insert({ name, password: hashedPassword })
+      .then(_.identity);
   }
 
   async getVerifiedUser({

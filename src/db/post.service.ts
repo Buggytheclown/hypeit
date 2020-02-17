@@ -531,7 +531,7 @@ export class PostModel {
     TRUNCATE TABLE tags;
     TRUNCATE TABLE posts_tags;
     SET FOREIGN_KEY_CHECKS = 1;`;
-    return this.dBConnection.knex.raw(query);
+    return this.dBConnection.knex.raw(query).then(_.identity);
   }
 
   async getResourcesMap(): Promise<{ [resources_id: string]: string }> {
@@ -559,14 +559,15 @@ export class PostModel {
       .knex('seen_users_posts')
       .insert(postsId.map(postId => ({ posts_id: postId, user_id: userId })));
 
-    return this.dBConnection.knexInsertIgnore(knexQuery);
+    return this.dBConnection.knexInsertIgnore(knexQuery).then(_.identity);
   }
 
   clearAllSeenPosts({ userId }: { userId: number }) {
     return this.dBConnection
       .knex('seen_users_posts')
       .where({ user_id: userId })
-      .del();
+      .del()
+      .then(_.identity);
   }
 
   toggleBookmarked({
@@ -589,14 +590,16 @@ export class PostModel {
     return this.dBConnection
       .knex('bookmarked_users_posts')
       .where({ posts_id: postId, user_id: userId })
-      .del();
+      .del()
+      .then(_.identity);
   }
 
   clearAllBookmarked({ userId }: { userId: number }) {
     return this.dBConnection
       .knex('bookmarked_users_posts')
       .where({ user_id: userId })
-      .del();
+      .del()
+      .then(_.identity);
   }
 
   saveOpenedPost({ userId, postId }: { userId: number; postId: number }) {
@@ -604,7 +607,7 @@ export class PostModel {
       .knex('opened_users_posts')
       .insert({ posts_id: postId, user_id: userId });
 
-    return this.dBConnection.knexInsertIgnore(knexQuery);
+    return this.dBConnection.knexInsertIgnore(knexQuery).then(_.identity);
   }
 
   getPostLink({ postId }: { postId: number }): Promise<string> {
