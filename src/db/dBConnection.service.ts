@@ -1,4 +1,5 @@
 import * as mysql from 'mysql';
+import * as knex from 'knex';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '../services/config/config.service';
 import { ConfigServiceProvider } from '../services/config/config.module';
@@ -22,6 +23,17 @@ export const DbOptions = {
 export class DBConnection {
   connection: any;
 
+  knex = knex({
+    client: 'mysql',
+    connection: DbOptions,
+  });
+
+  knexInsertIgnore(knexQuery) {
+    return this.knex.raw(
+      knexQuery.toString().replace('insert', 'INSERT IGNORE'),
+    );
+  }
+
   constructor(private readonly cls: CustomLoggerService) {
     this.connection = mysql.createConnection(DbOptions);
 
@@ -35,6 +47,7 @@ export class DBConnection {
     });
   }
 
+  /** @deprecated use knex */
   query(query: string): Promise<{ results: any; fields: any }> {
     return new Promise((resolve, reject) => {
       this.connection.query(query, (error, results, fields) => {
