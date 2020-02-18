@@ -112,7 +112,9 @@ export class AppController {
     if (request.session.user) {
       return setRedirectInfo({ response, status: 303, url: `/` });
     }
-    return {};
+    return {
+      url: '/auth',
+    };
   }
 
   @Post('/auth')
@@ -254,6 +256,7 @@ export class AppController {
   async getAbout(@Req() request) {
     return {
       user: request.session.user,
+      url: '/about',
     };
   }
 

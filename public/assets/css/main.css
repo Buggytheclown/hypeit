@@ -234,9 +234,17 @@ a {
 
 /* HEADER */
 .header .header-link-style a, .header .header-link-style button {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgb(95, 95, 95);
     font-size: 14px;
     font-weight: 400;
+}
+
+.header .header-link-style a:hover, .header .header-link-style button:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.header .header-link-style a.link--active, .header .header-link-style button.link--active {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .header .header__navigation a:not(:last-child) {
