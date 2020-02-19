@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DevtoParserService } from './devtoParser.service';
-import { devtoDataMock } from './devtoData1.mock';
-import { devtoMockParsed } from './devtoData1Parsed.mock';
+import { devtoDataMock } from './__mocks__/devtoData1.mock';
+import { devtoMockParsed } from './__mocks__/devtoData1Parsed.mock';
 
 describe('DevtoParserService', () => {
   let service: DevtoParserService;

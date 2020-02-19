@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DbModule } from './db.module';
 import { PostModel } from './post.service';
-import { postsMocks } from './posts.mock';
+import { postsMocks } from './__mocks__/posts.mock';
 import { PostResources } from '../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
 import { AppModule } from '../app.module';

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { habrData1 } from './habrData1.mock';
-import { habrMockParsed } from './habrData1Parsed.mock';
+import { habrData1 } from './__mocks__/habrData1.mock';
+import { habrMockParsed } from './__mocks__/habrData1Parsed.mock';
 import { HabrGrabberModule } from './habrGrabber.module';
 import { HabrHttpService } from './habrHttp.service';
 import { HabrPostGrabberService } from './habrPostGrabber.service';
