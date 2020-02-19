@@ -6,6 +6,7 @@ import { DbModule } from './db/db.module';
 import { TasksModule } from './services/tasks/tasks.module';
 import { CustomLoggerModule } from './services/logger/customLogger.module';
 import { ProxyModule } from './services/htmlproxy/proxy.module';
+import { DevbyEventsModule } from './eventGrabbers/devby/devbyEvents.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ProxyModule } from './services/htmlproxy/proxy.module';
     TasksModule,
     CustomLoggerModule.forRoot(),
     ProxyModule,
+    DevbyEventsModule,
   ],
   controllers: [AppController],
   providers: [],

@@ -19,7 +19,7 @@ const dbUserSimpleSchema = yup.object({
 type DbUserSimple = yup.InferType<typeof dbUserSimpleSchema>;
 
 @Injectable()
-export class UserService {
+export class UserModelService {
   constructor(private readonly dBConnection: DBConnection) {}
 
   async saveUser({ name, password }: { name: string; password: string }) {

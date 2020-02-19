@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { DBConnection } from './dBConnection.service';
-import { PostModel } from './post.service';
+import { PostModel } from './postModel.service';
 import { ConfigModule } from '../services/config/config.module';
-import { UserService } from './user.service';
+import { UserModelService } from './userModel.service';
 
 @Module({
   imports: [ConfigModule],
-  providers: [DBConnection, PostModel, UserService],
-  exports: [DBConnection, PostModel, UserService],
+  providers: [DBConnection, PostModel, UserModelService],
+  exports: [DBConnection, PostModel, UserModelService],
 })
 export class DbModule {}

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HabrPostGrabberService } from '../../postGrabbers/habr/habrPostGrabber.service';
-import { PostModel } from '../../db/post.service';
+import { PostModel } from '../../db/postModel.service';
 import { MediumPostGrabberService } from '../../postGrabbers/medium/mediumPostGrabber.service';
 import { DevtoPostGrabberService } from '../../postGrabbers/devto/devtoPostGrabber.service';
 import { merge, Observable, Subject } from 'rxjs';

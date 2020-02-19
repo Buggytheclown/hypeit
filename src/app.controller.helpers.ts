@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { PostResources } from './services/postDelivery/post.interfaces';
 import { exhaustiveCheck } from './helpers/helpers';
-import { DbPosts } from './db/post.service';
+import { DbPosts } from './db/postModel.service';
 
 export const postsQueryParamsSchema = yup.object({
   page: yup

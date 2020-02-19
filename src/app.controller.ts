@@ -12,9 +12,9 @@ import {
   Res,
 } from '@nestjs/common';
 import { PostDeliveryService } from './services/postDelivery/postDelivery.service';
-import { PostModel } from './db/post.service';
+import { PostModel } from './db/postModel.service';
 import { exhaustiveCheck } from './helpers/helpers';
-import { UserService } from './db/user.service';
+import { UserModelService } from './db/userModel.service';
 import { finalize } from 'rxjs/operators';
 import { ProxyService } from './services/htmlproxy/proxy.service';
 import {
@@ -41,14 +41,16 @@ import {
   updateBodySchema,
   UpdateBodyType,
 } from './app.controller.helpers';
+import { DevbyEventsGrabberService } from './eventGrabbers/devby/devbyEventsGrabber.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly postDeliveryService: PostDeliveryService,
     private readonly postModel: PostModel,
-    private readonly userService: UserService,
+    private readonly userModelService: UserModelService,
     private readonly proxyService: ProxyService,
+    private readonly devbyEventsService: DevbyEventsGrabberService,
   ) {}
 
   @Get('/')
@@ -141,7 +143,7 @@ export class AppController {
     };
 
     if (formType === AUTH_TYPE.REGISTER) {
-      if (await this.userService.isUsernameExist(userData)) {
+      if (await this.userModelService.isUsernameExist(userData)) {
         throw new HttpException(
           'Username is already taken',
           HttpStatus.BAD_REQUEST,
@@ -153,15 +155,17 @@ export class AppController {
           HttpStatus.BAD_REQUEST,
         );
       }
-      await this.userService.saveUser(userData);
+      await this.userModelService.saveUser(userData);
 
-      request.session.user = await this.userService.getVerifiedUser(userData);
+      request.session.user = await this.userModelService.getVerifiedUser(
+        userData,
+      );
 
       return setRedirectInfo({ response, status: 303, url: `/` });
     }
 
     if (formType === AUTH_TYPE.LOGIN) {
-      const user = await this.userService.getVerifiedUser(userData);
+      const user = await this.userModelService.getVerifiedUser(userData);
       if (!user) {
         throw new HttpException(
           'Username or password is incorrect',
@@ -335,7 +339,7 @@ export class AppController {
   @Get('stats/users')
   @Header('Content-Type', 'text/html; charset=utf-8')
   async getStatsUsers() {
-    return this.userService
+    return this.userModelService
       .getUsers()
       .then(users =>
         users

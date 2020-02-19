@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DbModule } from './db.module';
-import { PostModel } from './post.service';
+import { PostModel } from './postModel.service';
 import { postsMocks } from './__mocks__/posts.mock';
 import { PostResources } from '../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
 import { AppModule } from '../app.module';
-import { UserService } from './user.service';
+import { UserModelService } from './userModel.service';
 
 function withSortedTags(posts) {
   return posts.map(post => ({ ...post, tags: post.tags.slice().sort() }));
@@ -150,7 +150,7 @@ describe('post model: save', () => {
 
 describe('post model: get', () => {
   let postModel: PostModel;
-  let userService: UserService;
+  let userService: UserModelService;
   let user;
 
   beforeAll(async () => {
@@ -175,7 +175,7 @@ describe('post model: get', () => {
       resource: PostResources.MEDIUM,
     });
 
-    userService = app.get<UserService>(UserService);
+    userService = app.get<UserModelService>(UserModelService);
 
     try {
       await userService.saveUser({ name: 'admin', password: 'admin' });
