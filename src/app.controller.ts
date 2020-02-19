@@ -21,6 +21,8 @@ import {
   AUTH_TYPE,
   authBodySchema,
   AuthBodyType,
+  BasicPostPageData,
+  BasicTemplateData,
   extractData,
   getUpdateTypeData,
   htmlProxyQueryParamsSchema,
@@ -51,7 +53,10 @@ export class AppController {
 
   @Get('/')
   @Render('index')
-  async getPosts(@Req() request, @Query() query: unknown) {
+  async getPosts(
+    @Req() request,
+    @Query() query: unknown,
+  ): Promise<BasicPostPageData & BasicTemplateData> {
     const queryParams: PostsQueryParamsType = extractData(
       query,
       postsQueryParamsSchema,
@@ -108,18 +113,25 @@ export class AppController {
 
   @Get('/auth')
   @Render('auth')
-  async getAuth(@Req() request, @Res() response: any) {
+  async getAuth(
+    @Req() request,
+    @Res() response: any,
+  ): Promise<BasicTemplateData> {
     if (request.session.user) {
       return setRedirectInfo({ response, status: 303, url: `/` });
     }
     return {
       url: '/auth',
+      user: null,
     };
   }
 
   @Post('/auth')
   @Render('auth')
-  async postAuth(@Req() request: any, @Res() response: any) {
+  async postAuth(
+    @Req() request: any,
+    @Res() response: any,
+  ): Promise<BasicTemplateData> {
     const body: AuthBodyType = extractData(request.body, authBodySchema);
     const formType: AUTH_TYPE = body.form_type;
 
@@ -198,7 +210,9 @@ export class AppController {
 
   @Get('/bookmarked')
   @Render('index')
-  async getBookmarked(@Req() request) {
+  async getBookmarked(
+    @Req() request,
+  ): Promise<BasicPostPageData & BasicTemplateData> {
     if (!request.session.user) {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
     }
@@ -253,7 +267,7 @@ export class AppController {
 
   @Get('/about')
   @Render('about')
-  async getAbout(@Req() request) {
+  async getAbout(@Req() request): Promise<BasicTemplateData> {
     return {
       user: request.session.user,
       url: '/about',

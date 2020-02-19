@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { PostResources } from './services/postDelivery/post.interfaces';
 import { exhaustiveCheck } from './helpers/helpers';
+import { DbPosts } from './db/post.service';
 
 export const postsQueryParamsSchema = yup.object({
   page: yup
@@ -106,7 +107,7 @@ export function setRedirectInfo({
 }) {
   response.setHeader('Location', url);
   response.statusCode = status;
-  return {};
+  return {} as any;
 }
 
 export function getUpdateTypeData({
@@ -145,4 +146,19 @@ export function getUpdateTypeData({
     };
   }
   exhaustiveCheck(updateBodyType);
+}
+
+export interface BasicTemplateData {
+  user: { user_id: number; name: string } | null;
+  url: string;
+  [key: string]: any;
+}
+
+export interface BasicPostPageData {
+  posts: DbPosts;
+  queryParams: Object;
+  totalPosts: number;
+  totalSeenPosts: number;
+  currentPage: number;
+  resources: { [key: string]: string };
 }
