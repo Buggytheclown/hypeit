@@ -8,19 +8,30 @@
 <div class="about-container">
     <div>
         <h3 class="text-center">About</h3>
-        <p class="about-info">
-            <a href="https://github.com/Buggytheclown/hypeit" class="href" target="_blank" rel="noopener">Open source</a> news aggregator.
+        <p>
+        <ul>
+            <li>
+                <a href="https://github.com/Buggytheclown/hypeit"
+                   class="href"
+                   target="_blank"
+                   rel="noopener">Open source</a> news aggregator (sources: Medium, Habr, DevTo).
 
-            Aggregation sources: Medium, Habr, DevTo.
+            </li>
+            <li><span class="about-info">Sorted by relative rating:
+                    - Habr rating is `totalVotes`,
+                    - Medium rating is `voterCount` // `!clapCount`
+                    - Devto rating is `score/5` // `5` - magic number for the correct placement of posts among others
+                </span>
+            </li>
+            <li>
+                For registered users, we hide viewed messages and allow to make bookmarks.
+            </li>
 
-            Sort by relative rating:
-            - Habr rating is `totalVotes`,
-            - Medium rating is `voterCount` // `!clapCount`
-            - Devto rating is `score/5` // `5` - magic number for the correct placement of posts among others
+            <li>Medium posts can be proxed to remove any JS and cookies</li>
+        </ul>
 
-            For registered users, we hide viewed posts.
 
-            For any suggestions or bug report you can contact: <a href = "mailto: buggy.the.clown.md@gmail.com">buggy.the.clown.md@gmail.com</a>
+        For any suggestions or bug report you can contact: <a href="mailto: buggy.the.clown.md@gmail.com">buggy.the.clown.md@gmail.com</a>
         </p>
     </div>
 </div>
