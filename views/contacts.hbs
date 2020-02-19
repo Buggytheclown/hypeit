@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{> main_head }}
+
+    <style>
+        .auto-centered {
+            margin: auto 0;
+        }
+
+        .contact-data-list li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+{{> header (object user=user url=url) }}
+<div class="about-container">
+    <div>
+        <h3 class="text-center">Contacts</h3>
+        <p class="about-info">
+        <ul class="contact-data-list">
+            <li>
+                <a class="auto-centered"
+                   href="https://www.linkedin.com/in/artsiom-maratovich-ivanov"
+                   target="_blank"
+                   rel="noopener">
+                    linkedin
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/Buggytheclown"
+                   target="_blank"
+                   rel="noopener">
+                    github
+                </a>
+            </li>
+            <li>
+                <a href="mailto: buggy.the.clown.md@gmail.com"
+                   target="_blank"
+                   rel="noopener">
+                    buggy.the.clown.md@gmail.com
+                </a>
+            </li>
+            <li>
+                <a href="https://gist.github.com/Buggytheclown/d54c7b2f0c190dc9c9f8016a7991d4dc"
+                   target="_blank"
+                   rel="noopener">
+                    Basic javascript interview questions
+                </a>
+            </li>
+            <li>
+                <a href="https://stackoverflow.com/users/5801495/buggy"
+                   target="_blank"
+                   rel="noopener">
+                    stackoverflow
+                </a>
+            </li>
+            <li>
+                <a href="https://t.me/BuggyTheClown"
+                   target="_blank"
+                   rel="noopener">
+                    telegram
+                </a>
+            </li>
+        </ul>
+        </p>
+    </div>
+</div>
+</body>

@@ -343,4 +343,13 @@ export class AppController {
           .join('\n'),
       );
   }
+
+  @Get('/contacts')
+  @Render('contacts')
+  async getContacts(@Req() request): Promise<BasicTemplateData> {
+    return {
+      user: request.session.user,
+      url: '/contacts',
+    };
+  }
 }
