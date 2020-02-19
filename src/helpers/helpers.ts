@@ -14,6 +14,22 @@ export function writeLog<T>(info: string, data: T): T {
   return data;
 }
 
+export function writeTxt<T>(info: string, data: T): T {
+  fs.writeFileSync(`./logs/${moment().format()}.${info}.txt`, data);
+  return data;
+}
+
+export function readTxt(fileName): Promise<string> {
+  return new Promise((res, rej) => {
+    fs.readFile(`./logs/${fileName}`, 'utf8', (fsErr, fsData) => {
+      if (fsErr) {
+        return rej(fsErr);
+      }
+      return res(fsData);
+    });
+  });
+}
+
 export function WriteLog() {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     const oldValue = descriptor.value;
