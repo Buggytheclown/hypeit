@@ -29,6 +29,8 @@ const dbPostsSchema = yup.array(
   }),
 );
 
+export type DbPosts = yup.InferType<typeof dbPostsSchema>;
+
 const dbResoursesSchema = yup.array(
   yup.object({
     resources_id: yup.number(),
@@ -444,7 +446,7 @@ export class PostModel {
     onlyBookmarked?: boolean;
     onlyNotSeen?: boolean;
     tagName?: string;
-  } = {}): Promise<Required<yup.InferType<typeof dbPostsSchema>>> {
+  } = {}): Promise<Required<DbPosts>> {
     if ((onlyBookmarked || onlyNotSeen) && !userId) {
       throw new TypeError(
         `Configuration error, userId is required if (onlyBookmarked || onlyNotSeen)`,
