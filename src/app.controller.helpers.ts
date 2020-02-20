@@ -55,6 +55,7 @@ export enum UPDATE_TYPE {
   HABR = 'HABR',
   WEEK = 'WEEK',
   MONTH = 'MONTH',
+  EVENTS = 'EVENTS',
 }
 export const updateBodySchema = yup.object({
   update_type: yup
@@ -65,7 +66,9 @@ export const updateBodySchema = yup.object({
       UPDATE_TYPE.MEDIUM,
       UPDATE_TYPE.WEEK,
       UPDATE_TYPE.MONTH,
-    ]),
+      UPDATE_TYPE.EVENTS,
+    ])
+    .required(),
 });
 export type UpdateBodyType = yup.InferType<typeof updateBodySchema>;
 
@@ -125,6 +128,10 @@ export function getUpdateTypeData({
   updateBodyType: UPDATE_TYPE;
   period;
 }) {
+  if (updateBodyType === UPDATE_TYPE.EVENTS) {
+    throw new Error('Unsupported type');
+  }
+
   if (updateBodyType === UPDATE_TYPE.MEDIUM) {
     return {
       resource: PostResources.MEDIUM,

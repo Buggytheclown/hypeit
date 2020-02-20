@@ -45,6 +45,7 @@ import {
 } from './app.controller.helpers';
 import { DevbyEventsGrabberService } from './eventGrabbers/devby/devbyEventsGrabber.service';
 import { EventModelService } from './db/eventModel.service';
+import { EventDeliveryService } from './services/eventDelivery/eventDelivery.service';
 
 @Controller()
 export class AppController {
@@ -55,6 +56,7 @@ export class AppController {
     private readonly proxyService: ProxyService,
     private readonly devbyEventsService: DevbyEventsGrabberService,
     private readonly eventModelService: EventModelService,
+    private readonly eventDeliveryService: EventDeliveryService,
   ) {}
 
   @Get('/')
@@ -266,22 +268,33 @@ export class AppController {
     const body: UpdateBodyType = extractData(request.body, updateBodySchema);
     const updateBodyType: UPDATE_TYPE = body.update_type;
 
-    this.postDeliveryService
-      .updatePosts(
-        getUpdateTypeData({
-          updateBodyType,
-          period: this.postDeliveryService.period,
-        }),
-      )
-      .pipe(
-        finalize(() => {
-          response.write(`<pre>---DONE---</pre> \n`);
-          response.end();
-        }),
-      )
-      .subscribe(data =>
-        response.write(`<pre>${(JSON.stringify as any)(data, 4, 4)}</pre> \n`),
-      );
+    response.write(`<pre>---START---</pre> \n`);
+    if (updateBodyType === UPDATE_TYPE.EVENTS) {
+      this.eventDeliveryService.updateEvent({ pageCount: 1 }).then(res => {
+        response.write(`<pre>${res.savedCount}</pre> \n`);
+        response.write(`<pre>---DONE---</pre> \n`);
+        response.end();
+      });
+    } else {
+      this.postDeliveryService
+        .updatePosts(
+          getUpdateTypeData({
+            updateBodyType,
+            period: this.postDeliveryService.period,
+          }),
+        )
+        .pipe(
+          finalize(() => {
+            response.write(`<pre>---DONE---</pre> \n`);
+            response.end();
+          }),
+        )
+        .subscribe(data =>
+          response.write(
+            `<pre>${(JSON.stringify as any)(data, 4, 4)}</pre> \n`,
+          ),
+        );
+    }
   }
 
   @Get('/about')

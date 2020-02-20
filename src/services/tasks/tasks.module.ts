@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { PostDeliveryModule } from '../postDelivery/postDelivery.module';
-import { DevbyEventsModule } from '../../eventGrabbers/devby/devbyEvents.module';
-import { DbModule } from '../../db/db.module';
+import { EventDeliveryModule } from '../eventDelivery/eventDelivery.module';
 
 @Module({
-  imports: [PostDeliveryModule, DevbyEventsModule, DbModule],
+  imports: [PostDeliveryModule, EventDeliveryModule],
   providers: [TasksService],
   exports: [TasksService],
 })

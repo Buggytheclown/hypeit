@@ -24,12 +24,14 @@ export class EventModelService {
       link: string;
       title: string;
     }>,
-  ) {
+  ): Promise<{ savedCount: number }> {
     const knexQuery = this.dBConnection.knex('events').insert(events);
 
-    return this.dBConnection
+    await this.dBConnection
       .knexUpsert(knexQuery, ['time', 'title'])
       .then(_.identity);
+
+    return { savedCount: events.length };
   }
 
   saveSeenEvents({ eventsId, userId }: { eventsId: number[]; userId: number }) {

@@ -12,6 +12,11 @@
 <div class="update-container">
     <b>Update</b><br><br>
     <form method="POST" action="/update">
+        <input type="hidden" name="update_type" value="EVENTS">
+        <input class="btn btn-primary" type="submit" value="EVENTS">
+    </form>
+    <br>
+    <form method="POST" action="/update">
         <input type="hidden" name="update_type" value="WEEK">
         <input class="btn btn-primary" type="submit" value="WEEK">
     </form>
