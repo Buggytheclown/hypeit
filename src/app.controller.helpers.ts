@@ -3,6 +3,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { PostResources } from './services/postDelivery/post.interfaces';
 import { exhaustiveCheck } from './helpers/helpers';
 import { DbPosts } from './db/postModel.service';
+import { DbEvents } from './db/eventModel.service';
 
 export const postsQueryParamsSchema = yup.object({
   page: yup
@@ -32,6 +33,13 @@ export const postsBookmarkBodySchema = yup.object({
 });
 
 export type PostsBookmarkBody = yup.InferType<typeof postsBookmarkBodySchema>;
+
+export const hideEventkBodySchema = yup.object({
+  eventId: yup.number().required(),
+  hide: yup.boolean().required(),
+});
+
+export type HideEventkBody = yup.InferType<typeof hideEventkBodySchema>;
 
 export const authBodySchema = yup.object({
   form_type: yup.mixed().oneOf([AUTH_TYPE.LOGIN, AUTH_TYPE.REGISTER]),
@@ -161,4 +169,5 @@ export interface BasicPostPageData {
   totalSeenPosts: number;
   currentPage: number;
   resources: { [key: string]: string };
+  events: DbEvents;
 }

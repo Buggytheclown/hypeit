@@ -17,8 +17,11 @@ export function registerHbsHelpers() {
     );
   });
 
-  hbs.registerHelper('moment', (options: any): string => {
-    return moment(options).format('LLL');
+  hbs.registerHelper('moment', (options: any, format): string => {
+    // TODO: use user timezone instead of 3h
+    return moment(options)
+      .add(3, 'h')
+      .format(format);
   });
 
   hbs.registerHelper('get', (o, p): string => {

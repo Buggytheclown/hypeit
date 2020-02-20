@@ -10,7 +10,7 @@ const eventDataSchema = yup.object({
   title: yup.string().required(),
 });
 
-export type EventData = yup.InferType<typeof eventDataSchema>;
+export type EventData = Required<yup.InferType<typeof eventDataSchema>>;
 
 function rawTimeToDateTime(rawTime: string, ind: number, title: string) {
   const time = moment(rawTime);

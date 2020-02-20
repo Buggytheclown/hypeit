@@ -3,7 +3,7 @@ import { DBConnection } from './dBConnection.service';
 import * as yup from 'yup';
 import * as _ from 'lodash';
 
-const dbEventSchema = yup.array(
+const dbEventsSchema = yup.array(
   yup.object({
     event_id: yup.number().required(),
     title: yup.string().required(),
@@ -12,7 +12,7 @@ const dbEventSchema = yup.array(
   }),
 );
 
-export type DbEvent = yup.InferType<typeof dbEventSchema>;
+export type DbEvents = yup.InferType<typeof dbEventsSchema>;
 
 @Injectable()
 export class EventModelService {
@@ -55,7 +55,7 @@ export class EventModelService {
     featureXDays?: number;
     userId?: number;
     onlyNotSeen?: boolean;
-  } = {}): Promise<DbEvent> {
+  } = {}): Promise<DbEvents> {
     if (onlyNotSeen && !userId) {
       throw new TypeError(
         `Configuration error, userId is required if (onlyBookmarked)`,
@@ -84,9 +84,9 @@ export class EventModelService {
             )
           : builder,
       )
-      .orderBy('time', 'desc')
+      .orderBy('time', 'asc')
       .limit(limit);
-    return knexQuery.then(res => dbEventSchema.validateSync(res));
+    return knexQuery.then(res => dbEventsSchema.validateSync(res));
   }
 
   deleteAllEvents() {

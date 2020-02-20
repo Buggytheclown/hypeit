@@ -25,6 +25,8 @@ import {
   BasicTemplateData,
   extractData,
   getUpdateTypeData,
+  HideEventkBody,
+  hideEventkBodySchema,
   htmlProxyQueryParamsSchema,
   HtmlProxyQueryParamsType,
   PostsBookmarkBody,
@@ -42,6 +44,7 @@ import {
   UpdateBodyType,
 } from './app.controller.helpers';
 import { DevbyEventsGrabberService } from './eventGrabbers/devby/devbyEventsGrabber.service';
+import { EventModelService } from './db/eventModel.service';
 
 @Controller()
 export class AppController {
@@ -51,6 +54,7 @@ export class AppController {
     private readonly userModelService: UserModelService,
     private readonly proxyService: ProxyService,
     private readonly devbyEventsService: DevbyEventsGrabberService,
+    private readonly eventModelService: EventModelService,
   ) {}
 
   @Get('/')
@@ -110,6 +114,16 @@ export class AppController {
       resources: await this.postModel.getResourcesMap(),
       user: request.session.user,
       url: '/',
+      events:
+        request.url === '/'
+          ? await this.eventModelService.getEvents({
+              featureXDays: 14,
+              ...(request.session.user && {
+                onlyNotSeen: true,
+                userId: request.session.user.user_id,
+              }),
+            })
+          : [],
     };
   }
 
@@ -234,6 +248,7 @@ export class AppController {
       resources: await this.postModel.getResourcesMap(),
       user: request.session.user,
       url: '/bookmarked',
+      events: [],
     };
   }
 
@@ -355,5 +370,29 @@ export class AppController {
       user: request.session.user,
       url: '/contacts',
     };
+  }
+
+  @Post('/events/hide')
+  async toggleSeenEvents(@Req() request: any) {
+    if (!request.session.user) {
+      throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+    }
+
+    const body: HideEventkBody = extractData(
+      request.body,
+      hideEventkBodySchema,
+    );
+
+    if (!body.hide) {
+      throw new HttpException(
+        'UNIMPLEMENTED: can only hide events',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    await this.eventModelService.saveSeenEvents({
+      userId: request.session.user.user_id,
+      eventsId: [body.eventId],
+    });
   }
 }

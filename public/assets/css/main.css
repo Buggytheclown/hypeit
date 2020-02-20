@@ -276,3 +276,72 @@ a {
     max-width: 650px;
     margin: 0 auto;
 }
+
+/* EVENTS BLOCK*/
+.event-card {
+    display: flex;
+    margin-bottom: 10px;
+
+}
+
+.event-card__title {
+    margin: auto 0px;
+    font-size: 16px;
+}
+
+.event-card__title a {
+    color: rgb(191, 191, 191);
+}
+
+.event-card__title a:hover {
+    color: rgb(95, 95, 95);
+}
+
+.event-card__time {
+    color: rgb(102, 102, 102);
+    min-width: 110px;
+}
+
+.event-header {
+    font-size: 25px;
+    color: rgb(102, 102, 102);
+    text-align: center;
+}
+
+.scrollable-events {
+    max-height: 250px;
+    overflow: scroll;
+}
+
+.event-hide-icon {
+    color: rgb(102, 102, 102);
+    width: 20px;
+    height: 20px;
+}
+
+.event-hide-icon:hover {
+    color: rgb(191, 191, 191);
+}
+
+.event-hide-icon-container {
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.event-hide-icon--true, .event-hide-icon--false, .event-hide-icon--loading {
+    display: none;
+}
+
+[data-hidden='true'] .event-hide-icon--true {
+    display: block;
+}
+
+[data-hidden='false'] .event-hide-icon--false {
+    display: block;
+}
+
+[data-hidden='loading'] .event-hide-icon--loading {
+    display: block;
+}
