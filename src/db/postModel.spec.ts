@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DbModule } from './db.module';
 import { PostModel } from './postModel.service';
 import { postsMocks } from './__mocks__/posts.mock';
 import { PostResources } from '../services/postDelivery/post.interfaces';
@@ -61,7 +60,7 @@ const prepareMockDevtoPosts = _.flow([
 describe('post model: save', () => {
   let postModel: PostModel;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const app: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -191,7 +190,7 @@ describe('post model: get', () => {
     Promise.all([
       postModel.deleteAllPosts(),
       postModel.clearAllBookmarked({ userId: user.user_id }),
-      postModel.clearAllSeenPosts({ userId: user.user_id }),
+      postModel.deleteAllSeenPosts({ userId: user.user_id }),
     ]),
   );
 

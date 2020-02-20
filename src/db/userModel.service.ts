@@ -6,9 +6,9 @@ import * as yup from 'yup';
 import * as _ from 'lodash';
 
 const dbUserSchema = yup.object({
-  user_id: yup.number(),
-  name: yup.string(),
-  password: yup.string(),
+  user_id: yup.number().required(),
+  name: yup.string().required(),
+  password: yup.string().required(),
 });
 type DbUser = yup.InferType<typeof dbUserSchema>;
 

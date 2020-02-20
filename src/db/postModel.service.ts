@@ -564,7 +564,7 @@ export class PostModel {
     return this.dBConnection.knexInsertIgnore(knexQuery).then(_.identity);
   }
 
-  clearAllSeenPosts({ userId }: { userId: number }) {
+  deleteAllSeenPosts({ userId }: { userId: number }) {
     return this.dBConnection
       .knex('seen_users_posts')
       .where({ user_id: userId })

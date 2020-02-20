@@ -6,6 +6,7 @@ import { migration04 } from './04.migrations';
 import { migration05 } from './05.migrations';
 import { migration06 } from './06.migrations';
 import { migration07 } from './07.migrations';
+import { migration08 } from './08.migrations';
 
 export const migrationsList = [
   clearBD,
@@ -16,4 +17,5 @@ export const migrationsList = [
   migration05,
   migration06,
   migration07,
+  migration08,
 ];
