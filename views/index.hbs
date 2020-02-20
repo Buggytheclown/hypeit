@@ -241,7 +241,7 @@
                 throw new TypeError(`Unknown bookmarked type: ${state}`);
             }
 
-            if (state === STATES.loading) {
+            if (state === STATES.loading || state === STATES.true) {
                 return;
             }
 

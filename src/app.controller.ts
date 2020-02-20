@@ -386,7 +386,7 @@ export class AppController {
     if (!body.hide) {
       throw new HttpException(
         'UNIMPLEMENTED: can only hide events',
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
