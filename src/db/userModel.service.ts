@@ -63,7 +63,6 @@ export class UserModelService {
     return this.dBConnection
       .knex('users')
       .select('user_id', 'name')
-      .where({ name })
       .then(res => yup.array(dbUserSimpleSchema).validateSync(res));
   }
 }
