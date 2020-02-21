@@ -305,7 +305,6 @@ a {
 .event-header {
     font-size: 25px;
     color: rgb(102, 102, 102);
-    text-align: center;
 }
 
 .scrollable-events {
@@ -344,4 +343,8 @@ a {
 
 [data-hidden='loading'] .event-hide-icon--loading {
     display: block;
+}
+
+.align-center {
+    text-align: center;
 }

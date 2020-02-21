@@ -15,7 +15,12 @@
         {{#if events}}
             <article class="grid-item content-box scrollable-events">
                 <div class="inner">
-                    <p class="event-header">{{events.length}} Events in 2 week</p>
+                    <div class="align-center">
+                        <span class="event-header">{{events.length}} Events in 2 week</span>
+                        <br>
+                        <span class="event-card__time">Today is {{ moment undefined 'D ddd' }}</span>
+                    </div>
+
                     {{#each events}}
                         <div class="event-card">
                             {{#if ../user}}
