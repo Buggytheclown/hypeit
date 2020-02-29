@@ -54,11 +54,17 @@ export class CustomLoggerService implements NestLoggerService {
     if (!this.logLevels.has(LogLevels.DEBUG)) {
       return;
     }
+    if (typeof this.transports.debug !== 'function') {
+      return;
+    }
     this.transports.debug(message, context);
   }
 
-  verbose(message: any, context?: string) {
+  verbose(this: CustomLoggerService, message: any, context?: string) {
     if (!this.logLevels.has(LogLevels.VERBOSE)) {
+      return;
+    }
+    if (typeof this.transports.verbose !== 'function') {
       return;
     }
     this.transports.verbose(message, context);

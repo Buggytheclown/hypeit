@@ -119,7 +119,7 @@ export class Logger implements LoggerService {
       );
   }
 
-  private getInstance(): typeof Logger | LoggerService {
+  private getInstance(): typeof Logger | LoggerService | undefined {
     const { instance } = Logger;
     return instance === this ? Logger : instance;
   }
@@ -165,7 +165,7 @@ export class Logger implements LoggerService {
   ): string {
     const includeTimestamp = Logger.lastTimestamp && isTimeDiffEnabled;
     const result = includeTimestamp
-      ? yellow(` +${Date.now() - Logger.lastTimestamp}ms`)
+      ? yellow(` +${Date.now() - (Logger as any).lastTimestamp}ms`)
       : '';
     Logger.lastTimestamp = Date.now();
     return result;

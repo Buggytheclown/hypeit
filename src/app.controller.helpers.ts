@@ -8,16 +8,14 @@ import { DbEvents } from './db/eventModel.service';
 export const postsQueryParamsSchema = yup.object({
   page: yup
     .number()
-    .nullable()
     .min(1)
     .default(1),
   bestof: yup
     .number()
-    .nullable()
     .min(0)
     .default(7),
-  isNextPage: yup.boolean().nullable(),
-  tagName: yup.string().nullable(),
+  isNextPage: yup.boolean().default(false),
+  tagName: yup.string().notRequired(),
 });
 
 export type PostsQueryParamsType = yup.InferType<typeof postsQueryParamsSchema>;
