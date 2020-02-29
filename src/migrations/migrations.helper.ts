@@ -1,19 +1,21 @@
 import * as mysql from 'mysql';
 import { ConfigServiceProvider } from '../services/config/config.module';
 
-function promisefy(fn) {
+function promisify<E, R>(
+  fn: (cb: (err: E, res: R) => void) => void,
+): Promise<R> {
   return new Promise((resolve, reject) => {
     fn((err, res) => {
       if (err) {
         reject(err);
       }
-      resolve();
+      resolve(res);
     });
   });
 }
 
 export function execMigration(fn) {
-  return promisefy(cb => fn(connection, cb));
+  return promisify(cb => fn(connection, cb));
 }
 
 export function logOperation<T>(
@@ -35,7 +37,7 @@ export const connection = (() => {
     host: configService.get('DATABASE_HOST'),
     user: configService.get('DATABASE_USER'),
     password: configService.get('DATABASE_PASSWORD'),
-    port: configService.get('DATABASE_PORT'),
+    port: configService.databasePort,
     database,
     multipleStatements: true,
     dateStrings: true,

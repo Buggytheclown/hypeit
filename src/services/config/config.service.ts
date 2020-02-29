@@ -18,7 +18,7 @@ const envSchema = yup.object({
   DATABASE_HOST: yup.string().required(),
   DATABASE_USER: yup.string().required(),
   DATABASE_PASSWORD: yup.string().required(),
-  DATABASE_PORT: yup.string().required(),
+  DATABASE_PORT: yup.number().required(),
   DATABASE: yup.string().required(),
   TIMEZONE: yup.string().required(),
   PORT: yup.string().required(),
@@ -64,5 +64,9 @@ export class ConfigService {
 
   get sentryDsn(): string {
     return this.envConfig.SENTRY_DSN;
+  }
+
+  get databasePort(): number {
+    return this.envConfig.DATABASE_PORT;
   }
 }

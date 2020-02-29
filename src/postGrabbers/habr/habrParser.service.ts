@@ -89,24 +89,26 @@ export class HabrParserService {
     const $ = cheerio.load(data);
     const posts = $('.posts_list .content-list__item_post');
 
-    return posts
+    return (posts
       .filter(
         (_, el) =>
-          $(el).attr('id') &&
-          $(el)
+          !!$(el).attr('id') &&
+          !!$(el)
             .find('.post__title a')
             .text(),
       )
-      .map((ind, el) => {
-        try {
-          return habrPostDataSchema.validateSync(parsePosts($, ind, el), {
-            strict: true,
-          });
-        } catch (e) {
-          writeLog('HabrParserServiceCantparse', $.html(el));
-          throw e;
-        }
-      })
-      .toArray();
+      .map(
+        (ind, el): HabrPostData => {
+          try {
+            return habrPostDataSchema.validateSync(parsePosts($, ind, el), {
+              strict: true,
+            });
+          } catch (e) {
+            writeLog('HabrParserServiceCantparse', $.html(el));
+            throw e;
+          }
+        },
+      )
+      .toArray() as any) as HabrPostData[];
   }
 }

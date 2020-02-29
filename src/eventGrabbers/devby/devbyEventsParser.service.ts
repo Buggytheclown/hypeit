@@ -43,17 +43,19 @@ export class DevbyEventsParserService {
     const $ = cheerio.load(data);
     const events = $('.list-item-events .item');
 
-    return events
-      .map((ind, el) => {
-        try {
-          return eventDataSchema.validateSync(parseEvent($, ind, el), {
-            strict: true,
-          });
-        } catch (e) {
-          writeLog('DevbyEventsParserServiceCantParse', $.html(el));
-          throw e;
-        }
-      })
-      .toArray();
+    return (events
+      .map(
+        (ind, el): EventData => {
+          try {
+            return eventDataSchema.validateSync(parseEvent($, ind, el), {
+              strict: true,
+            });
+          } catch (e) {
+            writeLog('DevbyEventsParserServiceCantParse', $.html(el));
+            throw e;
+          }
+        },
+      )
+      .toArray() as any) as EventData[];
   }
 }

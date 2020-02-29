@@ -13,7 +13,7 @@ export const DbOptions = {
   password: configService.get('DATABASE_PASSWORD'),
   database: configService.get('DATABASE'),
   timezone: configService.get('TIMEZONE'),
-  port: configService.get('DATABASE_PORT'),
+  port: configService.databasePort,
   multipleStatements: true,
   dateStrings: true,
   charset: 'utf8mb4',
