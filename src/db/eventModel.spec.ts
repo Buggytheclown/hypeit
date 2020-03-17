@@ -4,6 +4,7 @@ import { EventModelService } from './eventModel.service';
 import { eventsMock } from './__mocks__/events.mock';
 import { UserModelService } from './userModel.service';
 import * as _ from 'lodash';
+import { assert } from '../helpers/helpers';
 
 describe('eventModel', () => {
   let eventModel: EventModelService;
@@ -50,6 +51,8 @@ describe('eventModel', () => {
   it('eventModel should return notSeenEvents', async () => {
     await eventModel.saveEvents(eventsMock);
     const events = await eventModel.getEvents();
+
+    assert(events[0]);
 
     await eventModel.saveSeenEvents({
       eventsId: [events[0].event_id],

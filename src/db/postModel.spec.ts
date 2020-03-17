@@ -5,6 +5,7 @@ import { PostResources } from '../services/postDelivery/post.interfaces';
 import * as _ from 'lodash';
 import { AppModule } from '../app.module';
 import { UserModelService } from './userModel.service';
+import { assert } from '../helpers/helpers';
 
 function withSortedTags(posts) {
   return posts.map(post => ({ ...post, tags: post.tags.slice().sort() }));
@@ -229,30 +230,38 @@ describe('post model: get', () => {
 
     const allPosts = await postModel.getPosts();
 
+    const secondPostId = allPosts.find(
+      el => el.externalID === postsExternalIds[1],
+    )?.posts_id;
+
+    assert(secondPostId);
+
     await postModel.toggleBookmarked({
-      postId: allPosts.find(el => el.externalID === postsExternalIds[1])
-        .posts_id,
+      postId: secondPostId,
       userId: user.user_id,
       bookmark: false,
     });
 
     await postModel.toggleBookmarked({
-      postId: allPosts.find(el => el.externalID === postsExternalIds[1])
-        .posts_id,
+      postId: secondPostId,
       userId: user.user_id,
       bookmark: true,
     });
 
     await postModel.toggleBookmarked({
-      postId: allPosts.find(el => el.externalID === postsExternalIds[1])
-        .posts_id,
+      postId: secondPostId,
       userId: user.user_id,
       bookmark: true,
     });
 
+    const thirdPostId = allPosts.find(
+      el => el.externalID === postsExternalIds[2],
+    )?.posts_id;
+
+    assert(thirdPostId);
+
     await postModel.toggleBookmarked({
-      postId: allPosts.find(el => el.externalID === postsExternalIds[2])
-        .posts_id,
+      postId: thirdPostId,
       userId: user.user_id,
       bookmark: true,
     });
@@ -314,10 +323,13 @@ describe('post model: get', () => {
   it('should use getPostLink', async () => {
     const posts = await postModel.getPosts();
 
+    const firstPost = posts[0];
+    assert(firstPost);
+
     const link = await postModel.getPostLink({
-      postId: posts[0].posts_id,
+      postId: firstPost.posts_id,
     });
 
-    expect(posts[0].link).toEqual(link);
+    expect(firstPost.link).toEqual(link);
   });
 });
