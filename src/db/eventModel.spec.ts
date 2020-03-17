@@ -31,7 +31,7 @@ describe('eventModel', () => {
   });
 
   afterEach(async () => {
-    return Promise.all([
+    await Promise.all([
       eventModel.deleteAllEvents(),
       eventModel.deleteAllSeenEvents({ userId: user.user_id }),
     ]);

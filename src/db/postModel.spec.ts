@@ -209,6 +209,11 @@ describe('post model: get', () => {
     expect(count).toEqual(postsExternalIds.length);
   });
 
+  it('should count inserted posts with tagName', async () => {
+    const count = await postModel.countPosts({ tagName: 'Machine Learning' });
+    expect(count).toEqual(2);
+  });
+
   it('should limit/offset', async () => {
     const posts2off2 = await postModel.getPosts({ offset: 2, limit: 2 });
     expect(posts2off2.map(el => el.externalID)).toEqual(
@@ -298,7 +303,10 @@ describe('post model: get', () => {
         .map(el => el.posts_id),
     });
 
-    const count2 = await postModel.countSeenPosts({ userId: user.user_id });
+    const count2 = await postModel.countSeenPosts({
+      userId: user.user_id,
+      tagName: 'beginners',
+    });
     expect(count2).toEqual(2);
 
     const posts2 = await postModel.getPosts({

@@ -105,11 +105,13 @@ export class AppController {
       queryParams,
       totalPosts: await this.postModel.countPosts({
         lastXDays: queryParams.bestof,
+        tagName: queryParams.tagName,
       }),
       totalSeenPosts: request.session.user
         ? await this.postModel.countSeenPosts({
             lastXDays: queryParams.bestof,
             userId: request.session.user.user_id,
+            tagName: queryParams.tagName,
           })
         : postsPerPage * (queryParams.page - 1),
       currentPage: queryParams.page,

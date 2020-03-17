@@ -113,7 +113,9 @@ export class PostModel {
       .groupBy('posts.posts_id')
       .modify(builder =>
         tagName
-          ? builder.havingRaw(`(? MEMBER OF (tags))`, [tagName])
+          ? builder
+              .select(this.dBConnection.knex.raw('JSON_ARRAYAGG(name) as tags'))
+              .havingRaw(`(? MEMBER OF (tags))`, [tagName])
           : builder,
       );
   }
@@ -168,11 +170,18 @@ export class PostModel {
     return { savedCount: posts.length };
   };
 
-  async countPosts({ lastXDays }: { lastXDays?: number }): Promise<number> {
+  async countPosts({
+    lastXDays,
+    tagName,
+  }: {
+    lastXDays?: number;
+    tagName?: string;
+  }): Promise<number> {
     return this.dBConnection
       .knex(
         this.getPostsModel({
           lastXDays,
+          tagName,
           seen: SEEN_POST_STATE.ALL,
         })
           .select('posts.posts_id')
@@ -186,15 +195,18 @@ export class PostModel {
   async countSeenPosts({
     lastXDays,
     userId,
+    tagName,
   }: {
     lastXDays?: number;
     userId: number;
+    tagName?: string;
   }): Promise<number> {
     return this.dBConnection
       .knex(
         this.getPostsModel({
           userId,
           lastXDays,
+          tagName,
           seen: SEEN_POST_STATE.SEEN,
         })
           .select('posts.posts_id')
