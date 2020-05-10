@@ -91,7 +91,9 @@ function combineGrabberModel({
           postDeliveryEventCreators.saved({ count: data.savedCount, resource }),
         );
         observer.complete();
-      });
+      }).catch(e => {
+        observer.error(e);
+    });
   });
 }
 
