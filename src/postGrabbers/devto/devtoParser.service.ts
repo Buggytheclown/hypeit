@@ -28,7 +28,8 @@ function parsePosts({
   path,
   tag_list,
   id,
-  score,
+  positive_reactions_count,
+  main_image,
 }: DevtoRawPost): DevtoPostData {
   return {
     title,
@@ -37,8 +38,8 @@ function parsePosts({
     link: `https://dev.to${path}`,
     tags: tag_list.map(_.toLower),
     externalID: String(id),
-    imageLink: null,
-    score,
+    imageLink: main_image,
+    score: positive_reactions_count,
   };
 }
 
@@ -50,7 +51,7 @@ export class DevtoParserService {
       { strict: true },
     );
 
-    return rawDataValidated.hits.map(post => {
+    return rawDataValidated.result.map(post => {
       try {
         return devtoPostDataSchema.validateSync(parsePosts(post), {
           strict: true,

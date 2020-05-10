@@ -7,8 +7,8 @@ export const devtoMockParsed = [
       'https://dev.to/cydstumpel/creating-a-fold-out-navigation-with-css-only-4g9k',
     tags: ['css', 'tutorial', 'codepen', 'beginners'],
     externalID: '228410',
-    imageLink: null,
-    score: 183,
+    imageLink: 'https://dev-to-uploads.s3.amazonaws.com/i/q19vv.png',
+    score: 182,
   },
   {
     title: 'Top 4 platforms for learning how to code (2020 edition)',
@@ -19,7 +19,7 @@ export const devtoMockParsed = [
     tags: ['education', 'javascript', 'webdev', 'beginners'],
     externalID: '227370',
     imageLink: null,
-    score: 181,
+    score: 180,
   },
   {
     title: 'Some helpful Bash scripts I use daily',
@@ -29,6 +29,6 @@ export const devtoMockParsed = [
     tags: ['bash', 'scripting', 'automation'],
     externalID: '226623',
     imageLink: null,
-    score: 173,
+    score: 172,
   },
 ];

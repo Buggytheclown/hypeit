@@ -3,14 +3,15 @@ import * as yup from 'yup';
 const rawPostFieldSchema = yup.object({
   title: yup.string(),
   path: yup.string(),
+  main_image: yup.string().nullable(),
   tag_list: yup.array(yup.string()),
   id: yup.number(),
   published_at_int: yup.number(),
-  score: yup.number(),
+  positive_reactions_count: yup.number(),
 });
 
 export const DevtoRawDataSchema = yup.object({
-  hits: yup.array(rawPostFieldSchema),
+  result: yup.array(rawPostFieldSchema),
 });
 
 export type DevtoRawPost = Required<yup.InferType<typeof rawPostFieldSchema>>;

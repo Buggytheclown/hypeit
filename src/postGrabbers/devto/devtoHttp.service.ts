@@ -4,26 +4,35 @@ import * as moment from 'moment';
 import { DevtoRawData } from './devto.interface';
 import { prepareTimeoutController } from '../../helpers/helpers';
 
-const url = `https://ye5y9r600c-dsn.algolia.net/1/indexes/ordered_articles_by_positive_reactions_count_production/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.20.3&x-algolia-application-id=YE5Y9R600C&x-algolia-api-key=YWVlZGM3YWI4NDg3Mjk1MzJmMjcwNDVjMjIwN2ZmZTQ4YTkxOGE0YTkwMzhiZTQzNmM0ZGFmYTE3ZTI1ZDFhNXJlc3RyaWN0SW5kaWNlcz1zZWFyY2hhYmxlc19wcm9kdWN0aW9uJTJDVGFnX3Byb2R1Y3Rpb24lMkNvcmRlcmVkX2FydGljbGVzX3Byb2R1Y3Rpb24lMkNDbGFzc2lmaWVkTGlzdGluZ19wcm9kdWN0aW9uJTJDb3JkZXJlZF9hcnRpY2xlc19ieV9wdWJsaXNoZWRfYXRfcHJvZHVjdGlvbiUyQ29yZGVyZWRfYXJ0aWNsZXNfYnlfcG9zaXRpdmVfcmVhY3Rpb25zX2NvdW50X3Byb2R1Y3Rpb24lMkNvcmRlcmVkX2NvbW1lbnRzX3Byb2R1Y3Rpb24%3D`;
+const url = `https://dev.to/search/feed_content`;
 
-function getTimeDelta(days): number {
-  return Math.trunc(+moment().subtract(days, 'days') / 1000);
+function toQueryParamsString(queryParams: { [key: string]: any }) {
+  return Object.entries(queryParams)
+      .map(kv => kv.map(encodeURI).join('='))
+      .join('&');
 }
 
 function simpleGet({
   postCount,
-  fromTime,
+  daysAgo,
 }: {
   postCount: number;
-  fromTime: number;
+  daysAgo: number;
 }): Promise<DevtoRawData> {
   const { controller, timeout } = prepareTimeoutController(5000);
+  const queryParams = {
+    per_page: postCount,
+    page: 0,
+    sort_by: 'positive_reactions_count',
+    sort_direction: 'desc',
+    approved: '',
+    class_name: 'Article',
+    'published_at[gte]': moment().subtract(daysAgo, 'days').format('YYYY-MM-DDT00:00:01[Z]'),
+  };
+  const path = `${url}?${toQueryParamsString(queryParams)}`;
 
-  return fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({
-      params: `query=*&hitsPerPage=${postCount}&page=0&attributesToHighlight=%5B%5D&tagFilters=%5B%5D&filters=published_at_int%20%3E%20${fromTime}`,
-    }),
+  return fetch(path, {
+    method: 'GET',
     headers: { 'Content-Type': 'application/json' },
     signal: controller.signal,
   })
@@ -36,10 +45,10 @@ function simpleGet({
 @Injectable()
 export class DevtoHttpService {
   getBestOfTheWeek(): Promise<DevtoRawData> {
-    return simpleGet({ fromTime: getTimeDelta(7), postCount: 150 });
+    return simpleGet({ daysAgo: 7, postCount: 200 });
   }
 
   getBestOfTheMonth(): Promise<DevtoRawData> {
-    return simpleGet({ fromTime: getTimeDelta(30), postCount: 500 });
+    return simpleGet({ daysAgo: 30, postCount: 500 });
   }
 }

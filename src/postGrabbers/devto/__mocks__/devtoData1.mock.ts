@@ -1,8 +1,9 @@
 export const devtoDataMock = {
-  hits: [
+  result: [
     {
       title: 'Creating a fold out navigation with CSS only',
       path: '/cydstumpel/creating-a-fold-out-navigation-with-css-only-4g9k',
+      main_image: 'https://dev-to-uploads.s3.amazonaws.com/i/q19vv.png',
       class_name: 'Article',
       comments_count: 18,
       reading_time: 4,
@@ -43,6 +44,7 @@ export const devtoDataMock = {
       title: 'Top 4 platforms for learning how to code (2020 edition)',
       path:
         '/realtoughcandy/top-4-platforms-for-learning-how-to-code-2020-edition-e6g',
+      main_image: null,
       class_name: 'Article',
       comments_count: 9,
       reading_time: 6,
@@ -82,6 +84,7 @@ export const devtoDataMock = {
     {
       title: 'Some helpful Bash scripts I use daily',
       path: '/aviaryan/some-helpful-bash-scripts-i-use-daily-40bd',
+      main_image: null,
       class_name: 'Article',
       comments_count: 18,
       reading_time: 3,
