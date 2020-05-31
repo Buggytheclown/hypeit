@@ -60,6 +60,36 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Запуск проекта с MySql в докере
+1. Качаем образ mysql-server 
+```
+docker pull mysql/mysql-server
+```
+2. Запускаем командой 
+```
+docker run -d -p 3306:3306 --name=mysql-server --env="MYSQL_ROOT_PASSWORD=root" mysql mysqld --default-authentication-plugin=mysql_native_password
+```
+3. Заходим в контейнер 
+```
+docker exec -ti mysql-server bash
+```
+4. Заходит в mysql 
+```
+mysql -u root -p
+```
+5. Создаем базу 
+```
+CREATE DATABASE dbname;
+```
+6. Накатываем миграции 
+```
+npm run migrate:dev
+```
+7. Проект должен запуститься без ошибок. Лента обновится через время по крону.
+```
+npm run start:dev
+```
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
