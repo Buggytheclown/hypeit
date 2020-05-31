@@ -60,32 +60,16 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Запуск проекта с MySql в докере
-1. Качаем образ mysql-server 
+## Start MySql in Docker
+1. Start command in directory with docker-compose.yml file. Flag -d is daemon. Wait around ten seconds before start migration. DB need time to start.
 ```
-docker pull mysql/mysql-server
+docker-compose up -d
 ```
-2. Запускаем командой 
-```
-docker run -d -p 3306:3306 --name=mysql-server --env="MYSQL_ROOT_PASSWORD=root" mysql mysqld --default-authentication-plugin=mysql_native_password
-```
-3. Заходим в контейнер 
-```
-docker exec -ti mysql-server bash
-```
-4. Заходит в mysql 
-```
-mysql -u root -p
-```
-5. Создаем базу 
-```
-CREATE DATABASE dbname;
-```
-6. Накатываем миграции 
+6. Start db migration
 ```
 npm run migrate:dev
 ```
-7. Проект должен запуститься без ошибок. Лента обновится через время по крону.
+7. Start dev version project. Feed will be updated on the cron later.
 ```
 npm run start:dev
 ```
