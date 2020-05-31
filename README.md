@@ -60,6 +60,20 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Start MySql in Docker
+1. Start command in directory with docker-compose.yml file. Flag -d is daemon. Wait around ten seconds before start migration. DB need time to start.
+```
+docker-compose up -d
+```
+6. Start db migration
+```
+npm run migrate:dev
+```
+7. Start dev version project. Feed will be updated on the cron later.
+```
+npm run start:dev
+```
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
