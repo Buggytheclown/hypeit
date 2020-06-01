@@ -28,7 +28,7 @@ function parsePosts({
   path,
   tag_list,
   id,
-  positive_reactions_count,
+  public_reactions_count,
   main_image,
 }: DevtoRawPost): DevtoPostData {
   return {
@@ -39,7 +39,7 @@ function parsePosts({
     tags: tag_list.map(_.toLower),
     externalID: String(id),
     imageLink: main_image,
-    score: positive_reactions_count,
+    score: public_reactions_count,
   };
 }
 
