@@ -10,6 +10,9 @@ server/yarn-debug.log*
 server/yarn-error.log*
 server/lerna-debug.log*
 
+# Lock
+server/yarn.lock
+
 # OS
 server/.DS_Store
 
