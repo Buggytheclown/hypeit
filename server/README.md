@@ -65,11 +65,11 @@ $ npm run test:cov
 ```
 docker-compose up -d
 ```
-6. Start db migration
+2. Start db migration
 ```
 npm run migrate:dev
 ```
-7. Start dev version project. Feed will be updated on the cron later.
+3. Start dev version project. Feed will be updated on the cron later.
 ```
 npm run start:dev
 ```
