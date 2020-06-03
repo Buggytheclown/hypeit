@@ -22,10 +22,14 @@ module.exports = {
       { devDependencies: ['**/test.tsx', '**/test.ts'] },
     ],
     '@typescript-eslint/indent': [2, 2],
+    'import/no-unresolved': 'off',
   },
   settings: {
     react: {
       version: 'detect', // Tells eslint-plugin-react to automatically detect the version of React to use
+    },
+    'import/resolver': {
+      typescript: {}, // this loads <rootdir>/tsconfig.json to eslint
     },
   },
 };
