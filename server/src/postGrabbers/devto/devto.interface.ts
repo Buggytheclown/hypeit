@@ -7,7 +7,7 @@ const rawPostFieldSchema = yup.object({
   tag_list: yup.array(yup.string()),
   id: yup.number(),
   published_at_int: yup.number(),
-  positive_reactions_count: yup.number(),
+  public_reactions_count: yup.number(),
 });
 
 export const DevtoRawDataSchema = yup.object({
