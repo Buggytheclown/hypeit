@@ -1,7 +1,8 @@
 module.exports = {
   parser: '@typescript-eslint/parser', // Specifies the ESLint parser
   extends: [
-    'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
+    'airbnb',
+    // 'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
     'plugin:@typescript-eslint/recommended', // Uses the recommended rules from @typescript-eslint/eslint-plugin
   ],
   parserOptions: {
@@ -12,8 +13,15 @@ module.exports = {
     },
   },
   rules: {
-    // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
-    // e.g. "@typescript-eslint/explicit-function-return-type": "off",
+    'react/jsx-filename-extension': [
+      2,
+      { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
+    ],
+    'import/no-extraneous-dependencies': [
+      2,
+      { devDependencies: ['**/test.tsx', '**/test.ts'] },
+    ],
+    '@typescript-eslint/indent': [2, 2],
   },
   settings: {
     react: {
