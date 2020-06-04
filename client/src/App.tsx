@@ -1,26 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+const navigation = [
+  {
+    id: 1,
+    name: 'About',
+    icon: '',
+  },
+  {
+    id: 2,
+    name: 'Feed',
+    icon: '',
+  },
+  {
+    id: 3,
+    name: 'Auth',
+    icon: '',
+  },
+];
 
 function App() {
+  const navigationJSX = navigation.map((item) => (
+    <li key={item.id} className="nav-item">
+      {item.name}
+    </li>
+  ));
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit
-          <code>src/App.tsx</code>
-          and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container">
+        <header className="header">
+          <nav className="navigation">
+            <ul>{navigationJSX}</ul>
+          </nav>
+        </header>
+        <div>
+          <div className="feed">
+            <div className="feed-navigation" />
+            <div className="feed-count" />
+            <div className="news-wrapper">
+              <div className="news" />
+            </div>
+            <div className="pagination" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
