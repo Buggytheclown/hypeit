@@ -1,7 +1,7 @@
 module.exports = {
   parser: '@typescript-eslint/parser', // Specifies the ESLint parser
   extends: [
-    'airbnb',
+    'airbnb-typescript',
     // 'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
     'plugin:@typescript-eslint/recommended', // Uses the recommended rules from @typescript-eslint/eslint-plugin
   ],
@@ -11,6 +11,8 @@ module.exports = {
     ecmaFeatures: {
       jsx: true, // Allows for the parsing of JSX
     },
+    project: './tsconfig.json',
+    createDefaultProgram: true,
   },
   rules: {
     'react/jsx-filename-extension': [

@@ -4,7 +4,7 @@ import Pagination from './components/ui/Pagination/Pagination';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" data-theme="dark">
       <div className="container">
         <Header />
         <div>

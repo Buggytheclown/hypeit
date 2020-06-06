@@ -4,15 +4,25 @@
   --font-color: #424242;
   --bg-color: #fff;
   --heading-color: #292922;
+  --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --colomn-width: 650px;
 }
 
 [data-theme='dark'] {
-  --primary-color: #9a97f3;
-  --secondary-color: #818cab;
-  --font-color: #e1e1ff;
+  --primary-color: rgb(31, 35, 39);
+  --secondary-color: rgb(34, 39, 43);
+  --font-color: rgb(95, 95, 95);
   --bg-color: #161625;
   --heading-color: #818cab;
 }
 
 body {
+  margin: 0;
+
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.42857143;
+
+  background-color: rgb(23, 28, 32);
+  color: #333;
 }

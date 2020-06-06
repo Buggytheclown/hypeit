@@ -1,7 +1,9 @@
 import React from 'react';
 import { ReactComponent as InformationIcon } from '../../assets/img/icons/inform.svg';
+import './header.modules.css';
+import Navigation from '../ui/Navigation/Navigation';
 
-const navigation = [
+const navigationItems = [
   {
     id: 1,
     name: 'About',
@@ -19,20 +21,12 @@ const navigation = [
   },
 ];
 
-const Header = () => {
-  const navigationJSX = navigation.map((item) => (
-    <li key={item.id} className="navigation__item">
-      <p className="nav-item__title">{item.name}</p>
-      <i className="nav-item__icon">{item.icon}</i>
-    </li>
-  ));
-  return (
-    <header className="header">
-      <nav className="navigation">
-        <ul>{navigationJSX}</ul>
-      </nav>
-    </header>
-  );
-};
+const Header = () => (
+  <header className="header">
+    <div className="header__container">
+      <Navigation navigations={navigationItems} />
+    </div>
+  </header>
+);
 
 export default Header;
