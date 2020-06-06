@@ -15,6 +15,8 @@ module.exports = {
     createDefaultProgram: true,
   },
   rules: {
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'react/prop-types': 0,
     'react/jsx-filename-extension': [
       2,
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
@@ -25,6 +27,7 @@ module.exports = {
     ],
     '@typescript-eslint/indent': [2, 2],
     'import/no-unresolved': 'off',
+    'import/prefer-default-export': 'off',
   },
   settings: {
     react: {

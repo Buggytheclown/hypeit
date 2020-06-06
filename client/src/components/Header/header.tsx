@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactComponent as InformationIcon } from '../../assets/img/icons/inform.svg';
 import './header.modules.css';
-import Navigation from '../ui/Navigation/Navigation';
+import { Navigation } from '../Navigation/Navigation';
 
 const navigationItems = [
   {

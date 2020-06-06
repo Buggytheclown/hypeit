@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Pagination = ({ count = 1 }: { count: number }): JSX.Element => (
+const Pagination = ({ count = 1 }: { count: number }) => (
   <div>
     <button type="button">prev</button>
     <button type="button">{count || 1}</button>
