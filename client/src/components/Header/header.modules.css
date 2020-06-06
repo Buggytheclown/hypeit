@@ -1,0 +1,14 @@
+.header {
+  display: flex;
+  justify-content: center;
+
+  background-color: rgb(31, 35, 39);
+}
+
+.header__container {
+  width: var(--colomn-width);
+  padding: 20px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

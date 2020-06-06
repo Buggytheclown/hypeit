@@ -1,7 +1,7 @@
 module.exports = {
   parser: '@typescript-eslint/parser', // Specifies the ESLint parser
   extends: [
-    'airbnb',
+    'airbnb-typescript',
     // 'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
     'plugin:@typescript-eslint/recommended', // Uses the recommended rules from @typescript-eslint/eslint-plugin
   ],
@@ -11,8 +11,12 @@ module.exports = {
     ecmaFeatures: {
       jsx: true, // Allows for the parsing of JSX
     },
+    project: './tsconfig.json',
+    createDefaultProgram: true,
   },
   rules: {
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'react/prop-types': 0,
     'react/jsx-filename-extension': [
       2,
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
@@ -23,6 +27,7 @@ module.exports = {
     ],
     '@typescript-eslint/indent': [2, 2],
     'import/no-unresolved': 'off',
+    'import/prefer-default-export': 'off',
   },
   settings: {
     react: {
