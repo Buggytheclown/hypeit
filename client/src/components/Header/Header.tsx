@@ -2,7 +2,7 @@ import React from 'react';
 import { ReactComponent as InformationIcon } from '../../assets/img/icons/inform.svg';
 import { ReactComponent as FeedIcon } from '../../assets/img/icons/feed.svg';
 import { ReactComponent as LoginIcon } from '../../assets/img/icons/login.svg';
-import './header.modules.css';
+import styles from './header.module.css';
 import { Navigation } from '../Navigation/Navigation';
 
 const navigationItems = [
@@ -25,8 +25,8 @@ const navigationItems = [
 ];
 
 const Header = () => (
-  <header className="header">
-    <div className="header__container">
+  <header className={styles.header}>
+    <div className={styles.header__container}>
       <Navigation navigations={navigationItems} />
     </div>
   </header>
