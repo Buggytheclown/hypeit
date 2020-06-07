@@ -1,0 +1,33 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 13
+        uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
+
+      - name: Install Packages
+        working-directory: ./client
+        run: npm install
+
+      - name: Run lint
+        working-directory: ./client
+        run: npm run lint
+
+      - name: Run test
+        working-directory: ./client
+        run: npm run test:nowatch
