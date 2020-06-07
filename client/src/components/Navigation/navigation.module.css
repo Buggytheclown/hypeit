@@ -43,8 +43,10 @@
   height: 18px;
 }
 
-.navigation__icon_s {
+.navigation__icon_small {
+  padding-left: 5px;
   width: 13px;
+  height: 18px;
 }
 
 .navigation__icon svg {

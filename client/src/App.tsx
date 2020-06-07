@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './components/Header/Header';
 import Pagination from './components/Pagination/Pagination';
 
-export const App: React.FunctionComponent = () => (
+export const App = () => (
   <div className="App" data-theme="dark">
     <div className="container">
       <Header />
@@ -19,5 +19,3 @@ export const App: React.FunctionComponent = () => (
     </div>
   </div>
 );
-
-export default App;
