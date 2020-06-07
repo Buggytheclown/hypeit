@@ -1,5 +1,7 @@
 import React from 'react';
 import { ReactComponent as InformationIcon } from '../../assets/img/icons/inform.svg';
+import { ReactComponent as FeedIcon } from '../../assets/img/icons/feed.svg';
+import { ReactComponent as LoginIcon } from '../../assets/img/icons/login.svg';
 import './header.modules.css';
 import { Navigation } from '../Navigation/Navigation';
 
@@ -12,12 +14,13 @@ const navigationItems = [
   {
     id: 2,
     name: 'Feed',
-    icon: null,
+    icon: <FeedIcon />,
   },
   {
     id: 3,
     name: 'Auth',
-    icon: null,
+    icon: <LoginIcon />,
+    size: 's',
   },
 ];
 
