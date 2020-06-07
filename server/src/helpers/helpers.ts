@@ -133,3 +133,18 @@ export function assert(condition: any, msg?: string): asserts condition {
     throw new Error(msg);
   }
 }
+
+export function isSorted<T, B>(
+  data: T[],
+  {
+    extractor,
+    comparatorGTE = (a, b) => a >= b,
+  }: { extractor: (el: T) => B; comparatorGTE?: (el1: B, el2: B) => boolean },
+): boolean {
+  return data.every((value, index, array) => {
+    return (
+      index === 0 ||
+      comparatorGTE(extractor(array[index - 1]), extractor(value))
+    );
+  });
+}

@@ -3,7 +3,6 @@ import {
   DevtoPostData,
   devtoPostDataSchema,
 } from '../../services/postDelivery/post.interfaces';
-import { writeLog } from '../../helpers/helpers';
 import {
   DevtoRawData,
   DevtoRawDataSchema,
@@ -11,6 +10,7 @@ import {
 } from './devto.interface';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { CustomLoggerService } from '../../services/logger/customLogger.service';
 
 function formatDataTime(dateTime: number): string {
   const parsedTime = moment(dateTime * 1000);
@@ -45,21 +45,25 @@ function parsePosts({
 
 @Injectable()
 export class DevtoParserService {
+  constructor(private readonly cls: CustomLoggerService) {}
+
   parse(rawData: DevtoRawData): DevtoPostData[] {
     const rawDataValidated: DevtoRawData = DevtoRawDataSchema.validateSync(
       rawData,
       { strict: true },
     );
 
-    return rawDataValidated.result.map(post => {
-      try {
-        return devtoPostDataSchema.validateSync(parsePosts(post), {
-          strict: true,
-        });
-      } catch (e) {
-        writeLog('DevtoParserServiceCantparse', post);
-        throw e;
-      }
-    });
+    return rawDataValidated.result
+      .map(post => {
+        try {
+          return devtoPostDataSchema.validateSync(parsePosts(post), {
+            strict: true,
+          });
+        } catch (e) {
+          this.cls.warn(post, `DevtoParserServiceCantparse: ${e.message}`);
+          return null as any;
+        }
+      })
+      .filter(Boolean);
   }
 }
