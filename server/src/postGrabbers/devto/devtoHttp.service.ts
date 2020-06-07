@@ -23,7 +23,7 @@ function simpleGet({
   const queryParams = {
     per_page: postCount,
     page: 0,
-    sort_by: 'positive_reactions_count',
+    sort_by: 'public_reactions_count',
     sort_direction: 'desc',
     approved: '',
     class_name: 'Article',
