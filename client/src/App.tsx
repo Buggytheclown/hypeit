@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from './components/Header/Header';
 import Pagination from './components/Pagination/Pagination';
 import { ThemeSelector } from './components/ThemeSelector/ThemeSelector';
 import { ThemeStatus } from './types';
 
 export const App = () => {
-  const [themeSelector, setThemeSelector] = useState<ThemeStatus>('dark');
-  const [theme, setTheme] = useState<ThemeStatus>('dark');
-
-  useEffect(() => {
-    setTheme(themeSelector);
-  }, [themeSelector]);
+  const [theme, setTheme] = useState<ThemeStatus>(ThemeStatus.DARK);
 
   return (
     <div className="App" data-theme={theme}>
@@ -27,7 +22,7 @@ export const App = () => {
           </div>
         </div>
       </div>
-      <ThemeSelector status={themeSelector} onChange={setThemeSelector} />
+      <ThemeSelector status={theme} onChange={setTheme} />
     </div>
   );
 };

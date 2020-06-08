@@ -1,1 +1,4 @@
-export type ThemeStatus = 'dark' | 'light';
+export enum ThemeStatus {
+  DARK = 'dark',
+  LIGHT = 'light'
+}
