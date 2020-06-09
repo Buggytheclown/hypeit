@@ -21,20 +21,11 @@
   display: flex;
   align-items: baseline;
 
-  color: var(--font-color);
+  color: var(--font-secondary-color);
   text-transform: uppercase;
   text-decoration: none;
 
   transition: var(--default-transition);
-}
-
-.navigation__title:hover {
-  color: var(--font-hover-color);
-}
-
-.navigation__title:hover svg {
-  fill: var(--font-hover-color);
-  stroke: var(--font-hover-color);
 }
 
 .navigation__icon {
@@ -50,8 +41,28 @@
 }
 
 .navigation__icon svg {
-  fill: var(--font-color);
-  stroke: var(--font-color);
+  fill: var(--font-secondary-color);
+  stroke: var(--font-secondary-color);
 
   transition: var(--default-transition);
 }
+
+.navigation__title:hover {
+  color: var(--font-primary-color);
+}
+
+.navigation__title:hover svg {
+  fill: var(--font-primary-color);
+  stroke: var(--font-primary-color);
+}
+
+.navigation__title_active {
+  color: var(--font-primary-color);
+}
+
+.navigation__title_active svg {
+  fill: var(--font-primary-color);
+  stroke: var(--font-primary-color);
+}
+
+

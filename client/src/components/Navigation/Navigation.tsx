@@ -1,10 +1,12 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import styles from './navigation.module.css';
 
 interface IProps {
   id: number;
   name: string;
   icon: React.ReactNode;
+  path?: string
   size?: string;
 }
 
@@ -21,7 +23,7 @@ export const Navigation = ({ navigations }: { navigations: IProps[] }) => {
     }
     return (
       <li key={item.id} className={styles.navigation__item}>
-        <a href="/" className={styles.navigation__title}>
+        <NavLink to={`/${item.path}`} activeClassName={styles.navigation__title_active} className={styles.navigation__title}>
           {item.name}
           {item.icon && (
             <i
@@ -34,7 +36,7 @@ export const Navigation = ({ navigations }: { navigations: IProps[] }) => {
               {item.icon}
             </i>
           )}
-        </a>
+        </NavLink>
       </li>
     );
   });
