@@ -6,7 +6,7 @@
   --heading-color: #292922;
   --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --colomn-width: 650px;
-  --font-transition: 0.2s;
+  --default-transition: 0.2s;
 }
 
 [data-theme='dark'] {

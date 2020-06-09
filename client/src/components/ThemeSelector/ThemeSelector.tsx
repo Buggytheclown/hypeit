@@ -1,18 +1,24 @@
 import React from 'react';
 import './theme-selector.modules.css';
+import { ThemeStatus } from '../../types';
 
-type Status = {
-  status: 'dark' | 'light';
-};
 interface IProps {
-  status: 'dark' | 'light';
-  onChange: (status: Status) => void;
+  status: ThemeStatus;
+  onChange: (status: ThemeStatus) => void;
 }
 
-export const ThemeSelector = ({ status = 'dark', onChange }: IProps) => (
+export const ThemeSelector = ({ status = ThemeStatus.DARK, onChange }: IProps) => (
   <div className="theme-selector">
     <label className="theme-selector__label" htmlFor="theme-selector">
-      <input type="checked" id="theme-selector" />
+      <input
+        onChange={() => onChange(
+          status === ThemeStatus.LIGHT
+            ? ThemeStatus.DARK
+            : ThemeStatus.LIGHT,
+        )}
+        type="checkbox"
+        id="theme-selector"
+      />
       <span className="theme-selector__round" />
     </label>
   </div>

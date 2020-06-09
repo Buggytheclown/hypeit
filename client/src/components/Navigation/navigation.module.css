@@ -25,7 +25,7 @@
   text-transform: uppercase;
   text-decoration: none;
 
-  transition: var(--font-transition);
+  transition: var(--default-transition);
 }
 
 .navigation__title:hover {
@@ -53,5 +53,5 @@
   fill: var(--font-color);
   stroke: var(--font-color);
 
-  transition: var(--font-transition);
+  transition: var(--default-transition);
 }
