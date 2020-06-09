@@ -9,6 +9,7 @@ const navigationItems = [
   {
     id: 1,
     name: 'About',
+    path: 'about',
     icon: <InformationIcon />,
   },
   {
@@ -24,12 +25,10 @@ const navigationItems = [
   },
 ];
 
-const Header = () => (
+export const Header = () => (
   <header className={styles.header}>
     <div className={styles.header__container}>
       <Navigation navigations={navigationItems} />
     </div>
   </header>
 );
-
-export default Header;

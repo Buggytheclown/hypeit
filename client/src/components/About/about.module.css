@@ -1,0 +1,15 @@
+.aboutContainer {
+    color: var(--font-primary-color);
+}
+
+.about__title {
+    text-align: center;
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.about__info {
+    padding-left: 10px;
+
+    list-style-type: none;
+}

@@ -6,7 +6,7 @@
 }
 
 .header__container {
-  width: var(--colomn-width);
+  width: var(--column-width);
   padding: 20px 10px;
   display: flex;
   justify-content: space-between;
