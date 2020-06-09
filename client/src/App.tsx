@@ -20,7 +20,7 @@ export const App = () => {
           <Header />
           <main className="main-content">
             <Switch>
-              <Route activeClassName="selected" path="/about">
+              <Route path="/about">
                 <About />
               </Route>
               <div className="feed__navigation" />
