@@ -6,6 +6,8 @@ import {
 } from '../../services/postDelivery/post.interfaces';
 import { DevtoHttpService } from './devtoHttp.service';
 import { DevtoParserService } from './devtoParser.service';
+import { isSorted } from '../../helpers/helpers';
+import { CustomLoggerService } from '../../services/logger/customLogger.service';
 
 export interface DevtoResourses {
   posts: DevtoPostData[];
@@ -31,12 +33,22 @@ export class DevtoPostGrabberService implements PostGrabber {
   constructor(
     private readonly devtoHttpService: DevtoHttpService,
     private readonly devtoParserService: DevtoParserService,
+    private readonly cls: CustomLoggerService,
   ) {}
+
+  private _ensureSorted<T extends { score: number }>(posts: T[]): T[] {
+    if (!isSorted(posts, { extractor: post => post.score })) {
+      this.cls.warn('DevtoPostGrabberService: posts are not sorted');
+    }
+    return posts;
+  }
 
   getBestOfTheWeek = async (): Promise<DevtoResourses> => {
     return wrapAsResources(
-      this.devtoParserService.parse(
-        await this.devtoHttpService.getBestOfTheWeek(),
+      this._ensureSorted(
+        this.devtoParserService.parse(
+          await this.devtoHttpService.getBestOfTheWeek(),
+        ),
       ),
     );
   };

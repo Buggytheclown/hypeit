@@ -5,7 +5,7 @@ export const mediumData1Parsed = [
     rawTime: '1576703894485',
     link:
       'https://towardsdatascience.com/complex-logic-at-breakneck-speed-try-julia-for-data-science-bcd4dfa23541',
-    clapCount: 150,
+    clapCount: 490,
     voterCount: 28,
     tags: [
       'data science',
@@ -24,7 +24,7 @@ export const mediumData1Parsed = [
     rawTime: '1576604434921',
     link:
       'https://towardsdatascience.com/building-an-image-recommendation-system-for-news-articles-using-word-and-sentence-embeddings-a5acb485a445',
-    clapCount: 54,
+    clapCount: 480,
     voterCount: 16,
     tags: [
       'machine learning',
@@ -42,7 +42,7 @@ export const mediumData1Parsed = [
     rawTime: '1576594120158',
     link:
       'https://towardsdatascience.com/causal-inference-thats-not-a-b-testing-theory-practical-guide-f3c824ac9ed2',
-    clapCount: 307,
+    clapCount: 470,
     voterCount: 22,
     tags: [
       'data science',
@@ -60,7 +60,7 @@ export const mediumData1Parsed = [
     rawTime: '1576502434597',
     link:
       'https://medium.com/young-coder/tech-less-teaching-part-3-de2dc495278c',
-    clapCount: 117,
+    clapCount: 460,
     voterCount: 9,
     tags: ['programming', 'students', 'stem', 'education', 'teaching'],
     externalID: 'de2dc495278c',
@@ -72,7 +72,7 @@ export const mediumData1Parsed = [
     rawTime: '1576364127382',
     link:
       'https://towardsdatascience.com/7-ways-to-make-software-developers-happy-d4b72c07584e',
-    clapCount: 627,
+    clapCount: 450,
     voterCount: 94,
     tags: [
       'software development',
@@ -90,7 +90,7 @@ export const mediumData1Parsed = [
     rawTime: '1576368217617',
     link:
       'https://towardsdatascience.com/the-triune-pipeline-for-three-major-transformers-in-nlp-18c14e20530',
-    clapCount: 59,
+    clapCount: 440,
     voterCount: 11,
     tags: [
       'machine learning',
@@ -108,7 +108,7 @@ export const mediumData1Parsed = [
     rawTime: '1576095335573',
     link:
       'https://medium.com/better-programming/the-surprisingly-simple-solution-for-streaming-data-6f3471c6d408',
-    clapCount: 86,
+    clapCount: 430,
     voterCount: 17,
     tags: ['big data', 'kafka', 'streaming', 'programming'],
     externalID: '6f3471c6d408',
@@ -120,7 +120,7 @@ export const mediumData1Parsed = [
     rawTime: '1576095196485',
     link:
       'https://medium.com/better-programming/secure-aws-api-gateway-with-amazon-cognito-and-aws-lambda-535e7c9ffea1',
-    clapCount: 64,
+    clapCount: 420,
     voterCount: 10,
     tags: ['aws', 'python', 'programming', 'devops', 'security'],
     externalID: '535e7c9ffea1',
@@ -133,7 +133,7 @@ export const mediumData1Parsed = [
     rawTime: '1575901814690',
     link:
       'https://towardsdatascience.com/real-time-object-tracking-with-tensorflow-raspberry-pi-and-pan-tilt-hat-2aeaef47e134',
-    clapCount: 243,
+    clapCount: 410,
     voterCount: 61,
     tags: [
       'raspberry pi',
@@ -151,7 +151,7 @@ export const mediumData1Parsed = [
     rawTime: '1576507797796',
     link:
       'https://medium.com/better-programming/intro-to-designing-for-the-human-mind-4106ce7c291',
-    clapCount: 228,
+    clapCount: 400,
     voterCount: 37,
     tags: ['design', 'ux', 'ui', 'programming', 'startup'],
     externalID: '4106ce7c291',
@@ -163,7 +163,7 @@ export const mediumData1Parsed = [
     rawTime: '1576364400000',
     link:
       'https://towardsdatascience.com/images-as-data-structures-art-through-256-integers-8898bce17230',
-    clapCount: 12,
+    clapCount: 300,
     voterCount: 3,
     tags: [
       'python',
@@ -180,7 +180,7 @@ export const mediumData1Parsed = [
     rawTime: '1576453616989',
     link:
       'https://medium.com/bb-tutorials-and-thoughts/how-to-implement-different-layouts-in-react-38f3686b3388',
-    clapCount: 120,
+    clapCount: 290,
     voterCount: 4,
     tags: [
       'javascript',
@@ -198,7 +198,7 @@ export const mediumData1Parsed = [
     rawTime: '1575912188929',
     link:
       'https://medium.com/young-coder/tech-less-teaching-part-3-de2dc495278c',
-    clapCount: 117,
+    clapCount: 280,
     voterCount: 9,
     tags: ['programming', 'students', 'stem', 'education', 'teaching'],
     externalID: 'de2dc495278c',
@@ -210,7 +210,7 @@ export const mediumData1Parsed = [
     rawTime: '1576443856021',
     link:
       'https://medium.com/@sukhrobgolibboev/build-binary-expression-tree-in-python-36c04123e57b',
-    clapCount: 10,
+    clapCount: 270,
     voterCount: 4,
     tags: ['programming', 'trees', 'data structures', 'binary tree', 'python'],
     externalID: '36c04123e57b',
@@ -222,7 +222,7 @@ export const mediumData1Parsed = [
     rawTime: '1576473142450',
     link:
       'https://towardsdatascience.com/my-top-3-sql-interview-questions-8a42597e8505',
-    clapCount: 75,
+    clapCount: 260,
     voterCount: 35,
     tags: [
       'sql',
@@ -241,7 +241,7 @@ export const mediumData1Parsed = [
     rawTime: '1576185104104',
     link:
       'https://medium.com/better-programming/app-intro-with-react-native-expo-and-airbnb-lottie-part-4-681e38f04cc6',
-    clapCount: 430,
+    clapCount: 250,
     voterCount: 15,
     tags: ['javascript', 'react native', 'expo', 'programming', 'mobile'],
     externalID: '681e38f04cc6',
@@ -254,7 +254,7 @@ export const mediumData1Parsed = [
     rawTime: '1576185069767',
     link:
       'https://medium.com/better-programming/app-intro-with-react-native-expo-and-airbnb-lottie-part-3-16694d93ec52',
-    clapCount: 363,
+    clapCount: 240,
     voterCount: 12,
     tags: ['javascript', 'react native', 'expo', 'programming', 'mobile'],
     externalID: '16694d93ec52',
@@ -267,7 +267,7 @@ export const mediumData1Parsed = [
     rawTime: '1576185014872',
     link:
       'https://medium.com/better-programming/app-intro-with-react-native-expo-and-airbnb-lottie-part-2-ca94727af20f',
-    clapCount: 266,
+    clapCount: 230,
     voterCount: 11,
     tags: ['javascript', 'react native', 'expo', 'programming', 'mobile'],
     externalID: 'ca94727af20f',
@@ -279,7 +279,7 @@ export const mediumData1Parsed = [
     rawTime: '1576471653394',
     link:
       'https://towardsdatascience.com/scraping-data-behind-site-logins-with-python-ee0676f523ee',
-    clapCount: 84,
+    clapCount: 220,
     voterCount: 38,
     tags: [
       'web scraping',
@@ -298,7 +298,7 @@ export const mediumData1Parsed = [
     rawTime: '1576183576398',
     link:
       'https://medium.com/better-programming/app-intro-with-react-native-expo-and-airbnb-lottie-668af1dbe401',
-    clapCount: 668,
+    clapCount: 210,
     voterCount: 40,
     tags: ['javascript', 'expo', 'react native', 'programming', 'mobile'],
     externalID: '668af1dbe401',
@@ -310,7 +310,7 @@ export const mediumData1Parsed = [
     rawTime: '1576345381978',
     link:
       'https://medium.com/better-programming/typescript-jest-testing-challenges-c010eaa8f3f2',
-    clapCount: 113,
+    clapCount: 200,
     voterCount: 6,
     tags: ['javascript', 'typescript', 'jest', 'programming', 'tdd'],
     externalID: 'c010eaa8f3f2',
@@ -322,7 +322,7 @@ export const mediumData1Parsed = [
     rawTime: '1576362393411',
     link:
       'https://medium.com/better-programming/introduction-to-flutter-animations-using-animatedcontainer-96a335cad2ca',
-    clapCount: 80,
+    clapCount: 190,
     voterCount: 13,
     tags: [
       'flutter',
@@ -340,7 +340,7 @@ export const mediumData1Parsed = [
     rawTime: '1576466204190',
     link:
       'https://medium.com/better-programming/progressive-web-apps-an-overview-c6e4328ef2d2',
-    clapCount: 401,
+    clapCount: 180,
     voterCount: 50,
     tags: ['web development', 'programming', 'javascript', 'technology', 'pwa'],
     externalID: 'c6e4328ef2d2',
@@ -352,7 +352,7 @@ export const mediumData1Parsed = [
     rawTime: '1508772027033',
     link:
       'https://medium.com/better-programming/mvvm-in-ios-from-net-perspective-580eb7f4f129',
-    clapCount: 2841,
+    clapCount: 170,
     voterCount: 512,
     tags: ['ios', 'programming', 'mobile', 'swift', 'xcode'],
     externalID: '580eb7f4f129',
@@ -364,7 +364,7 @@ export const mediumData1Parsed = [
     rawTime: '1576460918207',
     link:
       'https://medium.com/better-programming/six-years-of-lessons-what-i-learned-as-an-android-developer-a825b55db7f0',
-    clapCount: 230,
+    clapCount: 160,
     voterCount: 38,
     tags: ['android', 'programming', 'mobile', 'java', 'kotlin'],
     externalID: 'a825b55db7f0',
@@ -376,7 +376,7 @@ export const mediumData1Parsed = [
     rawTime: '1576271740430',
     link:
       'https://medium.com/better-programming/pearls-of-wisdom-for-the-junior-developer-a906e708d4e6',
-    clapCount: 196,
+    clapCount: 150,
     voterCount: 33,
     tags: [
       'programming',
@@ -394,7 +394,7 @@ export const mediumData1Parsed = [
     rawTime: '1576459226568',
     link:
       'https://medium.com/better-programming/create-a-star-wars-title-crawl-in-html-c25a76fea401',
-    clapCount: 121,
+    clapCount: 140,
     voterCount: 15,
     tags: ['css', 'star wars', 'javascript', 'html', 'programming'],
     externalID: 'c25a76fea401',
@@ -406,7 +406,7 @@ export const mediumData1Parsed = [
     rawTime: '1576225783739',
     link:
       'https://medium.com/better-programming/typescript-and-node-js-a-simple-guide-to-creating-rest-apis-7bfac9f58b34',
-    clapCount: 186,
+    clapCount: 130,
     voterCount: 18,
     tags: [
       'javascript',
@@ -424,7 +424,7 @@ export const mediumData1Parsed = [
     rawTime: '1576281600000',
     link:
       'https://medium.com/better-programming/how-unix-works-everything-you-were-too-afraid-to-ask-f8396aeb2763',
-    clapCount: 217,
+    clapCount: 120,
     voterCount: 39,
     tags: [
       'software development',
@@ -442,7 +442,7 @@ export const mediumData1Parsed = [
     rawTime: '1576455844220',
     link:
       'https://medium.com/better-programming/2020-002-my-perfect-2020-stack-43be78df37dd',
-    clapCount: 1497,
+    clapCount: 110,
     voterCount: 388,
     tags: [
       'javascript',
@@ -460,7 +460,7 @@ export const mediumData1Parsed = [
     rawTime: '1576455263878',
     link:
       'https://medium.com/better-programming/5-ios-libraries-to-ignite-the-designer-in-you-4e33cc68eabc',
-    clapCount: 194,
+    clapCount: 100,
     voterCount: 33,
     tags: ['ios', 'design', 'dribble', 'programming', 'software development'],
     externalID: '4e33cc68eabc',
@@ -471,7 +471,7 @@ export const mediumData1Parsed = [
     time: '2019-12-12 14:32:20',
     rawTime: '1576161140954',
     link: 'https://medium.com/better-programming/people-and-code-edce63291010',
-    clapCount: 93,
+    clapCount: 90,
     voterCount: 7,
     tags: [
       'programming',
@@ -489,7 +489,7 @@ export const mediumData1Parsed = [
     rawTime: '1576453909968',
     link:
       'https://medium.com/better-programming/my-interview-experience-with-microsoft-754039df9103',
-    clapCount: 208,
+    clapCount: 80,
     voterCount: 37,
     tags: ['interview', 'internships', 'programming', 'career', 'code'],
     externalID: '754039df9103',
@@ -501,7 +501,7 @@ export const mediumData1Parsed = [
     rawTime: '1576453832890',
     link:
       'https://medium.com/better-programming/introduction-to-functional-programming-in-python-3d26cd9cbfd7',
-    clapCount: 106,
+    clapCount: 70,
     voterCount: 22,
     tags: [
       'functional programming',
@@ -519,7 +519,7 @@ export const mediumData1Parsed = [
     rawTime: '1576452579025',
     link:
       'https://medium.com/better-programming/20-methods-to-get-to-know-javascript-array-operations-6935e757729b',
-    clapCount: 257,
+    clapCount: 60,
     voterCount: 23,
     tags: [
       'javascript',

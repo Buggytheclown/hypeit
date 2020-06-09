@@ -8,6 +8,8 @@ import {
 } from '../../services/postDelivery/post.interfaces';
 import { MediumRawData } from './medium.interface';
 import * as _ from 'lodash';
+import { CustomLoggerService } from '../../services/logger/customLogger.service';
+import { isSorted } from '../../helpers/helpers';
 
 export interface MediumResourses {
   posts: MediumPostData[];
@@ -17,6 +19,7 @@ export interface MediumResourses {
 function proceedPosts(
   rawPosts: Promise<MediumRawData[]>,
   mediumParserService: MediumParserService,
+  ensureSorted: (els: MediumPostData[]) => MediumPostData[],
 ): Promise<{
   posts: MediumPostData[];
   resource: PostResources.MEDIUM;
@@ -24,6 +27,7 @@ function proceedPosts(
   return rawPosts
     .then(pages => pages.map(mediumParserService.parse))
     .then(_.flatten)
+    .then(ensureSorted)
     .then(posts => ({ posts, resource: PostResources.MEDIUM }));
 }
 
@@ -34,12 +38,23 @@ export class MediumPostGrabberService implements PostGrabber {
   constructor(
     private readonly mediumParserService: MediumParserService,
     private readonly mediumHttpService: MediumHttpService,
+    private readonly cls: CustomLoggerService,
   ) {}
+
+  private _ensureSorted = <T extends { clapCount: number }>(
+    posts: T[],
+  ): T[] => {
+    if (!isSorted(posts, { extractor: post => post.clapCount })) {
+      this.cls.warn('MediumPostGrabberService: posts are not sorted');
+    }
+    return posts;
+  };
 
   getBestOfTheWeek = async (): Promise<MediumResourses> => {
     return proceedPosts(
       this.mediumHttpService.getBestOfTheWeek(),
       this.mediumParserService,
+      this._ensureSorted,
     );
   };
 
@@ -47,6 +62,7 @@ export class MediumPostGrabberService implements PostGrabber {
     return proceedPosts(
       this.mediumHttpService.getBestOfTheMonth(),
       this.mediumParserService,
+      this._ensureSorted,
     );
   };
 }

@@ -6,7 +6,7 @@ import {
 import * as moment from 'moment';
 import { MediumRawData, MediumRawDataSchema } from './medium.interface';
 import * as _ from 'lodash';
-import { writeLog } from '../../helpers/helpers';
+import { CustomLoggerService } from '../../services/logger/customLogger.service';
 
 function formatDataTime(dateTime?: number): string {
   const format = 'YYYY-MM-DD HH:mm:ss';
@@ -22,6 +22,8 @@ function formatDataTime(dateTime?: number): string {
 
 @Injectable()
 export class MediumParserService {
+  constructor(private readonly cls: CustomLoggerService) {}
+
   parse(mediumRawData: MediumRawData): MediumPostData[] {
     const mediumRawDataValidated: MediumRawData = MediumRawDataSchema.validateSync(
       mediumRawData,
@@ -37,27 +39,31 @@ export class MediumParserService {
       // ...topic.popularPosts.postPreviews,
     ].map(({ post }) => post);
 
-    return posts.map(post => {
-      const rawTime = post.firstPublishedAt || post.updatedAt;
-      try {
-        return mediumPostDataSchema.validateSync(
-          {
-            title: post.title,
-            time: formatDataTime(rawTime),
-            rawTime: rawTime ? String(rawTime) : null,
-            link: post.mediumUrl,
-            clapCount: post.clapCount,
-            voterCount: post.voterCount,
-            tags: post.tags.map(({ displayTitle }) => _.toLower(displayTitle)),
-            externalID: post.id,
-            imageLink: `https://miro.medium.com/max/334/${post.previewImage.id}`,
-          },
-          { strict: true },
-        );
-      } catch (e) {
-        writeLog('MediumParserServiceCantParse', post);
-        throw e;
-      }
-    });
+    return posts
+      .map(post => {
+        const rawTime = post.firstPublishedAt || post.updatedAt;
+        try {
+          return mediumPostDataSchema.validateSync(
+            {
+              title: post.title,
+              time: formatDataTime(rawTime),
+              rawTime: rawTime ? String(rawTime) : null,
+              link: post.mediumUrl,
+              clapCount: post.clapCount,
+              voterCount: post.voterCount,
+              tags: post.tags.map(({ displayTitle }) =>
+                _.toLower(displayTitle),
+              ),
+              externalID: post.id,
+              imageLink: `https://miro.medium.com/max/334/${post.previewImage.id}`,
+            },
+            { strict: true },
+          );
+        } catch (e) {
+          this.cls.warn(post, `MediumParserServiceCantParse: ${e.message}`);
+          return null as any;
+        }
+      })
+      .filter(Boolean);
   }
 }

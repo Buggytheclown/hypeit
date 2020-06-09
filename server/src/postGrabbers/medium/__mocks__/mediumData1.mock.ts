@@ -22,7 +22,7 @@ export const mediumData1Mock = {
                 'Complex logic at breakneck speed: Try Julia for data science',
               mediumUrl:
                 'https://towardsdatascience.com/complex-logic-at-breakneck-speed-try-julia-for-data-science-bcd4dfa23541',
-              clapCount: 150,
+              clapCount: 490,
               voterCount: 28,
               tags: [
                 {
@@ -85,7 +85,7 @@ export const mediumData1Mock = {
                 'Building An Image Recommendation System For News Articles using Word and Sentence Embeddings',
               mediumUrl:
                 'https://towardsdatascience.com/building-an-image-recommendation-system-for-news-articles-using-word-and-sentence-embeddings-a5acb485a445',
-              clapCount: 54,
+              clapCount: 480,
               voterCount: 16,
               tags: [
                 {
@@ -148,7 +148,7 @@ export const mediumData1Mock = {
                 'Causal Inference that’s not A/B Testing: Theory & Practical Guide',
               mediumUrl:
                 'https://towardsdatascience.com/causal-inference-thats-not-a-b-testing-theory-practical-guide-f3c824ac9ed2',
-              clapCount: 307,
+              clapCount: 470,
               voterCount: 22,
               tags: [
                 {
@@ -210,7 +210,7 @@ export const mediumData1Mock = {
               title: 'Bad Assumptions Make Bad Code',
               mediumUrl:
                 'https://medium.com/young-coder/tech-less-teaching-part-3-de2dc495278c',
-              clapCount: 117,
+              clapCount: 460,
               voterCount: 9,
               tags: [
                 {
@@ -272,7 +272,7 @@ export const mediumData1Mock = {
               title: '7 Ways To Make Software Developers Happy',
               mediumUrl:
                 'https://towardsdatascience.com/7-ways-to-make-software-developers-happy-d4b72c07584e',
-              clapCount: 627,
+              clapCount: 450,
               voterCount: 94,
               tags: [
                 {
@@ -334,7 +334,7 @@ export const mediumData1Mock = {
               title: 'The Triune Pipeline, for Three Major Transformers in NLP',
               mediumUrl:
                 'https://towardsdatascience.com/the-triune-pipeline-for-three-major-transformers-in-nlp-18c14e20530',
-              clapCount: 59,
+              clapCount: 440,
               voterCount: 11,
               tags: [
                 {
@@ -396,7 +396,7 @@ export const mediumData1Mock = {
               title: 'The Surprisingly Simple Solution for Streaming Data',
               mediumUrl:
                 'https://medium.com/better-programming/the-surprisingly-simple-solution-for-streaming-data-6f3471c6d408',
-              clapCount: 86,
+              clapCount: 430,
               voterCount: 17,
               tags: [
                 {
@@ -456,7 +456,7 @@ export const mediumData1Mock = {
                 'Secure an AWS API Gateway With Amazon Cognito and AWS Lambda',
               mediumUrl:
                 'https://medium.com/better-programming/secure-aws-api-gateway-with-amazon-cognito-and-aws-lambda-535e7c9ffea1',
-              clapCount: 64,
+              clapCount: 420,
               voterCount: 10,
               tags: [
                 {
@@ -519,7 +519,7 @@ export const mediumData1Mock = {
                 'Real-time Object Tracking with TensorFlow, Raspberry Pi, and Pan-Tilt HAT',
               mediumUrl:
                 'https://towardsdatascience.com/real-time-object-tracking-with-tensorflow-raspberry-pi-and-pan-tilt-hat-2aeaef47e134',
-              clapCount: 243,
+              clapCount: 410,
               voterCount: 61,
               tags: [
                 {
@@ -581,7 +581,7 @@ export const mediumData1Mock = {
               title: 'Design Principles for Programmers',
               mediumUrl:
                 'https://medium.com/better-programming/intro-to-designing-for-the-human-mind-4106ce7c291',
-              clapCount: 228,
+              clapCount: 400,
               voterCount: 37,
               tags: [
                 {
@@ -661,7 +661,7 @@ export const mediumData1Mock = {
                   id: 'b54061b5d17e',
                   mediumUrl:
                     'https://medium.com/@mc999/writing-my-first-algorithm-in-rails-without-even-knowing-it-b54061b5d17e',
-                  clapCount: 1,
+                  clapCount: 390,
                   voterCount: 1,
                   tags: [
                     {
@@ -705,7 +705,7 @@ export const mediumData1Mock = {
                   id: 'fdf2a4be2dc0',
                   mediumUrl:
                     'https://medium.com/better-programming/an-introduction-to-recursion-fdf2a4be2dc0',
-                  clapCount: 55,
+                  clapCount: 380,
                   voterCount: 6,
                   tags: [
                     {
@@ -751,7 +751,7 @@ export const mediumData1Mock = {
                   id: '1196088b7d9f',
                   mediumUrl:
                     'https://medium.com/better-programming/thinking-about-console-log-usage-in-react-1196088b7d9f',
-                  clapCount: 58,
+                  clapCount: 370,
                   voterCount: 5,
                   tags: [
                     {
@@ -794,7 +794,7 @@ export const mediumData1Mock = {
                   id: '2ff9468d11ad',
                   mediumUrl:
                     'https://medium.com/better-programming/making-a-pagination-bar-with-react-paginate-and-rails-will-paginate-gem-2ff9468d11ad',
-                  clapCount: 104,
+                  clapCount: 360,
                   voterCount: 4,
                   tags: [
                     {
@@ -841,7 +841,7 @@ export const mediumData1Mock = {
                   id: 'e502350ff51a',
                   mediumUrl:
                     'https://medium.com/better-programming/blog-posts-and-programming-7-reasons-to-write-e502350ff51a',
-                  clapCount: 296,
+                  clapCount: 350,
                   voterCount: 34,
                   tags: [
                     {
@@ -887,7 +887,7 @@ export const mediumData1Mock = {
                   id: '1acd3e947a16',
                   mediumUrl:
                     'https://medium.com/better-programming/blazing-blade-building-a-simple-api-with-rails-1acd3e947a16',
-                  clapCount: 297,
+                  clapCount: 340,
                   voterCount: 17,
                   tags: [
                     {
@@ -933,7 +933,7 @@ export const mediumData1Mock = {
                   id: '5de72d6a58ae',
                   mediumUrl:
                     'https://medium.com/better-programming/the-joy-of-regular-expressions-part-2-character-classes-5de72d6a58ae',
-                  clapCount: 53,
+                  clapCount: 330,
                   voterCount: 4,
                   tags: [
                     {
@@ -980,7 +980,7 @@ export const mediumData1Mock = {
                   id: '539dc581e282',
                   mediumUrl:
                     'https://medium.com/better-programming/the-joy-of-regular-expressions-part-1-what-is-regex-539dc581e282',
-                  clapCount: 167,
+                  clapCount: 320,
                   voterCount: 10,
                   tags: [
                     {
@@ -1024,7 +1024,7 @@ export const mediumData1Mock = {
                   id: 'aa8174c4b632',
                   mediumUrl:
                     'https://medium.com/better-programming/breaking-down-orm-and-ruby-aa8174c4b632',
-                  clapCount: 206,
+                  clapCount: 310,
                   voterCount: 19,
                   tags: [
                     {
@@ -1077,7 +1077,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://towardsdatascience.com/images-as-data-structures-art-through-256-integers-8898bce17230',
-              clapCount: 12,
+              clapCount: 300,
               voterCount: 3,
               tags: [
                 {
@@ -1135,7 +1135,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/bb-tutorials-and-thoughts/how-to-implement-different-layouts-in-react-38f3686b3388',
-              clapCount: 120,
+              clapCount: 290,
               voterCount: 4,
               tags: [
                 {
@@ -1195,7 +1195,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/young-coder/tech-less-teaching-part-3-de2dc495278c',
-              clapCount: 117,
+              clapCount: 280,
               voterCount: 9,
               tags: [
                 {
@@ -1256,7 +1256,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/@sukhrobgolibboev/build-binary-expression-tree-in-python-36c04123e57b',
-              clapCount: 10,
+              clapCount: 270,
               voterCount: 4,
               tags: [
                 {
@@ -1311,7 +1311,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://towardsdatascience.com/my-top-3-sql-interview-questions-8a42597e8505',
-              clapCount: 75,
+              clapCount: 260,
               voterCount: 35,
               tags: [
                 {
@@ -1372,7 +1372,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/app-intro-with-react-native-expo-and-airbnb-lottie-part-4-681e38f04cc6',
-              clapCount: 430,
+              clapCount: 250,
               voterCount: 15,
               tags: [
                 {
@@ -1433,7 +1433,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/app-intro-with-react-native-expo-and-airbnb-lottie-part-3-16694d93ec52',
-              clapCount: 363,
+              clapCount: 240,
               voterCount: 12,
               tags: [
                 {
@@ -1494,7 +1494,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/app-intro-with-react-native-expo-and-airbnb-lottie-part-2-ca94727af20f',
-              clapCount: 266,
+              clapCount: 230,
               voterCount: 11,
               tags: [
                 {
@@ -1556,7 +1556,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://towardsdatascience.com/scraping-data-behind-site-logins-with-python-ee0676f523ee',
-              clapCount: 84,
+              clapCount: 220,
               voterCount: 38,
               tags: [
                 {
@@ -1617,7 +1617,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/app-intro-with-react-native-expo-and-airbnb-lottie-668af1dbe401',
-              clapCount: 668,
+              clapCount: 210,
               voterCount: 40,
               tags: [
                 {
@@ -1678,7 +1678,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/typescript-jest-testing-challenges-c010eaa8f3f2',
-              clapCount: 113,
+              clapCount: 200,
               voterCount: 6,
               tags: [
                 {
@@ -1739,7 +1739,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/introduction-to-flutter-animations-using-animatedcontainer-96a335cad2ca',
-              clapCount: 80,
+              clapCount: 190,
               voterCount: 13,
               tags: [
                 {
@@ -1800,7 +1800,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/progressive-web-apps-an-overview-c6e4328ef2d2',
-              clapCount: 401,
+              clapCount: 180,
               voterCount: 50,
               tags: [
                 {
@@ -1861,7 +1861,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/mvvm-in-ios-from-net-perspective-580eb7f4f129',
-              clapCount: 2841,
+              clapCount: 170,
               voterCount: 512,
               tags: [
                 {
@@ -1922,7 +1922,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/six-years-of-lessons-what-i-learned-as-an-android-developer-a825b55db7f0',
-              clapCount: 230,
+              clapCount: 160,
               voterCount: 38,
               tags: [
                 {
@@ -1984,7 +1984,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/pearls-of-wisdom-for-the-junior-developer-a906e708d4e6',
-              clapCount: 196,
+              clapCount: 150,
               voterCount: 33,
               tags: [
                 {
@@ -2044,7 +2044,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/create-a-star-wars-title-crawl-in-html-c25a76fea401',
-              clapCount: 121,
+              clapCount: 140,
               voterCount: 15,
               tags: [
                 {
@@ -2104,7 +2104,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/typescript-and-node-js-a-simple-guide-to-creating-rest-apis-7bfac9f58b34',
-              clapCount: 186,
+              clapCount: 130,
               voterCount: 18,
               tags: [
                 {
@@ -2166,7 +2166,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/how-unix-works-everything-you-were-too-afraid-to-ask-f8396aeb2763',
-              clapCount: 217,
+              clapCount: 120,
               voterCount: 39,
               tags: [
                 {
@@ -2227,7 +2227,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/2020-002-my-perfect-2020-stack-43be78df37dd',
-              clapCount: 1497,
+              clapCount: 110,
               voterCount: 388,
               tags: [
                 {
@@ -2288,7 +2288,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/5-ios-libraries-to-ignite-the-designer-in-you-4e33cc68eabc',
-              clapCount: 194,
+              clapCount: 100,
               voterCount: 33,
               tags: [
                 {
@@ -2349,7 +2349,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/people-and-code-edce63291010',
-              clapCount: 93,
+              clapCount: 90,
               voterCount: 7,
               tags: [
                 {
@@ -2409,7 +2409,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/my-interview-experience-with-microsoft-754039df9103',
-              clapCount: 208,
+              clapCount: 80,
               voterCount: 37,
               tags: [
                 {
@@ -2469,7 +2469,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/introduction-to-functional-programming-in-python-3d26cd9cbfd7',
-              clapCount: 106,
+              clapCount: 70,
               voterCount: 22,
               tags: [
                 {
@@ -2529,7 +2529,7 @@ export const mediumData1Mock = {
               __typename: 'Post',
               mediumUrl:
                 'https://medium.com/better-programming/20-methods-to-get-to-know-javascript-array-operations-6935e757729b',
-              clapCount: 257,
+              clapCount: 60,
               voterCount: 23,
               tags: [
                 {
@@ -2644,7 +2644,7 @@ export const mediumData1Mock = {
               id: 'c1b5fa96f43a',
               mediumUrl:
                 'https://medium.com/better-programming/how-to-replace-your-python-for-loops-with-map-filter-and-reduce-c1b5fa96f43a',
-              clapCount: 1684,
+              clapCount: 50,
               voterCount: 571,
               tags: [
                 {
@@ -2690,7 +2690,7 @@ export const mediumData1Mock = {
               id: '43be78df37dd',
               mediumUrl:
                 'https://medium.com/better-programming/2020-002-my-perfect-2020-stack-43be78df37dd',
-              clapCount: 1497,
+              clapCount: 40,
               voterCount: 388,
               tags: [
                 {
@@ -2735,7 +2735,7 @@ export const mediumData1Mock = {
               id: 'e01edba0d81',
               mediumUrl:
                 'https://medium.com/better-programming/how-to-start-using-map-filter-and-reduce-e01edba0d81',
-              clapCount: 2604,
+              clapCount: 30,
               voterCount: 804,
               tags: [
                 {
@@ -2780,7 +2780,7 @@ export const mediumData1Mock = {
               id: 'afb8b110d9a0',
               mediumUrl:
                 'https://towardsdatascience.com/20-predictions-about-software-development-trends-in-2020-afb8b110d9a0',
-              clapCount: 1303,
+              clapCount: 20,
               voterCount: 308,
               tags: [
                 {
@@ -2825,7 +2825,7 @@ export const mediumData1Mock = {
               id: '6970a55a444b',
               mediumUrl:
                 'https://medium.com/better-programming/5-rules-of-code-6970a55a444b',
-              clapCount: 276,
+              clapCount: 10,
               voterCount: 89,
               tags: [
                 {

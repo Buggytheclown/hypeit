@@ -14,20 +14,20 @@ export interface PostGrabber {
 }
 
 const basePostDataFields = {
-  title: yup.string(),
-  time: yup.string(),
+  title: yup.string().required(),
+  time: yup.string().required(),
   rawTime: yup.string(),
-  link: yup.string(),
-  tags: yup.array(yup.string()),
-  externalID: yup.string(),
+  link: yup.string().required(),
+  tags: yup.array(yup.string()).ensure(),
+  externalID: yup.string().required(),
   imageLink: yup.string().nullable(),
 };
 
 export const postDataSchema = yup.object(basePostDataFields);
 
 const mediumPostRatingInfoFields = {
-  clapCount: yup.number(),
-  voterCount: yup.number(),
+  clapCount: yup.number().required(),
+  voterCount: yup.number().required(),
 };
 
 const mediumPostRatingInfoSchema = yup.object(mediumPostRatingInfoFields);
@@ -42,8 +42,8 @@ export const mediumPostDataSchema = yup.object({
 });
 
 const habrPostRatingInfoFields = {
-  totalVotes: yup.number(),
-  totalViews: yup.number(),
+  totalVotes: yup.number().required(),
+  totalViews: yup.number().required(),
 };
 
 const habrPostRatingInfoSchema = yup.object(habrPostRatingInfoFields);
@@ -58,7 +58,7 @@ export const habrPostDataSchema = yup.object({
 });
 
 const devtoPostRatingInfoFields = {
-  score: yup.number(),
+  score: yup.number().required(),
 };
 
 const devtoPostRatingInfoSchema = yup.object(devtoPostRatingInfoFields);
