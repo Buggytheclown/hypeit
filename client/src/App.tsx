@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,9 +13,13 @@ import { ThemeStatus } from './types';
 export const App = () => {
   const [theme, setTheme] = useState<ThemeStatus>(ThemeStatus.DARK);
 
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+  }, [theme]);
+
   return (
     <Router>
-      <div className="App" data-theme={theme}>
+      <div className="App">
         <div className="container">
           <Header />
           <main className="main-content">
