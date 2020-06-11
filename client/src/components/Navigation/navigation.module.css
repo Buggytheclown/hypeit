@@ -21,7 +21,8 @@
   display: flex;
   align-items: baseline;
 
-  color: var(--font-secondary-color);
+  
+  color: var(--font-header-primary-color);
   text-transform: uppercase;
   text-decoration: none;
 
@@ -41,28 +42,28 @@
 }
 
 .navigation__icon svg {
-  fill: var(--font-secondary-color);
-  stroke: var(--font-secondary-color);
+  fill: var(--font-header-primary-color);
+  stroke: var(--font-header-primary-color);
 
   transition: var(--default-transition);
 }
 
 .navigation__title:hover {
-  color: var(--font-primary-color);
+  color: var(--font-header-secondary-color);
 }
 
 .navigation__title:hover svg {
-  fill: var(--font-primary-color);
-  stroke: var(--font-primary-color);
+  fill: var(--font-header-secondary-color);
+  stroke: var(--font-header-secondary-color);
 }
 
 .navigation__title_active {
-  color: var(--font-primary-color);
+  color: var(--font-header-primary-color);
 }
 
 .navigation__title_active svg {
-  fill: var(--font-primary-color);
-  stroke: var(--font-primary-color);
+  fill: var(--font-header-primary-color);
+  stroke: var(--font-header-primary-color);
 }
 
 

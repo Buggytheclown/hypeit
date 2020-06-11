@@ -1,12 +1,18 @@
 :root {
-  --primary-color: #302ae6;
+  --primary-color: #8ac858;
   --secondary-color: #536390;
-  --font-primary-color: rgba(255, 255, 255, 0.7);
-  --font-secondary-color: #424242;
+
+  --font-primary-color: rgb(117, 117, 117);
+  --font-secondary-color: rgb(33, 33, 33);
+
+  --font-header-primary-color: rgb(216, 255, 188);
+  --font-header-secondary-color: rgb(255, 255, 255);
+
   --link-primary-color: #337ab7;
 
   --bg-color: #fff;
   --heading-color: #292922;
+
   --font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
   --column-width: 650px;
   --default-transition: 0.2s;
@@ -15,11 +21,16 @@
 [data-theme='dark'] {
   --primary-color: rgb(31, 35, 39);
   --secondary-color: rgb(34, 39, 43);
-  --font-primary-color: rgba(255, 255, 255, 0.7);
-  --font-secondary-color: rgb(95, 95, 95);
+
+  --font-primary-color: rgb(125, 125, 125);
+  --font-secondary-color: rgb(191, 191, 191);
+
+  --font-header-primary-color: rgb(95, 95, 95);
+  --font-header-secondary-color: rgba(255, 255, 255, 0.7);
+
   --link-primary-color: #337ab7;
 
-  --bg-color: #161625;
+  --bg-color: rgb(23, 28, 32);
   --heading-color: #818cab;
 }
 
@@ -31,8 +42,8 @@ body {
   line-height: 1.42857143;
   font-weight: 400;
 
-  background-color: rgb(23, 28, 32);
-  color: #333;
+  background-color: var(--bg-color);
+  color: var(--font-primary-color)
 }
 
 .main-content {
