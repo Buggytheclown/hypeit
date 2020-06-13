@@ -15,6 +15,7 @@ const navigationItems = [
   {
     id: 2,
     name: 'Feed',
+    path: '/',
     icon: <FeedIcon />,
   },
   {

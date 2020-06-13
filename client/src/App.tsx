@@ -7,6 +7,7 @@ import {
 import { Header } from './components/Header/Header';
 import Pagination from './components/Pagination/Pagination';
 import { About } from './components/About/About';
+import { Feeds } from './containers/Feeds/Feeds';
 import { ThemeSelector } from './components/ThemeSelector/ThemeSelector';
 import { ThemeStatus } from './types';
 
@@ -26,6 +27,9 @@ export const App = () => {
             <Switch>
               <Route path="/about">
                 <About />
+              </Route>
+              <Route path="/">
+                <Feeds />
               </Route>
               <div className="feed__navigation" />
               <div className="feed__count" />

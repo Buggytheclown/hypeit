@@ -23,7 +23,7 @@ export const Navigation = ({ navigations }: { navigations: IProps[] }) => {
     }
     return (
       <li key={item.id} className={styles.navigation__item}>
-        <NavLink to={`/${item.path}`} activeClassName={styles.navigation__title_active} className={styles.navigation__title}>
+        <NavLink to={`${item.path}`} activeClassName={styles.navigation__title_active} className={styles.navigation__title}>
           {item.name}
           {item.icon && (
             <i
