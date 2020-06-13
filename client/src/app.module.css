@@ -1,0 +1,7 @@
+.mainContainer {
+  width: var(--column-width);
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+}

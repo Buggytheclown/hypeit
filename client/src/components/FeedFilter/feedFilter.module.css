@@ -1,0 +1,29 @@
+.feedFilter {
+    font-size: 20px;
+    text-align: center;
+}
+
+.feedFilter__link {
+    text-decoration: none;
+    color: var(--font-primary-color);
+    transition: var(--default-transition);
+
+    padding-right: 5px;
+}
+
+.feedFilter__link:last-of-type {
+    padding-right: 0;
+}
+
+.feedFilter__link:hover {
+    color: var(--font-secondary-color);
+}
+
+.feedFilter__link_active {
+    text-decoration: none;
+}
+
+.totalPosts {
+    margin: 5px 0;
+    color: var(--font-secondary-color);
+}

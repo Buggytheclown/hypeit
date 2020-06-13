@@ -3,6 +3,7 @@
     flex-direction: column;
     flex-grow: 1;
     padding: 1rem;
+    margin: 1rem 0;
 
     max-height: 250px;
     overflow: auto;

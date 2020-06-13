@@ -50,13 +50,6 @@ body {
   color: var(--font-primary-color)
 }
 
-.main-content {
-  width: var(--column-width);
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .link {
   color: var(--link-primary-color);
   text-decoration: none;
