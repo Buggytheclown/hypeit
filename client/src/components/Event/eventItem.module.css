@@ -1,0 +1,24 @@
+.eventItem {
+    display: flex;
+    align-items: center;
+}
+
+.eventItem__time {
+    display: flex;
+    flex-direction: column;
+    min-width: 110px;
+
+    color: var(--font-primary-color);
+}
+
+.eventItem__title a {
+    color: var(--font-secondary-color);
+    text-decoration: none;
+    word-break: break-all;
+
+    transition: var(--default-transition);
+}
+
+.eventItem__title a:hover {
+    color: var(--font-primary-color);
+}

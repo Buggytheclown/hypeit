@@ -7,8 +7,11 @@ import {
 import { Header } from './components/Header/Header';
 import Pagination from './components/Pagination/Pagination';
 import { About } from './components/About/About';
+import { Feeds } from './containers/Feeds/Feeds';
+import { FeedFilter } from './components/FeedFilter/FeedFilter';
 import { ThemeSelector } from './components/ThemeSelector/ThemeSelector';
 import { ThemeStatus } from './types';
+import styles from './app.module.css';
 
 export const App = () => {
   const [theme, setTheme] = useState<ThemeStatus>(ThemeStatus.DARK);
@@ -22,10 +25,14 @@ export const App = () => {
       <div className="App">
         <div className="container">
           <Header />
-          <main className="main-content">
+          <main className={styles.mainContainer}>
             <Switch>
               <Route path="/about">
                 <About />
+              </Route>
+              <Route path="/">
+                <Feeds />
+                <FeedFilter />
               </Route>
               <div className="feed__navigation" />
               <div className="feed__count" />

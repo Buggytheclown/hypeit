@@ -1,6 +1,6 @@
 :root {
   --primary-color: #8ac858;
-  --secondary-color: #536390;
+  --secondary-color: #fff;
 
   --font-primary-color: rgb(117, 117, 117);
   --font-secondary-color: rgb(33, 33, 33);
@@ -10,12 +10,14 @@
 
   --link-primary-color: #337ab7;
 
-  --bg-color: #fff;
+  --bg-color: #f4f4f4;
   --heading-color: #292922;
 
   --font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
   --column-width: 650px;
   --default-transition: 0.2s;
+
+  --event-border: var(--primary-color);
 }
 
 [data-theme='dark'] {
@@ -32,6 +34,8 @@
 
   --bg-color: rgb(23, 28, 32);
   --heading-color: #818cab;
+
+  --event-border: #393d41;
 }
 
 body {
@@ -44,13 +48,6 @@ body {
 
   background-color: var(--bg-color);
   color: var(--font-primary-color)
-}
-
-.main-content {
-  width: var(--column-width);
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .link {
