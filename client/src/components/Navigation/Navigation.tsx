@@ -6,7 +6,7 @@ interface IProps {
   id: number;
   name: string;
   icon: React.ReactNode;
-  path?: string
+  path?: string;
   size?: string;
 }
 
@@ -16,23 +16,25 @@ export const Navigation = ({ navigations }: { navigations: IProps[] }) => {
 
     switch (item.size) {
       case 's':
-        iconStyle = [styles.navigation__icon, styles.navigation__icon_small].join(' ');
+        iconStyle = [
+          styles.navigation__icon,
+          styles.navigation__icon_small,
+        ].join(' ');
         break;
       default:
         iconStyle = '';
     }
     return (
       <li key={item.id} className={styles.navigation__item}>
-        <NavLink to={`${item.path}`} activeClassName={styles.navigation__title_active} className={styles.navigation__title}>
+        <NavLink
+          exact
+          to={`${item.path}`}
+          activeClassName={styles.navigation__title_active}
+          className={styles.navigation__title}
+        >
           {item.name}
           {item.icon && (
-            <i
-              className={
-                item.size
-                  ? iconStyle
-                  : `${styles.navigation__icon}`
-              }
-            >
+            <i className={item.size ? iconStyle : `${styles.navigation__icon}`}>
               {item.icon}
             </i>
           )}

@@ -21,6 +21,7 @@ const navigationItems = [
   {
     id: 3,
     name: 'Auth',
+    path: 'auth',
     icon: <LoginIcon />,
     size: 's',
   },

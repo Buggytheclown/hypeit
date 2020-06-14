@@ -1,0 +1,27 @@
+.authForm {
+  margin: 10px 0;
+  max-width: 300px;
+}
+
+.authTabs {
+  margin: 10px 0;
+}
+
+.tabsButton {
+  background-color: transparent;
+  border: none;
+  text-decoration: dashed;
+
+  cursor: pointer;
+
+  color: var(--font-primary-color);
+  outline: 0;
+}
+
+.tabsButton_active {
+  color: var(--font-secondary-color);
+}
+
+.formInput__auth {
+  margin: 10px 0;
+}

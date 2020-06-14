@@ -21,7 +21,6 @@
   display: flex;
   align-items: baseline;
 
-  
   color: var(--font-header-primary-color);
   text-transform: uppercase;
   text-decoration: none;
@@ -58,12 +57,10 @@
 }
 
 .navigation__title_active {
-  color: var(--font-header-primary-color);
+  color: var(--font-header-secondary-color);
 }
 
 .navigation__title_active svg {
-  fill: var(--font-header-primary-color);
-  stroke: var(--font-header-primary-color);
+  fill: var(--font-header-secondary-color);
+  stroke: var(--font-header-secondary-color);
 }
-
-
