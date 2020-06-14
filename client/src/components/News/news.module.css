@@ -44,15 +44,28 @@
     color: var(--font-primary-color); 
 }
 .newsItem__tags {
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 .newsItem__footer {
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
+
+    color: var(--font-primary-color);
+}
+
+.newsItem__footer > *:not(:last-child) {
+    padding-right: 3px;
 }
 
 .newsItem__favorite {
     width: 16px;
     height: 16px;
+
+    fill: var(--font-primary-color);
+}
+
+.newsItem__favorite_active {
+    fill: #F44336;
 }

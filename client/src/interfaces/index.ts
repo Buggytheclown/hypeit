@@ -18,5 +18,6 @@ export interface INews {
   count: number
   date: Date
   image: string
+  favorite: boolean
   tags: ITags[]
 }

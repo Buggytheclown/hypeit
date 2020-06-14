@@ -25,9 +25,9 @@ export const News = ({ news }: { news: INews }) => (
     {news.tags && <div className={styles.newsItem__tags}><Tags tags={news.tags} /></div>}
 
     <div className={styles.newsItem__footer}>
-      {news.count}
-      <Favorite className={styles.newsItem__favorite} />
-      {/* {news.date} */}
+      <span>{news.count}</span>
+      <Favorite className={`${styles.newsItem__favorite} ${news.favorite ? styles.newsItem__favorite_active : ''}`} />
+      <span>{news.date.toDateString()}</span>
     </div>
 
     <div className="content-box-thumb">

@@ -7,6 +7,43 @@ export const news: INews[] = [{
   count: 281,
   date: new Date(),
   image: 'https://miro.medium.com/max/334/1*zTDCRlfMj5hz986Es3eh9Q.png',
+  favorite: true,
+  tags: [
+    {
+      id: 1,
+      name: 'python',
+      link: 'python',
+    },
+    {
+      id: 2,
+      name: 'programming',
+      link: 'programming',
+    },
+    {
+      id: 3,
+      name: 'artificial intelligence',
+      link: 'artificial intelligence',
+    },
+    {
+      id: 4,
+      name: 'machine learning',
+      link: 'machine learning',
+    },
+    {
+      id: 5,
+      name: 'data science',
+      link: 'data science',
+    },
+  ],
+},
+{
+  postId: 582233,
+  type: 'habr',
+  title: ' Why we switched from Flask to FastAPI for production machine learning',
+  count: 281,
+  date: new Date(),
+  image: 'https://miro.medium.com/max/334/1*zTDCRlfMj5hz986Es3eh9Q.png',
+  favorite: false,
   tags: [
     {
       id: 1,
