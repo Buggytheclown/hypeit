@@ -20,4 +20,5 @@ export interface INews {
   image: string
   favorite: boolean
   tags: ITags[]
+  bookMarked: boolean
 }

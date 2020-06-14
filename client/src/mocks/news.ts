@@ -8,6 +8,7 @@ export const news: INews[] = [{
   date: new Date(),
   image: 'https://miro.medium.com/max/334/1*zTDCRlfMj5hz986Es3eh9Q.png',
   favorite: true,
+  bookMarked: false,
   tags: [
     {
       id: 1,
@@ -44,6 +45,7 @@ export const news: INews[] = [{
   date: new Date(),
   image: 'https://miro.medium.com/max/334/1*zTDCRlfMj5hz986Es3eh9Q.png',
   favorite: false,
+  bookMarked: true,
   tags: [
     {
       id: 1,

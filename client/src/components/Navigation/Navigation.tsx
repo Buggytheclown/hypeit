@@ -26,6 +26,7 @@ export const Navigation = ({ navigations }: { navigations: IProps[] }) => {
     }
     return (
       <li key={item.id} className={styles.navigation__item}>
+        {item.name === 'Logout' && <span>user</span>}
         <NavLink
           exact
           to={`${item.path}`}
