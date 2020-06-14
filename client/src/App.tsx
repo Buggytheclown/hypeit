@@ -5,7 +5,7 @@ import {
   Route,
 } from 'react-router-dom';
 import { Header } from './components/Header/Header';
-import Pagination from './components/Pagination/Pagination';
+import { Pagination } from './components/Pagination/Pagination';
 import { About } from './components/About/About';
 import { Feeds } from './containers/Feeds/Feeds';
 import { FeedFilter } from './components/FeedFilter/FeedFilter';
@@ -36,13 +36,8 @@ export const App = () => {
                 <Feeds />
                 <FeedFilter />
                 <NewsList news={news} />
+                <Pagination count={1} />
               </Route>
-              <div className="feed__navigation" />
-              <div className="feed__count" />
-              <div className="news-wrapper">
-                <div className="news" />
-              </div>
-              <Pagination count={1} />
             </Switch>
           </main>
         </div>

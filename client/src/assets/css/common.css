@@ -19,6 +19,9 @@
   --default-transition: 0.2s;
 
   --event-border: var(--primary-color);
+
+  --pagination-color: var(--font-primary-color);
+  --pagination-color-hover: var(--font-secondary-color);
 }
 
 [data-theme='dark'] {
@@ -38,6 +41,9 @@
   --heading-color: #818cab;
 
   --event-border: #393d41;
+
+  --pagination-color: rgba(255, 255, 255, 0.7);
+  --pagination-color-hover: rgba(255, 255, 255, 1);
 }
 
 body {
