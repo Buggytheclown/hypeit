@@ -9,14 +9,12 @@ import styles from './auth.module.css';
 export const Auth = () => {
   const [type, setType] = useState<string>('signIn');
 
-  const submitHandlerSignIn = (e: any) => {
+  const submitHandlerSignIn = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    console.log(e, 'submitHandlerSignIn');
   };
 
-  const submitHandlerSignUp = (e: any) => {
+  const submitHandlerSignUp = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    console.log(e, 'submitHandlerSignUp');
   };
   return (
     <div className={styles.authForm}>

@@ -3,7 +3,11 @@ import React from 'react';
 // styles
 import styles from './auth.module.css';
 
-const SignIn = ({ submitHandler }: any) => (
+interface IProp {
+  (e: React.SyntheticEvent): void;
+}
+
+const SignIn = ({ submitHandler }: { submitHandler: IProp }) => (
   <div>
     <form onSubmit={(e) => submitHandler(e)}>
       <input
