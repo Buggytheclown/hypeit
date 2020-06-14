@@ -12,6 +12,8 @@ import { FeedFilter } from './components/FeedFilter/FeedFilter';
 import { ThemeSelector } from './components/ThemeSelector/ThemeSelector';
 import { ThemeStatus } from './types';
 import styles from './app.module.css';
+import { NewsList } from './components/News/NewsList';
+import { news } from './mocks/news';
 
 export const App = () => {
   const [theme, setTheme] = useState<ThemeStatus>(ThemeStatus.DARK);
@@ -33,6 +35,7 @@ export const App = () => {
               <Route path="/">
                 <Feeds />
                 <FeedFilter />
+                <NewsList news={news} />
               </Route>
               <div className="feed__navigation" />
               <div className="feed__count" />

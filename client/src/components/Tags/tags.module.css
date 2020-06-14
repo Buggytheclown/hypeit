@@ -1,0 +1,12 @@
+.tags {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tags li:not(:last-of-type) {
+    padding-right: 5px;
+}

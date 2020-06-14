@@ -9,6 +9,7 @@
   --font-header-secondary-color: rgb(255, 255, 255);
 
   --link-primary-color: #337ab7;
+  --link-secondary-color: #23527c;
 
   --bg-color: #f4f4f4;
   --heading-color: #292922;
@@ -31,6 +32,7 @@
   --font-header-secondary-color: rgba(255, 255, 255, 0.7);
 
   --link-primary-color: #337ab7;
+  --link-secondary-color: #23527c;
 
   --bg-color: rgb(23, 28, 32);
   --heading-color: #818cab;
@@ -53,4 +55,8 @@ body {
 .link {
   color: var(--link-primary-color);
   text-decoration: none;
+}
+
+.link:hover {
+  color: var(--link-secondary-color)
 }
