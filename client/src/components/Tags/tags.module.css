@@ -10,3 +10,12 @@
 .tags li:not(:last-of-type) {
     padding-right: 5px;
 }
+
+.tags a {
+    text-decoration: none;
+    color: var(--font-primary-color);
+    transition: var(--default-transition);
+}
+.tags a:hover {
+    color: var(--font-secondary-color);
+}

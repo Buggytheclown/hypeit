@@ -60,3 +60,13 @@ body {
 .link:hover {
   color: var(--link-secondary-color)
 }
+
+.content-box-thumb {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: 500px;
+  margin: auto;
+
+  font-size: 0;
+}

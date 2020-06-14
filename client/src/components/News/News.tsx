@@ -10,22 +10,23 @@ export const News = ({ news }: { news: INews }) => (
   <article className={styles.newsItem}>
 
     <div className={styles.newsItem__header}>
-
-      <div className={styles.newsItem__icon}><NewsIcon type={news.type} /></div>
-      {news.type === 'medium' && <a className={`${styles.newsItem__arrow} link`} href="/redirect?postId=582833&amp;redirectType=HTMLPROXY" target="_blank" rel="noopener">=&gt;</a>}
-
       <h1 className={styles.newsItem__title}>
-        <a className={styles.newsItem__link} href={`/redirect?postId=${news.postId}`} target="_blank" rel="noopener noreferrer">
-          {news.title}
-        </a>
+        <div className={styles.newsItem__icon}>
+          <NewsIcon type={news.type} />
+        </div>
+
+        {news.type === 'medium' && <a className={`${styles.newsItem__arrow} link`} href="/redirect?postId=582833&amp;redirectType=HTMLPROXY" target="_blank" rel="noopener">=&gt;</a>}
+
+
+        <a className={styles.newsItem__link} href={`/redirect?postId=${news.postId}`} target="_blank" rel="noopener noreferrer">{news.title}</a>
       </h1>
     </div>
 
-    {news.tags && <Tags tags={news.tags} />}
+    {news.tags && <div className={styles.newsItem__tags}><Tags tags={news.tags} /></div>}
 
-    <div className="cbh__time">
+    <div className={styles.newsItem__footer}>
       {news.count}
-      <Favorite className="cbh__time__image" />
+      <Favorite className={styles.newsItem__favorite} />
       {/* {news.date} */}
     </div>
 
