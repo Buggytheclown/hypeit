@@ -43,9 +43,9 @@ export class UserModelService {
       .select('*')
       .where({ name })
       .then(([data]) => data)
-      .then(res => dbUserSchema.validateSync(res));
+      .then(res => res && dbUserSchema.validateSync(res));
 
-    if (user.password && (await bcrypt.compare(password, user.password))) {
+    if (user && user.password && (await bcrypt.compare(password, user.password))) {
       return _.omit(user, 'password');
     }
     return null;

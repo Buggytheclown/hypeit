@@ -301,6 +301,7 @@ describe('post model: get', () => {
           [postsExternalIds[0], postsExternalIds[1]].includes(el.externalID),
         )
         .map(el => el.posts_id),
+      date: '2020-01-01'
     });
 
     const count2 = await postModel.countSeenPosts({

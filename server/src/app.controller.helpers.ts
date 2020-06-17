@@ -40,9 +40,18 @@ export const hideEventkBodySchema = yup.object({
 export type HideEventkBody = yup.InferType<typeof hideEventkBodySchema>;
 
 export const authBodySchema = yup.object({
-  form_type: yup.mixed().oneOf([AUTH_TYPE.LOGIN, AUTH_TYPE.REGISTER]),
-  username: yup.string().min(3),
-  password: yup.string().min(5),
+  form_type: yup
+    .mixed()
+    .oneOf([AUTH_TYPE.LOGIN, AUTH_TYPE.REGISTER])
+    .required(),
+  username: yup
+    .string()
+    .min(3)
+    .required(),
+  password: yup
+    .string()
+    .min(5)
+    .required(),
   password2: yup.string().min(5),
 });
 export type AuthBodyType = yup.InferType<typeof authBodySchema>;
@@ -97,9 +106,9 @@ export type RedirectQueryParamsType = yup.InferType<
   typeof redirectQueryParamsSchema
 >;
 
-export function extractData(data, schema) {
+export function extractData(data, schema, options = {}) {
   try {
-    return schema.validateSync(data);
+    return schema.validateSync(data, options);
   } catch (e) {
     throw new HttpException(e, HttpStatus.BAD_REQUEST);
   }
@@ -176,3 +185,25 @@ export interface BasicPostPageData {
   resources: { [key: string]: string };
   events: DbEvents;
 }
+
+export const statsUserParamsSchema = yup
+  .object({
+    id: yup
+      .string()
+      .matches(/^\d+$/)
+      .required(),
+  })
+  .noUnknown();
+
+export type StatsUserParams = yup.InferType<typeof statsUserParamsSchema>;
+
+const dateRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
+
+export const statsUserQuerySchema = yup
+  .object({
+    date_from: yup.string().matches(dateRegex),
+    date_to: yup.string().matches(dateRegex),
+  })
+  .noUnknown();
+
+export type StatsUserQuery = yup.InferType<typeof statsUserQuerySchema>;
