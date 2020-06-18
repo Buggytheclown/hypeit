@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{> main_head }}
+    <style>
+        .update-container {
+            margin: 20px;
+        }
+    </style>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <script>
+        window.pageData = {{{json pageData}}}
+    </script>
+
+
+</head>
+<body>
+
+{{> header (object user=user url=url) }}
+
+<div class="user-stats-container">
+    <div id="highcharts-container-opened" style="height: 400px"></div>
+    <div id="highcharts-container-seen" style="height: 400px"></div>
+</div>
+
+<script>
+const commonConfig = {
+  chart: {
+    type: "column"
+  },
+  title: {
+    text: "Opened posts"
+  },
+  plotOptions: {
+    column: {
+      stacking: "normal"
+    }
+  },
+  xAxis: {
+    labels: {
+      align: "right",
+      rotation: -45,
+      formatter: function() {
+        const today = new Date(this.value);
+        return today.toLocaleDateString("en-GB");
+      }
+    }
+  }
+};
+
+Highcharts.chart("highcharts-container-opened", {
+  ...commonConfig,
+  title: {
+    text: "Opened posts"
+  },
+
+  series: pageData.opened.map(({ name, data }) => ({
+    name,
+    data: data.map(({ date, count }) => ({
+      x: +new Date(date),
+      y: count
+    }))
+  }))
+});
+
+Highcharts.chart("highcharts-container-seen", {
+  ...commonConfig,
+  title: {
+    text: "Seen posts"
+  },
+
+  series: pageData.seen.map(({ name, data }) => ({
+    name,
+    data: data.map(({ date, count }) => ({
+      x: +new Date(date),
+      y: count
+    }))
+  }))
+});
+
+</script>
+</body>

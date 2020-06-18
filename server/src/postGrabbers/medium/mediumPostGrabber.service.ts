@@ -45,7 +45,7 @@ export class MediumPostGrabberService implements PostGrabber {
     posts: T[],
   ): T[] => {
     if (!isSorted(posts, { extractor: post => post.clapCount })) {
-      this.cls.warn('MediumPostGrabberService: posts are not sorted');
+      this.cls.debug('MediumPostGrabberService: posts are not sorted');
     }
     return posts;
   };

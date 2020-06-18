@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Param,
   Post,
   Query,
   Render,
@@ -39,6 +40,10 @@ import {
   seenPostsIdSchema,
   SeenPostsIdType,
   setRedirectInfo,
+  StatsUserParams,
+  statsUserParamsSchema,
+  StatsUserQuery,
+  statsUserQuerySchema,
   UPDATE_TYPE,
   updateBodySchema,
   UpdateBodyType,
@@ -46,6 +51,8 @@ import {
 import { DevbyEventsGrabberService } from './eventGrabbers/devby/devbyEventsGrabber.service';
 import { EventModelService } from './db/eventModel.service';
 import { EventDeliveryService } from './services/eventDelivery/eventDelivery.service';
+import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @Controller()
 export class AppController {
@@ -83,6 +90,9 @@ export class AppController {
       await this.postModel.saveSeenPosts({
         postsId: seenPostsId as number[],
         userId: request.session.user.user_id,
+        date: moment()
+          .utcOffset(0)
+          .format('YYYY-MM-DD HH:mm:ss'),
       });
     }
 
@@ -115,7 +125,7 @@ export class AppController {
           })
         : postsPerPage * (queryParams.page - 1),
       currentPage: queryParams.page,
-      resources: await this.postModel.getResourcesMap(),
+      resources: await this.postModel.getResourceFaviconsMap(),
       user: request.session.user,
       url: '/',
       events:
@@ -249,7 +259,7 @@ export class AppController {
       totalPosts: posts.length,
       totalSeenPosts: 0,
       currentPage: 1,
-      resources: await this.postModel.getResourcesMap(),
+      resources: await this.postModel.getResourceFaviconsMap(),
       user: request.session.user,
       url: '/bookmarked',
       events: [],
@@ -352,6 +362,9 @@ export class AppController {
       this.postModel.saveOpenedPost({
         userId: request.session.user.user_id,
         postId: queryParams.postId,
+        date: moment()
+          .utcOffset(0)
+          .format('YYYY-MM-DD HH:mm:ss'),
       });
     }
 
@@ -376,6 +389,55 @@ export class AppController {
           .map(user => `<pre>${(JSON.stringify as any)(user, 4, 4)}</pre> \n`)
           .join('\n'),
       );
+  }
+
+  @Get('stats/users/:id')
+  @Render('user-stats')
+  async getStatsUser(@Param() params: unknown, @Query() query: unknown) {
+    const paramsData: StatsUserParams = extractData(
+      params,
+      statsUserParamsSchema,
+      { strict: true },
+    );
+    const queryData: StatsUserQuery = extractData(query, statsUserQuerySchema);
+
+    const filters = {
+      userId: +paramsData.id,
+      date_from:
+        queryData.date_from ||
+        moment()
+          .subtract(30, 'day')
+          .format('YYYY-MM-DD'),
+      date_to:
+        queryData.date_to ||
+        moment()
+          .add(1, 'day')
+          .format('YYYY-MM-DD'),
+    };
+
+    function prepareData<T extends { resources_id: any }>(
+      data: T[],
+      resourcesMap: { [resources_id: string]: { name: string } },
+    ): { name: string; data: T[] }[] {
+      return Object.entries(_.groupBy(data, el => el.resources_id)).reduce(
+        (acc, [resourceId, data]) => [
+          ...acc,
+          { name: resourcesMap[resourceId].name, data },
+        ],
+        [],
+      );
+    }
+
+    return Promise.all([
+      this.postModel.getOpenedPosts(filters),
+      this.postModel.getSeenPosts(filters),
+      this.postModel.getResourcesMap(),
+    ]).then(([opened, seen, resourcesMap]) => ({
+      pageData: {
+        opened: prepareData(opened, resourcesMap),
+        seen: prepareData(seen, resourcesMap),
+      },
+    }));
   }
 
   @Get('/contacts')

@@ -8,6 +8,7 @@ import {
   assertAllPostWasFound,
   assertAllTagsWasFound,
   createPostsTagsRelations,
+  DbTouchedPost,
   dbPostLinkSchema,
   DbPosts,
   dbPostsSchema,
@@ -18,6 +19,7 @@ import {
   insertPosts,
   insertTags,
   withPostRating,
+  getTouchecPostFactory,
 } from './postModel.helpers';
 import { exhaustiveCheck } from '../helpers/helpers';
 
@@ -277,7 +279,7 @@ export class PostModel {
     return this.dBConnection.knex.raw(query).then(_.identity);
   }
 
-  async getResourcesMap(): Promise<{ [resources_id: string]: string }> {
+  async getResourceFaviconsMap(): Promise<{ [resources_id: string]: string }> {
     return this.dBConnection
       .knex('resources')
       .select('*')
@@ -293,14 +295,44 @@ export class PostModel {
       );
   }
 
-  saveSeenPosts({ postsId, userId }: { postsId: number[]; userId: number }) {
+  async getResourcesMap(): Promise<{
+    [resources_id: string]: { favicon: string; link: string; name: string };
+  }> {
+    return this.dBConnection
+      .knex('resources')
+      .select('*')
+      .then(res => dbResoursesSchema.validateSync(res))
+      .then(res =>
+        res.reduce(
+          (acc, { resources_id, favicon, link, name }) => ({
+            ...acc,
+            [resources_id]: { favicon, link, name },
+          }),
+          {},
+        ),
+      );
+  }
+
+  saveSeenPosts({
+    postsId,
+    userId,
+    date,
+  }: {
+    postsId: number[];
+    userId: number;
+    date: string;
+  }) {
     if (!postsId.length) {
       return;
     }
 
-    const knexQuery = this.dBConnection
-      .knex('seen_users_posts')
-      .insert(postsId.map(postId => ({ posts_id: postId, user_id: userId })));
+    const knexQuery = this.dBConnection.knex('seen_users_posts').insert(
+      postsId.map(postId => ({
+        posts_id: postId,
+        user_id: userId,
+        datetime: date,
+      })),
+    );
 
     return this.dBConnection.knexInsertIgnore(knexQuery).then(_.identity);
   }
@@ -345,20 +377,51 @@ export class PostModel {
       .then(_.identity);
   }
 
-  saveOpenedPost({ userId, postId }: { userId: number; postId: number }) {
+  saveOpenedPost({
+    userId,
+    postId,
+    date,
+  }: {
+    userId: number;
+    postId: number;
+    date: string;
+  }) {
     const knexQuery = this.dBConnection
       .knex('opened_users_posts')
-      .insert({ posts_id: postId, user_id: userId });
+      .insert({ posts_id: postId, user_id: userId, datetime: date });
 
     return this.dBConnection.knexInsertIgnore(knexQuery).then(_.identity);
   }
 
   getPostLink({ postId }: { postId: number }): Promise<string> {
-    return (this.dBConnection.knex as any)('posts')
+    return this.dBConnection
+      .knex('posts')
       .select('link')
       .where({ posts_id: postId })
       .then(([row]) => row)
       .then(row => dbPostLinkSchema.validateSync(row))
       .then(row => row.link);
+  }
+
+  getOpenedPosts(data: {
+    userId: number;
+    date_from: string;
+    date_to: string;
+  }): Promise<DbTouchedPost[]> {
+    return getTouchecPostFactory({
+      knex: this.dBConnection.knex,
+      table: 'opened_users_posts',
+    })(data);
+  }
+
+  getSeenPosts(data: {
+    userId: number;
+    date_from: string;
+    date_to: string;
+  }): Promise<DbTouchedPost[]> {
+    return getTouchecPostFactory({
+      knex: this.dBConnection.knex,
+      table: 'seen_users_posts',
+    })(data);
   }
 }

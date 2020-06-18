@@ -316,3 +316,35 @@ export const extractTags = _.flow([
   _.flatten,
   _.uniq,
 ]);
+
+const dbTouchedPostSchema = yup
+  .object({
+    date: yup.string().required(),
+    count: yup.number().required(),
+    resources_id: yup.number().required(),
+  })
+  .noUnknown();
+
+export const dbTouchedPostsSchema = yup.array(dbTouchedPostSchema);
+export type DbTouchedPost = yup.InferType<typeof dbTouchedPostSchema>;
+
+export function getTouchecPostFactory({ knex, table }) {
+  return function({
+    userId,
+    date_from,
+    date_to,
+  }: {
+    userId: number;
+    date_from: string;
+    date_to: string;
+  }) {
+    return knex(table)
+      .select(knex.raw('cast(datetime as Date) as date'), 'resources_id')
+      .count('* as count')
+      .whereBetween('datetime', [date_from, date_to])
+      .where({ user_id: userId })
+      .innerJoin('posts', `${table}.posts_id`, 'posts.posts_id')
+      .groupBy('date', 'resources_id')
+      .then(row => dbTouchedPostsSchema.validateSync(row, { strict: true }));
+  };
+}

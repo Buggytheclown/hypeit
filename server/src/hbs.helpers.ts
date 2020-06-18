@@ -57,4 +57,8 @@ export function registerHbsHelpers() {
   });
 
   hbs.registerHelper('object', ({ hash }) => hash);
+
+  hbs.registerHelper('json', value => {
+    return JSON.stringify(value);
+  });
 }
