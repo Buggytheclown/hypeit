@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import cx from 'classnames';
 
 import SignIn from './SignIn';
 import SignUp from './SignUp';
@@ -21,22 +22,23 @@ export const Auth = () => {
   const submitHandlerSignUp = (e: React.SyntheticEvent) => {
     e.preventDefault();
   };
+
+  const activeButtonClass = (buttonType: AuthType) => cx({
+    [styles.tabsButton]: true,
+    [styles.tabsButton_active]: type === buttonType,
+  });
   return (
     <div className={styles.authForm}>
       <div className={styles.authTabs}>
         <button
-          className={`${styles.tabsButton} ${
-            type === AuthType.SIGNIN && styles.tabsButton_active
-          }`}
+          className={activeButtonClass(AuthType.SIGNIN)}
           onClick={() => setType(AuthType.SIGNIN)}
           type="button"
         >
           Войти
         </button>
         <button
-          className={`${styles.tabsButton} ${
-            type === 'signUp' && styles.tabsButton_active
-          }`}
+          className={activeButtonClass(AuthType.SIGNUP)}
           onClick={() => setType(AuthType.SIGNUP)}
           type="button"
         >
