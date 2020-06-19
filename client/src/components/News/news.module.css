@@ -1,0 +1,83 @@
+.newsItem {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 1rem;
+  margin: 0.5rem 0;
+
+  background-color: var(--secondary-color);
+  box-shadow: 0px -1px 2px rgba(58, 58, 58, 0.1),
+    1px 1px 2px rgba(58, 58, 58, 0.1);
+  border: 1px solid var(--event-border);
+  border-radius: 2px;
+}
+
+.newsItem__icon {
+  display: inline;
+  vertical-align: middle;
+}
+
+.newsItem__header {
+  display: flex;
+  position: relative;
+  padding-right: 30px;
+}
+
+.newsItem__arrow {
+  padding-left: 5px;
+  padding-right: 5px;
+  display: inline;
+  vertical-align: top;
+}
+
+.newsItem__title {
+  margin: 0;
+
+  line-height: 1.1;
+  font-weight: 400;
+  font-size: 18px;
+}
+.newsItem__link {
+  text-decoration: none;
+  color: var(--font-secondary-color);
+  transition: var(--default-transition);
+}
+
+.newsItem__link:hover {
+  color: var(--font-primary-color);
+}
+.newsItem__tags {
+  margin: 5px 0;
+}
+
+.newsItem__footer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  color: var(--font-primary-color);
+}
+
+.newsItem__footer > *:not(:last-child) {
+  padding-right: 3px;
+}
+
+.newsItem__favorite {
+  width: 16px;
+  height: 16px;
+
+  fill: var(--font-primary-color);
+}
+
+.newsItem__favorite_active {
+  fill: #f44336;
+}
+
+.newsItemBookMarked {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 32px;
+  height: 32px;
+}

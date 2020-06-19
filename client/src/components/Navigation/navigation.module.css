@@ -10,10 +10,18 @@
   display: flex;
   flex-grow: 1;
   justify-content: space-between;
+
+  list-style-type: none;
 }
 
 .navigation__item {
-  list-style-type: none;
+  display: flex;
+}
+
+.navigation__item span {
+  padding-right: 7px;
+
+  color: var(--font-header-secondary-color);
 }
 
 .navigation__title {
@@ -21,7 +29,6 @@
   display: flex;
   align-items: baseline;
 
-  
   color: var(--font-header-primary-color);
   text-transform: uppercase;
   text-decoration: none;
@@ -58,12 +65,10 @@
 }
 
 .navigation__title_active {
-  color: var(--font-header-primary-color);
+  color: var(--font-header-secondary-color);
 }
 
 .navigation__title_active svg {
-  fill: var(--font-header-primary-color);
-  stroke: var(--font-header-primary-color);
+  fill: var(--font-header-secondary-color);
+  stroke: var(--font-header-secondary-color);
 }
-
-

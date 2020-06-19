@@ -1,0 +1,20 @@
+.button {
+  display: block;
+  width: inherit;
+  height: inherit;
+  padding: 0;
+
+  cursor: pointer;
+  outline: 0;
+
+  background-color: transparent;
+  border: none;
+}
+
+.button svg {
+  fill: rgb(125, 125, 125, 0.7);
+  transition: var(--default-transition);
+}
+.button svg:hover {
+  fill: rgb(125, 125, 125, 1);
+}

@@ -1,38 +1,35 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import cx from 'classnames';
 import styles from './navigation.module.css';
 
 interface IProps {
   id: number;
   name: string;
   icon: React.ReactNode;
-  path?: string
+  path?: string;
   size?: string;
 }
 
 export const Navigation = ({ navigations }: { navigations: IProps[] }) => {
   const navigationJSX = navigations.map((item) => {
-    let iconStyle: string;
+    const iconClass = cx({
+      [styles.navigation__icon]: true,
+      [styles.navigation__icon_small]: item.size === 's',
+    });
 
-    switch (item.size) {
-      case 's':
-        iconStyle = [styles.navigation__icon, styles.navigation__icon_small].join(' ');
-        break;
-      default:
-        iconStyle = '';
-    }
     return (
       <li key={item.id} className={styles.navigation__item}>
-        <NavLink to={`${item.path}`} activeClassName={styles.navigation__title_active} className={styles.navigation__title}>
+        {item.name === 'Logout' && <span>user</span>}
+        <NavLink
+          exact
+          to={`${item.path}`}
+          activeClassName={styles.navigation__title_active}
+          className={styles.navigation__title}
+        >
           {item.name}
           {item.icon && (
-            <i
-              className={
-                item.size
-                  ? iconStyle
-                  : `${styles.navigation__icon}`
-              }
-            >
+            <i className={iconClass}>
               {item.icon}
             </i>
           )}
