@@ -1,8 +1,9 @@
+import { NewsType } from '../types';
 import { INews } from '../interfaces/index';
 
 export const news: INews[] = [{
   postId: 582833,
-  type: 'MEDIUM',
+  type: NewsType.MEDIUM,
   title: ' Why we switched from Flask to FastAPI for production machine learning',
   count: 281,
   date: new Date(),
@@ -39,7 +40,7 @@ export const news: INews[] = [{
 },
 {
   postId: 582233,
-  type: 'HABR',
+  type: NewsType.HABR,
   title: ' Why we switched from Flask to FastAPI for production machine learning',
   count: 281,
   date: new Date(),

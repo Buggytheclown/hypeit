@@ -11,6 +11,8 @@ interface IProps {
   size?: string;
 }
 
+const LOGOUT_USER = 'Logout';
+
 export const Navigation = ({ navigations }: { navigations: IProps[] }) => {
   const navigationJSX = navigations.map((item) => {
     const iconClass = cx({
@@ -20,7 +22,7 @@ export const Navigation = ({ navigations }: { navigations: IProps[] }) => {
 
     return (
       <li key={item.id} className={styles.navigation__item}>
-        {item.name === 'Logout' && <span>user</span>}
+        {item.name === LOGOUT_USER && <span>user</span>}
         <NavLink
           exact
           to={`${item.path}`}
