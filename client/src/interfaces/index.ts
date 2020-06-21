@@ -1,3 +1,5 @@
+import { NewsType } from '../types';
+
 export interface IEvent {
   id: number
   title: string
@@ -13,7 +15,7 @@ export interface ITags {
 
 export interface INews {
   postId: number
-  type: string
+  type: NewsType
   title: string
   count: number
   date: Date

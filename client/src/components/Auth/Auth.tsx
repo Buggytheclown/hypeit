@@ -35,14 +35,14 @@ export const Auth = () => {
           onClick={() => setType(AuthType.SIGNIN)}
           type="button"
         >
-          Войти
+          Login
         </button>
         <button
           className={activeButtonClass(AuthType.SIGNUP)}
           onClick={() => setType(AuthType.SIGNUP)}
           type="button"
         >
-          Зарегестрироваться
+          Registration
         </button>
       </div>
       {type === AuthType.SIGNIN && (
