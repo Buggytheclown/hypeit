@@ -41,6 +41,7 @@ POSTS
         lastXDays - days
         tagName? - tag || undefined
         bookmarked - true || false
+        isNextPage - true || false
 
     response
         posts: [
