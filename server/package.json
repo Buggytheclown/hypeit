@@ -29,6 +29,7 @@
     "@nestjs/core": "^6.10.14",
     "@nestjs/platform-express": "^6.7.2",
     "@nestjs/schedule": "^0.1.1",
+    "@nestjs/swagger": "^4.5.12",
     "@sentry/node": "^5.11.0",
     "@types/bcrypt": "^3.0.0",
     "@types/cheerio": "^0.22.16",
@@ -54,6 +55,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",
+    "swagger-ui-express": "^4.1.4",
     "yup": "^0.28.0"
   },
   "devDependencies": {

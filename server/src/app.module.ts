@@ -8,6 +8,7 @@ import { CustomLoggerModule } from './services/logger/customLogger.module';
 import { ProxyModule } from './services/htmlproxy/proxy.module';
 import { DevbyEventsModule } from './eventGrabbers/devby/devbyEvents.module';
 import { EventDeliveryModule } from './services/eventDelivery/eventDelivery.module';
+import { EventModule } from './api/event/event.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { EventDeliveryModule } from './services/eventDelivery/eventDelivery.modu
     ProxyModule,
     DevbyEventsModule,
     EventDeliveryModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [],

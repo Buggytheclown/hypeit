@@ -1,7 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { EventModule } from './api/event/event.module';
 import * as hbs from 'hbs';
 import * as session from 'express-session';
 import * as express_mysql_session from 'express-mysql-session';
@@ -40,6 +42,16 @@ async function bootstrap() {
       },
     }),
   );
+
+  const options = new DocumentBuilder()
+    .setTitle('HypeIP')
+    .setDescription('Popular IT News')
+    .setVersion('1.0')
+    .build();
+  const newApiDocument = SwaggerModule.createDocument(app, options, {
+    include: [EventModule],
+  });
+  SwaggerModule.setup('api', app, newApiDocument);
 
   await app.listen(ConfigServiceProvider.useValue.get('PORT'));
 }

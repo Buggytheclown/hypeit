@@ -15,13 +15,12 @@ TODO
 3. Добавить на возврат всем events isSeen
 4. Формализовать время UTS
 5. Посмотреть что возвращает база, если ничего не найдено
-6. Стоит ли обрабатывать запрос "только для главной" - мне кажется это дело фронта когда запрашивать и где выводить?
 
 TODO NEXT
 1. Добавить swagger
 */
 @Controller()
-export class AppController {
+export class EventController {
   constructor(private readonly eventModelService: EventModelService) {}
 
   @Get('/api/v1/events')
