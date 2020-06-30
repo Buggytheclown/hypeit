@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { EventController } from './event.controller';
-import { EventModelService } from '../../db/eventModel.service';
-import { DBConnection } from '../../db/dBConnection.service';
+import { DbModule } from '../../db/db.module';
 
 @Module({
   controllers: [EventController],
-  providers: [EventModelService, DBConnection],
+  imports: [DbModule],
 })
 export class EventModule {}
