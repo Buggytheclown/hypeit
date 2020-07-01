@@ -4,6 +4,7 @@ import { join } from 'path';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { EventModule } from './api/event/event.module';
+import { PostModule } from './api/posts/posts.module';
 import * as hbs from 'hbs';
 import * as session from 'express-session';
 import * as express_mysql_session from 'express-mysql-session';
@@ -49,7 +50,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const newApiDocument = SwaggerModule.createDocument(app, options, {
-    include: [EventModule],
+    include: [EventModule, PostModule],
   });
   SwaggerModule.setup('api', app, newApiDocument);
 

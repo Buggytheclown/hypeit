@@ -38,7 +38,7 @@ export class EventController {
     description: 'Authorization',
     type: AithorizationDto,
   })
-  async getPosts(@Req() request): Promise<BasicEventsPageData> {
+  async getPosts(@Req() request: any): Promise<BasicEventsPageData> {
     if (request.session.user?.user_id) {
       const events = await this.eventModelService.getEvents({
         featureXDays: 14,
