@@ -53,85 +53,97 @@ export class PostController {
     console.log(request.tagName, 'requestrequest, tagName');
     console.log(request.session, 'requestrequest, session');
 
-    const queryParams: PostsRequestParamsSchema = extractData(
-      request,
-      postsRequestParamsSchema,
-    );
+    try {
+      const queryParams: PostsRequestParamsSchema = extractData(
+        request,
+        postsRequestParamsSchema,
+      );
 
-    console.log('queryParams');
+      console.log('queryParams');
 
-    // if (
-    //   queryParams.isNextPage &&
-    //   request.session.user &&
-    //   request.session.seenPostsId
-    // ) {
-    //   const seenPostsId: SeenPostsIdType = extractData(
-    //     request.session.seenPostsId,
-    //     seenPostsIdSchema,
-    //   );
+      // if (
+      //   queryParams.isNextPage &&
+      //   request.session.user &&
+      //   request.session.seenPostsId
+      // ) {
+      //   const seenPostsId: SeenPostsIdType = extractData(
+      //     request.session.seenPostsId,
+      //     seenPostsIdSchema,
+      //   );
 
-    //   await this.postModel.saveSeenPosts({
-    //     postsId: seenPostsId as number[],
-    //     userId: request.session.user.user_id,
-    //     date: moment()
-    //       .utcOffset(0)
-    //       .format('YYYY-MM-DD HH:mm:ss'),
-    //   });
-    // }
+      //   await this.postModel.saveSeenPosts({
+      //     postsId: seenPostsId as number[],
+      //     userId: request.session.user.user_id,
+      //     date: moment()
+      //       .utcOffset(0)
+      //       .format('YYYY-MM-DD HH:mm:ss'),
+      //   });
+      // }
 
-    // const postsPerPage = 10;
-    // const posts = await this.postModel.getPosts({
-    //   limit: postsPerPage,
-    //   lastXDays: queryParams.bestof,
-    //   offset: postsPerPage * (queryParams.page - 1),
-    //   userId: request.session.user?.user_id,
-    //   onlyNotSeen: !!request.session.user?.user_id,
-    //   tagName: queryParams.tagName,
-    // });
+      // const postsPerPage = 10;
+      // const posts = await this.postModel.getPosts({
+      //   limit: postsPerPage,
+      //   lastXDays: queryParams.bestof,
+      //   offset: postsPerPage * (queryParams.page - 1),
+      //   userId: request.session.user?.user_id,
+      //   onlyNotSeen: !!request.session.user?.user_id,
+      //   tagName: queryParams.tagName,
+      // });
 
-    // if (request.session.user) {
-    //   request.session.seenPostsId = posts.map(({ posts_id }) => posts_id);
-    // }
+      // if (request.session.user) {
+      //   request.session.seenPostsId = posts.map(({ posts_id }) => posts_id);
+      // }
 
-    //   response
-    //   posts: [
-    //       {
-    //           bookmarked: false,
-    //           tags: ['github', 'git', 'programming', 'c++'],
-    //           resources_id: 1,
-    //           rating: 5,
-    //           externalID: '508020',
-    //           imageLink: null,
-    //           link: 'https://habr.com/en/post/508020/',
-    //           rawTime: 'today at 01:21 PM',
-    //           time: '2020-06-24 10:21:00',
-    //           title: 'Использование GitHub Actions с C++ и CMake',
-    //           posts_id: 356,
-    //           resources: картинка на тип источника новости
-    //       }
-    //   ]
-    //   totalPosts
-    //   totalSeenPosts ?
-    //       params : {
-    //           isNextPage: false,
-    //           bestof?: 1,
-    //           page: 1
-    //       }
-    // return {
-    //   posts,
-    //   queryParams,
-    //   totalPosts: await this.postModel.countPosts({
-    //     lastXDays: queryParams.bestof,
-    //     tagName: queryParams.tagName,
-    //   }),
-    //   totalSeenPosts: request.session.user
-    //     ? await this.postModel.countSeenPosts({
-    //         lastXDays: queryParams.bestof,
-    //         userId: request.session.user.user_id,
-    //         tagName: queryParams.tagName,
-    //       })
-    //     : postsPerPage * (queryParams.page - 1),
-    //   resources: await this.postModel.getResourceFaviconsMap(),
-    // };
+      //   response
+      //   posts: [
+      //       {
+      //           bookmarked: false,
+      //           tags: ['github', 'git', 'programming', 'c++'],
+      //           resources_id: 1,
+      //           rating: 5,
+      //           externalID: '508020',
+      //           imageLink: null,
+      //           link: 'https://habr.com/en/post/508020/',
+      //           rawTime: 'today at 01:21 PM',
+      //           time: '2020-06-24 10:21:00',
+      //           title: 'Использование GitHub Actions с C++ и CMake',
+      //           posts_id: 356,
+      //           resources: картинка на тип источника новости
+      //       }
+      //   ]
+      //   totalPosts
+      //   totalSeenPosts ?
+      //       params : {
+      //           isNextPage: false,
+      //           bestof?: 1,
+      //           page: 1
+      //       }
+      // return {
+      //   posts,
+      //   queryParams,
+      //   totalPosts: await this.postModel.countPosts({
+      //     lastXDays: queryParams.bestof,
+      //     tagName: queryParams.tagName,
+      //   }),
+      //   totalSeenPosts: request.session.user
+      //     ? await this.postModel.countSeenPosts({
+      //         lastXDays: queryParams.bestof,
+      //         userId: request.session.user.user_id,
+      //         tagName: queryParams.tagName,
+      //       })
+      //     : postsPerPage * (queryParams.page - 1),
+      //   resources: await this.postModel.getResourceFaviconsMap(),
+      // };
+    } catch (error) {
+      console.log(error, 'sadasdasdasd');
+
+      throw new HttpException(
+        {
+          status: error.status,
+          error: error.message?.message,
+        },
+        error.status,
+      );
+    }
   }
 }
