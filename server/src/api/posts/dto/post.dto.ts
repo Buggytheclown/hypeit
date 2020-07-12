@@ -1,15 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class EventDto {
-  @ApiProperty()
-  event_id: number;
+export class PostRequestDto {
+  @ApiProperty({
+    required: false,
+  })
+  userId: number;
 
   @ApiProperty()
-  title: string;
+  lastXDays: number;
 
-  @ApiProperty()
-  link: string;
+  @ApiProperty({
+    required: false,
+  })
+  tagName: string;
 
-  @ApiProperty()
-  time: string;
+  @ApiProperty({
+    required: false,
+  })
+  bookmarked: boolean;
+
+  @ApiProperty({
+    required: false,
+  })
+  isNextPage: boolean;
 }

@@ -15,12 +15,16 @@ import {
 import { PostModel } from '../../db/postModel.service';
 import {
   extractData,
-  postsQueryParamsSchema,
-  PostsQueryParamsType,
   seenPostsIdSchema,
   SeenPostsIdType,
 } from '../../app.controller.helpers';
 import * as moment from 'moment';
+import { ApiBody } from '@nestjs/swagger';
+import { PostRequestDto } from './dto/post.dto';
+import {
+  postsRequestParamsSchema,
+  PostsRequestParamsSchema,
+} from './posts.controller.helpers';
 
 /**
     TODO
@@ -38,49 +42,56 @@ export class PostController {
   // userId? - id || undefined
   // lastXDays - days
   // tagName ? - tag || undefined
-  // bookmarked - true || false
-  // isNextPage - true || false
+  // bookmarked ? - true || false
+  // isNextPage ? - true || false
   @Post('/api/v1/posts')
+  @ApiBody({ description: 'Request Body', type: PostRequestDto })
   async getPosts(@Req() request: any): Promise<any> {
-    console.log(request, 'requestrequest');
+    console.log(request.page, 'requestrequest, bestof');
+    console.log(request.bestof, 'requestrequest, request.bestof');
+    console.log(request.isNextPage, 'requestrequest, isNextPage');
+    console.log(request.tagName, 'requestrequest, tagName');
+    console.log(request.session, 'requestrequest, session');
 
-    const queryParams: PostsQueryParamsType = extractData(
+    const queryParams: PostsRequestParamsSchema = extractData(
       request,
-      postsQueryParamsSchema,
+      postsRequestParamsSchema,
     );
 
-    if (
-      queryParams.isNextPage &&
-      request.session.user &&
-      request.session.seenPostsId
-    ) {
-      const seenPostsId: SeenPostsIdType = extractData(
-        request.session.seenPostsId,
-        seenPostsIdSchema,
-      );
+    console.log('queryParams');
 
-      await this.postModel.saveSeenPosts({
-        postsId: seenPostsId as number[],
-        userId: request.session.user.user_id,
-        date: moment()
-          .utcOffset(0)
-          .format('YYYY-MM-DD HH:mm:ss'),
-      });
-    }
+    // if (
+    //   queryParams.isNextPage &&
+    //   request.session.user &&
+    //   request.session.seenPostsId
+    // ) {
+    //   const seenPostsId: SeenPostsIdType = extractData(
+    //     request.session.seenPostsId,
+    //     seenPostsIdSchema,
+    //   );
 
-    const postsPerPage = 10;
-    const posts = await this.postModel.getPosts({
-      limit: postsPerPage,
-      lastXDays: queryParams.bestof,
-      offset: postsPerPage * (queryParams.page - 1),
-      userId: request.session.user?.user_id,
-      onlyNotSeen: !!request.session.user?.user_id,
-      tagName: queryParams.tagName,
-    });
+    //   await this.postModel.saveSeenPosts({
+    //     postsId: seenPostsId as number[],
+    //     userId: request.session.user.user_id,
+    //     date: moment()
+    //       .utcOffset(0)
+    //       .format('YYYY-MM-DD HH:mm:ss'),
+    //   });
+    // }
 
-    if (request.session.user) {
-      request.session.seenPostsId = posts.map(({ posts_id }) => posts_id);
-    }
+    // const postsPerPage = 10;
+    // const posts = await this.postModel.getPosts({
+    //   limit: postsPerPage,
+    //   lastXDays: queryParams.bestof,
+    //   offset: postsPerPage * (queryParams.page - 1),
+    //   userId: request.session.user?.user_id,
+    //   onlyNotSeen: !!request.session.user?.user_id,
+    //   tagName: queryParams.tagName,
+    // });
+
+    // if (request.session.user) {
+    //   request.session.seenPostsId = posts.map(({ posts_id }) => posts_id);
+    // }
 
     //   response
     //   posts: [
@@ -106,21 +117,21 @@ export class PostController {
     //           bestof?: 1,
     //           page: 1
     //       }
-    return {
-      posts,
-      queryParams,
-      totalPosts: await this.postModel.countPosts({
-        lastXDays: queryParams.bestof,
-        tagName: queryParams.tagName,
-      }),
-      totalSeenPosts: request.session.user
-        ? await this.postModel.countSeenPosts({
-            lastXDays: queryParams.bestof,
-            userId: request.session.user.user_id,
-            tagName: queryParams.tagName,
-          })
-        : postsPerPage * (queryParams.page - 1),
-      resources: await this.postModel.getResourceFaviconsMap(),
-    };
+    // return {
+    //   posts,
+    //   queryParams,
+    //   totalPosts: await this.postModel.countPosts({
+    //     lastXDays: queryParams.bestof,
+    //     tagName: queryParams.tagName,
+    //   }),
+    //   totalSeenPosts: request.session.user
+    //     ? await this.postModel.countSeenPosts({
+    //         lastXDays: queryParams.bestof,
+    //         userId: request.session.user.user_id,
+    //         tagName: queryParams.tagName,
+    //       })
+    //     : postsPerPage * (queryParams.page - 1),
+    //   resources: await this.postModel.getResourceFaviconsMap(),
+    // };
   }
 }
