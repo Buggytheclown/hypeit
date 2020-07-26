@@ -230,19 +230,13 @@ export function createPostsTagsRelations({
 
   const postIdsTagsIds = _.flatMap(posts, ({ externalID, tags }) => {
     const posts_id = insertedPostsByExternalPostId[externalID].posts_id;
-    return tags.map(tagName => {
-      if (!insertedTagsByTagsName[tagName]) {
-        cls.error(
-          `!insertedTagsByTagsName[tagName]: ${JSON.stringify({
-            tagName,
-            externalID,
-            tags,
-          })}`,
-        );
-        throw new Error(`No tagName: ${tagName}, externalID: ${externalID}`);
-      }
-      return { posts_id, tags_id: insertedTagsByTagsName[tagName].tags_id };
-    });
+    return tags
+      //  temporal workaround when some tags are not inserted ("médium" problem)
+      .filter(tagName => insertedTagsByTagsName[tagName])
+      .map(tagName => ({
+        posts_id,
+        tags_id: insertedTagsByTagsName[tagName].tags_id,
+      }));
   });
 
   const knexQuery = dBConnection.knex('posts_tags').insert(postIdsTagsIds);
@@ -307,7 +301,7 @@ export function assertAllTagsWasFound({
   );
   if (difference.length) {
     cls.error(`assertAllTagsWasFoundDifference: ${difference}`);
-    throw new Error(`${difference.length} tags name was not found`);
+    // throw new Error(`${difference.length} tags name was not found`);
   }
 }
 

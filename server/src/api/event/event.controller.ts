@@ -11,7 +11,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { EventDto } from './dto/event.dto';
-import { AithorizationDto } from './../dto/Authorization.dto';
+import { AithorizationDto } from './../dto/authorization.dto';
 import { EventModelService } from '../../db/eventModel.service';
 import { BasicEventsPageData } from './event.controller.helpers';
 
