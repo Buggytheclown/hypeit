@@ -20,18 +20,18 @@ export interface PostRequest {
 
 export const postsRequestParamsSchema = yup.object({
   userId: yup.number().notRequired(),
-  lastXDays: yup
-    .number()
-    .min(0)
-    .required(),
+  lastXDays: yup.number().required(),
   tagName: yup.string().notRequired(),
-  bookmarked: yup.boolean().notRequired(),
   isNextPage: yup
+    .boolean()
+    .default(false)
+    .notRequired(),
+  bookmarked: yup
     .boolean()
     .default(false)
     .notRequired(),
 });
 
-export type PostsRequestParamsSchema = yup.InferType<
+export type IPostsRequestParamsSchema = yup.InferType<
   typeof postsRequestParamsSchema
 >;
