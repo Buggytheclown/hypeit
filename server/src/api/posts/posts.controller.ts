@@ -50,7 +50,6 @@ export class PostController {
   @ApiOperation({ summary: 'Get posts' })
   @ApiBody({ description: 'Request Body', type: PostRequestDto })
   async getPosts(@Req() request: Request): Promise<any> {
-    console.log(request, 'request');
     console.log(request.session, 'requestrequest, session');
 
     const queryParams: TPostsRequestParamsSchema = extractData(
@@ -94,7 +93,8 @@ export class PostController {
       /** Возвращаемые посты сразу помещаем в просмотренные.*/
       request.session.seenPostsId = posts.map(({ posts_id }) => posts_id);
     }
-    console.log(posts);
+    const tt = await this.postModel.getResourceFaviconsMap();
+    console.log(tt);
 
     //   response
     // posts: [
@@ -120,21 +120,21 @@ export class PostController {
     //         bestof?: 1,
     //         page: 1
     //     }
-    // return {
-    //   posts,
-    //   queryParams,
-    //   totalPosts: await this.postModel.countPosts({
-    //     lastXDays: queryParams.bestof,
-    //     tagName: queryParams.tagName,
-    //   }),
-    //   totalSeenPosts: request.session.user
-    //     ? await this.postModel.countSeenPosts({
-    //         lastXDays: queryParams.bestof,
-    //         userId: request.session.user.user_id,
-    //         tagName: queryParams.tagName,
-    //       })
-    //     : postsPerPage * (queryParams.page - 1),
-    //   resources: await this.postModel.getResourceFaviconsMap(),
-    // };
+    return {
+      posts,
+      totalPosts: await this.postModel.countPosts({
+        lastXDays: queryParams.lastXDays,
+        tagName: queryParams.tagName,
+      }),
+      totalSeenPosts: request.session?.user
+        ? await this.postModel.countSeenPosts({
+            lastXDays: queryParams.lastXDays,
+            userId: request.session.user.user_id,
+            tagName: queryParams.tagName,
+          })
+        : // : postsPerPage * (queryParams.page - 1),
+          postsPerPage,
+      resources: await this.postModel.getResourceFaviconsMap(),
+    };
   }
 }
