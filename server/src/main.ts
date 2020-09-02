@@ -31,7 +31,7 @@ async function bootstrap() {
   const sessionStore = new MySQLStore(DbOptions);
   app.use(
     session({
-      key: 'sid',
+      // key: 'sid',
       secret: 'secret_string',
       store: sessionStore,
       resave: false,

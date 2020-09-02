@@ -34,6 +34,7 @@
     "@types/bcrypt": "^3.0.0",
     "@types/cheerio": "^0.22.16",
     "@types/cli-color": "^2.0.0",
+    "@types/express-session": "^1.17.0",
     "@types/hbs": "^4.0.1",
     "@types/knex": "^0.16.1",
     "@types/lodash": "^4.14.149",

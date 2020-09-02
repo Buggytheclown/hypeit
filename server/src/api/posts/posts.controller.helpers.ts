@@ -1,7 +1,7 @@
 import { DbPosts } from '../../db/postModel.helpers';
 import * as yup from 'yup';
 
-export interface BasicPostPageData {
+export interface IBasicPostPageData {
   posts: DbPosts;
   queryParams: Object;
   totalPosts: number;
@@ -10,8 +10,9 @@ export interface BasicPostPageData {
   resources: { [key: string]: string };
 }
 
-export interface PostRequest {
+export interface IPostRequest {
   userId?: number;
+  /** За последний день, неделю или месяц */
   lastXDays: number;
   tagName?: string;
   bookmarked?: boolean;
@@ -32,6 +33,6 @@ export const postsRequestParamsSchema = yup.object({
     .notRequired(),
 });
 
-export type IPostsRequestParamsSchema = yup.InferType<
+export type TPostsRequestParamsSchema = yup.InferType<
   typeof postsRequestParamsSchema
 >;
