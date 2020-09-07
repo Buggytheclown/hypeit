@@ -14,6 +14,7 @@ import { EventDto } from './dto/event.dto';
 import { AithorizationDto } from './../dto/authorization.dto';
 import { EventModelService } from '../../db/eventModel.service';
 import { BasicEventsPageData } from './event.controller.helpers';
+import { Request } from 'express';
 
 /**  
 TODO
@@ -38,8 +39,8 @@ export class EventController {
     description: 'Authorization',
     type: AithorizationDto,
   })
-  async getPosts(@Req() request): Promise<BasicEventsPageData> {
-    if (request.session.user?.user_id) {
+  async getPosts(@Req() request: Request): Promise<BasicEventsPageData> {
+    if (request.session?.user?.user_id) {
       const events = await this.eventModelService.getEvents({
         featureXDays: 14,
         userId: request.session.user.user_id,

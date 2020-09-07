@@ -9,6 +9,7 @@ import { ProxyModule } from './services/htmlproxy/proxy.module';
 import { DevbyEventsModule } from './eventGrabbers/devby/devbyEvents.module';
 import { EventDeliveryModule } from './services/eventDelivery/eventDelivery.module';
 import { EventModule } from './api/event/event.module';
+import { PostModule } from './api/posts/posts.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EventModule } from './api/event/event.module';
     DevbyEventsModule,
     EventDeliveryModule,
     EventModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [],
