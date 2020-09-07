@@ -24,10 +24,8 @@ TODO
 4. Формализовать время UTS
 5. Посмотреть что возвращает база, если ничего не найдено
 6. Закрыть авторизацией
-
-TODO NEXT
-1. Добавить swagger
 */
+
 @Controller()
 export class EventController {
   constructor(private readonly eventModelService: EventModelService) {}

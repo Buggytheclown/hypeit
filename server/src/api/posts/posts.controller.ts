@@ -12,6 +12,7 @@ import {
   Req,
   Res,
   Session,
+  Body,
 } from '@nestjs/common';
 import { PostModel } from '../../db/postModel.service';
 import {
@@ -23,10 +24,6 @@ import * as moment from 'moment';
 import { Request } from 'express';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { PostRequestDto } from './dto/post.dto';
-import {
-  postsRequestParamsSchema,
-  TPostsRequestParamsSchema,
-} from './posts.controller.helpers';
 
 /**
     TODO
@@ -34,6 +31,9 @@ import {
     2. rawTime, url, externalID, link - на фронте не используется
     3. user - лучше вынести в отдельный эндпоинт
     4. Возможно стоит совместить bookmarked и posts - так как сущности одни и те же и добавить только флаг при запросе.
+
+    TODO
+    1. Проверить получение постов, кажется там пока не работает, так как надо переписать получение из БД
  */
 
 @Controller()
@@ -49,15 +49,13 @@ export class PostController {
   @Post('/api/v1/posts')
   @ApiOperation({ summary: 'Get posts' })
   @ApiBody({ description: 'Request Body', type: PostRequestDto })
-  async getPosts(@Req() request: Request): Promise<any> {
+  async getPosts(
+    @Req() request: Request,
+    @Body() queryParams: PostRequestDto,
+  ): Promise<any> {
+    console.log(queryParams);
+
     console.log(request.session, 'requestrequest, session');
-
-    const queryParams: TPostsRequestParamsSchema = extractData(
-      request.body,
-      postsRequestParamsSchema,
-    );
-
-    console.log(queryParams, 'queryParams');
 
     if (
       queryParams.isNextPage &&
@@ -68,6 +66,7 @@ export class PostController {
         request.session.seenPostsId,
         seenPostsIdSchema,
       );
+      //TODO
       /**  Помечаем в БД помеченные просмотренные посты. Тут нюанс, что если куки почистить и не запросить новые посты, то тогда данные о последних просмотренных постах пропадут. */
       await this.postModel.saveSeenPosts({
         postsId: seenPostsId as number[],
@@ -82,6 +81,7 @@ export class PostController {
     const posts = await this.postModel.getPosts({
       limit: postsPerPage,
       lastXDays: queryParams.lastXDays,
+      //TODO
       // Кажется тут решил усложнить тем, чтобы считать в базе данных от просмотренные + postPerPage для следукющей страницы.
       // offset: postsPerPage * (queryParams.page - 1),
       userId: request.session?.user?.user_id,

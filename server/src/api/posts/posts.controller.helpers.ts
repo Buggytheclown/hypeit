@@ -1,5 +1,4 @@
 import { DbPosts } from '../../db/postModel.helpers';
-import * as yup from 'yup';
 
 export interface IBasicPostPageData {
   posts: DbPosts;
@@ -18,21 +17,3 @@ export interface IPostRequest {
   bookmarked?: boolean;
   isNextPage?: boolean;
 }
-
-export const postsRequestParamsSchema = yup.object({
-  userId: yup.number().notRequired(),
-  lastXDays: yup.number().required(),
-  tagName: yup.string().notRequired(),
-  isNextPage: yup
-    .boolean()
-    .default(false)
-    .notRequired(),
-  bookmarked: yup
-    .boolean()
-    .default(false)
-    .notRequired(),
-});
-
-export type TPostsRequestParamsSchema = yup.InferType<
-  typeof postsRequestParamsSchema
->;

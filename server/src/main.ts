@@ -13,11 +13,13 @@ import { ConfigServiceProvider } from './services/config/config.module';
 import { registerHbsHelpers } from './hbs.helpers';
 import { CustomLoggerService } from './services/logger/customLogger.service';
 import * as moment from 'moment';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   registerHbsHelpers();
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
   const loggerService = app.get<CustomLoggerService>(CustomLoggerService);
 
   app.useLogger(loggerService);
